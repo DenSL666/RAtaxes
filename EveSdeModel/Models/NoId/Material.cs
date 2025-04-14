@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 using YamlDotNet.RepresentationModel;
 using System.Text.Json.Serialization;
+using YamlDotNet.Serialization;
 
 namespace EveSdeModel.Models
 {
@@ -22,6 +23,7 @@ namespace EveSdeModel.Models
             set { _typeID = value; }
         }
 
+        [YamlIgnore]
         [JsonPropertyName("typeID")]
         public string TypeID
         {

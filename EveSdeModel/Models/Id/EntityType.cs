@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 using YamlDotNet.RepresentationModel;
 using System.Text.Json.Serialization;
+using YamlDotNet.Serialization;
 
 namespace EveSdeModel.Models
 {
@@ -104,6 +105,33 @@ namespace EveSdeModel.Models
             Description = new Name();
         }
 
+        protected EntityType(EntityType entity)
+        {
+            Id = new string(entity.Id.ToCharArray());
+            Mass = new string(entity.Mass.ToCharArray());
+            PortionSize = new string(entity.PortionSize.ToCharArray());
+            Published = new string(entity.Published.ToCharArray());
+            Volume = new string(entity.Volume.ToCharArray());
+            Radius = new string(entity.Radius.ToCharArray());
+            IconID = new string(entity.IconID.ToCharArray());
+            GroupID = new string(entity.GroupID.ToCharArray());
+            GraphicID = new string(entity.GraphicID.ToCharArray());
+            SoundID = new string(entity.SoundID.ToCharArray());
+            RaceID = new string(entity.RaceID.ToCharArray());
+            SofFactionName = new string(entity.SofFactionName.ToCharArray());
+            BasePrice = new string(entity.BasePrice.ToCharArray());
+            MarketGroupID = new string(entity.MarketGroupID.ToCharArray());
+            Capacity = new string(entity.Capacity.ToCharArray());
+            MetaGroupID = new string(entity.MetaGroupID.ToCharArray());
+            VariationParentTypeID = new string(entity.VariationParentTypeID.ToCharArray());
+            FactionID = new string(entity.FactionID.ToCharArray());
+            SofMaterialSetID = new string(entity.SofMaterialSetID.ToCharArray());
+            Name = entity.Name.DeepCopy();
+            Description = entity.Description.DeepCopy();
+            Group = entity.Group.DeepCopy();
+        }
+
+        [YamlIgnore]
         public bool IsPublished => !string.IsNullOrEmpty(Published) && Published == "true";
 
         public void ParseWithId(KeyValuePair<YamlNode, YamlNode> yamlNode)
@@ -121,10 +149,11 @@ namespace EveSdeModel.Models
                 {
                     Name = EveYamlFactory.GetObject<Name>((YamlMappingNode)node.Value);
                 }
-                if (node.Key.ToString() == nameof(Description).GetAttr<EntityType>())
-                {
-                    Description = EveYamlFactory.GetObject<Name>((YamlMappingNode)node.Value);
-                }
+                //  убираю чтение описания
+                //if (node.Key.ToString() == nameof(Description).GetAttr<EntityType>())
+                //{
+                //    Description = EveYamlFactory.GetObject<Name>((YamlMappingNode)node.Value);
+                //}
             }
         }
 
@@ -182,6 +211,22 @@ namespace EveSdeModel.Models
 
         public string Write() => $"{Name.English}\t{Group?.Category?.Name?.English} {GetTech()}\t{Group?.Name?.English}";
 
+        public override string ToString()
+        {
+            return Name?.English ?? "";
+        }
+
+        public static EntityType DeepCopy(EntityType entity)
+        {
+            return new EntityType(entity);
+        }
+
+        public EntityType DeepCopy()
+        {
+            return new EntityType(this);
+        }
+
+        [YamlIgnore]
         public static List<string> Cats = new List<string>
         {
             "Charge 1",

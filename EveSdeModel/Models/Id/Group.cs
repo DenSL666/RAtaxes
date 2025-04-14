@@ -40,6 +40,7 @@ namespace EveSdeModel.Models
         public string UseBasePrice { get; set; }
 
         public Category Category { get; private set; }
+        public bool IsPublished => !string.IsNullOrEmpty(Published) && Published == "true";
 
         public Group()
         {
@@ -54,6 +55,21 @@ namespace EveSdeModel.Models
 
             Category = new Category();
             Name = new Name();
+        }
+
+        protected Group(Group group)
+        {
+            Id = new string(group.Id.ToCharArray());
+            Anchorable = new string(group.Anchorable.ToCharArray());
+            Anchored = new string(group.Anchored.ToCharArray());
+            CategoryID = new string(group.CategoryID.ToCharArray());
+            FittableNonSingleton = new string(group.FittableNonSingleton.ToCharArray());
+            IconID = new string(group.IconID.ToCharArray());
+            Published = new string(group.Published.ToCharArray());
+            UseBasePrice = new string(group.UseBasePrice.ToCharArray());
+
+            Category = group.Category.DeepCopy();
+            Name = group.Name.DeepCopy();
         }
 
         public void ParseWithId(KeyValuePair<YamlNode, YamlNode> yamlNode)
@@ -86,6 +102,21 @@ namespace EveSdeModel.Models
             {
                 Category = found;
             }
+        }
+
+        public override string ToString()
+        {
+            return Name?.English ?? "";
+        }
+
+        public static Group DeepCopy(Group group)
+        {
+            return new Group(group);
+        }
+
+        public Group DeepCopy()
+        {
+            return new Group(this);
         }
     }
 }

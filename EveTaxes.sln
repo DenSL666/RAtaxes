@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EveTaxes", "EveTaxes\EveTax
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EveSdeModel", "EveSdeModel\EveSdeModel.csproj", "{7D59E4E0-48D0-4191-8043-A04751CE1968}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EveWebClient", "EveWebClient\EveWebClient.csproj", "{CF09FC8C-C78A-401D-B648-4384B08846AA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{7D59E4E0-48D0-4191-8043-A04751CE1968}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D59E4E0-48D0-4191-8043-A04751CE1968}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D59E4E0-48D0-4191-8043-A04751CE1968}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF09FC8C-C78A-401D-B648-4384B08846AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF09FC8C-C78A-401D-B648-4384B08846AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF09FC8C-C78A-401D-B648-4384B08846AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF09FC8C-C78A-401D-B648-4384B08846AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

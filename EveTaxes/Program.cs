@@ -1,43 +1,31 @@
-﻿using EveSdeModel.Factories;
-using EveSdeModel.Interfaces;
-using EveSdeModel.Models;
+﻿using EveSdeModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EveWebClient;
 
-internal class Program
+namespace EveTaxes
 {
-    static string PathToFiles { get; } = @"F:\sde\fsd";
-    static string PathToFiles_2 { get; } = @"F:\sde\bsd";
-    static string PathToFiles_3 { get; } = @"F:\sde\universe\eve";
-    static string CategoriesFilename { get; } = @"categories.yaml";
-    static string GroupsFilename { get; } = @"groups.yaml";
-    static string TypeIDFilename { get; } = @"types.yaml";
-    static string TypeMaterialsFilename { get; } = @"typeMaterials.yaml";
-    static string BlueprintsFilename { get; } = @"blueprints.yaml";
-
-    private static void Main(string[] args)
+    internal class Program
     {
-        var typeMaterials = EveYamlFactory.ParseFile<TypeMaterial>(Path.Combine(PathToFiles, TypeMaterialsFilename));
-        var categories = EveYamlFactory.ParseFile<Category>(Path.Combine(PathToFiles, CategoriesFilename));
-        var groups = EveYamlFactory.ParseFile<Group>(Path.Combine(PathToFiles, GroupsFilename));
-        var blueprints = EveYamlFactory.ParseFile<Blueprint>(Path.Combine(PathToFiles, BlueprintsFilename));
-        var _types = EveYamlFactory.ParseFile<EntityType>(Path.Combine(PathToFiles, TypeIDFilename));
+        const double Effincency = 0.9063d;
 
-        groups.ForEach(x => x.FillCategories(categories));
-        _types.ForEach(x => x.FillGroups(groups));
-        blueprints.ForEach(x => x.FillMaterials(_types));
-
-        //фильтр и вывод блюпринтов
-        var hasManu = blueprints.Where(x => x.HasManufactory && !x.IsFuelBlock).ToList();
-        using (var wr = new StreamWriter(@"F:\bps.txt"))
+        private static void Main(string[] args)
         {
-            foreach (var bp in hasManu.OrderBy(x => x.Product.Name.English))
+            SdeMain.InitializeAll(false);
+            var asteroid = SdeMain.TypeMaterials.Where(x => x.IsAsteroid).ToList();
+            var refineItems = asteroid.SelectMany(x => x.RefineMaterials.Keys).GroupBy(x => x.Id).Select(x => x.First()).ToList();
+            var refineIds = refineItems.Select(x => x.Id).ToList();
+
+            var found = asteroid.FirstOrDefault(x => x.ToString() == "Monazite");
+            if (found != null)
             {
-                wr.WriteLine(bp.Write());
+                var refined = found.Refine("1000", Effincency);
             }
+
+            var prices = Price.GetPrices(refineIds);
         }
     }
 }

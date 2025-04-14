@@ -24,12 +24,22 @@ namespace EveSdeModel.Models
         [JsonPropertyName("iconID")]
         public string IconID { get; set; }
 
+        public bool IsPublished => !string.IsNullOrEmpty(Published) && Published == "true";
+
         public Category()
         {
             Id = string.Empty;
             Published = string.Empty;
             IconID = string.Empty;
             Name = new Name();
+        }
+
+        protected Category(Category category)
+        {
+            Id = new string(category.Id.ToCharArray());
+            Published = new string(category.Published.ToCharArray());
+            IconID = new string(category.IconID.ToCharArray());
+            Name = category.Name.DeepCopy();
         }
 
         public void ParseWithId(KeyValuePair<YamlNode, YamlNode> yamlNode)
@@ -53,6 +63,21 @@ namespace EveSdeModel.Models
         public void ParseNoId(YamlMappingNode yamlNode)
         {
             throw new NotImplementedException();
+        }
+
+        public override string ToString()
+        {
+            return Name?.English ?? "";
+        }
+
+        public static Category DeepCopy(Category category)
+        {
+            return new Category(category);
+        }
+
+        public Category DeepCopy()
+        {
+            return new Category(this);
         }
     }
 }
