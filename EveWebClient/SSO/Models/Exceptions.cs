@@ -1,0 +1,45 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace EveWebClient.SSO.Models
+{
+    internal class EVEStandardException : Exception
+    {
+        internal EVEStandardException()
+        {
+        }
+
+        internal EVEStandardException(string message)
+            : base(message)
+        {
+        }
+
+        internal EVEStandardException(string message, Exception inner)
+            : base(message, inner)
+        {
+        }
+    }
+
+    internal class EVEStandardAuthExpiredException : EVEStandardException
+    {
+    }
+
+    internal class EVEStandardScopeNotAcquired : EVEStandardException
+    {
+        internal EVEStandardScopeNotAcquired()
+        {
+        }
+
+        internal EVEStandardScopeNotAcquired(string message)
+            : base(message)
+        {
+        }
+    }
+
+    internal class EVEStandardUnauthorizedException : EVEStandardException
+    {
+    }
+}

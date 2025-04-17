@@ -6,6 +6,9 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
+using EveWebClient.External;
+using EveWebClient.EsiModels;
+
 namespace EveWebClient
 {
     internal static class WebApi

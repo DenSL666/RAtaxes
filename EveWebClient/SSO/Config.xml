@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<singleSignOn>
+    <clientId>copyYourValue</clientId>
+	<clientSecret>copyYourValue</clientSecret>
+	<callbackUrl>copyYourValue</callbackUrl>
+	<scopes>
+		<scope>copyYourValue</scope>
+		<scope>copyYourValue</scope>
+	</scopes>
+</singleSignOn>

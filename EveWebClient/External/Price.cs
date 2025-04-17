@@ -4,7 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EveWebClient
+using EveWebClient.External;
+using EveWebClient.EsiModels;
+
+namespace EveWebClient.External
 {
     public sealed class Price
     {

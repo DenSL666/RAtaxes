@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EveSdeModel", "EveSdeModel\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EveWebClient", "EveWebClient\EveWebClient.csproj", "{CF09FC8C-C78A-401D-B648-4384B08846AA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EveDataStorage", "EveDataStorage\EveDataStorage.csproj", "{C49FAF8C-01CE-44CB-8941-610D7DD00213}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{CF09FC8C-C78A-401D-B648-4384B08846AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF09FC8C-C78A-401D-B648-4384B08846AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF09FC8C-C78A-401D-B648-4384B08846AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C49FAF8C-01CE-44CB-8941-610D7DD00213}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C49FAF8C-01CE-44CB-8941-610D7DD00213}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C49FAF8C-01CE-44CB-8941-610D7DD00213}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C49FAF8C-01CE-44CB-8941-610D7DD00213}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
