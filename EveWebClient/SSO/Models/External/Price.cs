@@ -3,17 +3,39 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EveWebClient.SSO.Models;
+using EveWebClient.SSO.Models.Esi;
 
-using EveWebClient.External;
-using EveWebClient.EsiModels;
-
-namespace EveWebClient.External
+namespace EveWebClient.SSO.Models.External
 {
     public sealed class Price
     {
         internal Price()
         {
             Id = string.Empty;
+        }
+
+        private int? _id;
+        public int TypeId
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(Id))
+                {
+                    return -1;
+                }
+                else
+                {
+                    if (!_id.HasValue && int.TryParse(Id, out int _val))
+                    {
+                        _id = _val;
+                    }
+                    if (_id.HasValue)
+                        return _id.Value;
+                    else
+                        return -1;
+                }
+            }
         }
 
         public string Id { get; private set; }
@@ -23,19 +45,17 @@ namespace EveWebClient.External
         public double EveAverage { get; private set; }
 
         public const string FuzzworkUrl = "https://market.fuzzwork.co.uk/aggregates/?region=30000142&types=";
-        public const string EsiUrl = "https://esi.evetech.net/latest/markets/prices/?datasource=tranquility";
 
-        public static List<Price> GetPrices(IEnumerable<string> ids)
+        public static async Task<List<Price>> GetPrices(IEnumerable<string> ids, EsiHelper esiHelper, string esiPricesPath)
         {
             var result = new List<Price>();
 
             if (ids != null && ids.Any())
             {
-                var idString = string.Join(",", ids);
-                var fullFuzzworkUrl = FuzzworkUrl + idString;
-                var fuzzworkData = WebApi.GetFuzzworkPrices(fullFuzzworkUrl);
+                var esiData = MarketPrice.Read(esiPricesPath);
 
-                var esiData = WebApi.GetEsiPrices(EsiUrl);
+                var idString = string.Join(",", ids);
+                var fuzzworkData = await esiHelper.GetFuzzworkPrices(new Uri(FuzzworkUrl + idString));
 
                 foreach (var id in ids)
                 {

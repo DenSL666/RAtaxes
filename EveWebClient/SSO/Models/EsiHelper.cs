@@ -1,5 +1,7 @@
 ﻿using EveWebClient.SSO.Models.Esi;
+using EveWebClient.SSO.Models.External;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -82,7 +84,7 @@ namespace EveWebClient.SSO.Models
 
             //CheckResponse(nameof(GetCharacterPublicInfoV5Async), responseModel.Error, responseModel.Message, responseModel.LegacyWarning, logger);
 
-            return ReturnModelDTO<CharacterInfo>(responseModel);
+            return ReturnModelDTO<CharacterInfo>(responseModel, characterId);
         }
 
         /// <summary>
@@ -98,7 +100,7 @@ namespace EveWebClient.SSO.Models
 
             //CheckResponse(nameof(GetCorporationInfoV5Async), responseModel.Error, responseModel.Message, responseModel.LegacyWarning, logger);
 
-            return ReturnModelDTO<CorporationInfo>(responseModel);
+            return ReturnModelDTO<CorporationInfo>(responseModel, corporationId);
         }
 
         /// <summary>
@@ -114,7 +116,7 @@ namespace EveWebClient.SSO.Models
 
             //CheckResponse(nameof(GetAllianceInfoV3Async), responseModel.Error, responseModel.Message, responseModel.LegacyWarning, logger);
 
-            return ReturnModelDTO<AllianceInfo>(responseModel);
+            return ReturnModelDTO<AllianceInfo>(responseModel, allianceId);
         }
 
         /// <summary>
@@ -130,7 +132,65 @@ namespace EveWebClient.SSO.Models
 
             //CheckResponse(nameof(ListAllianceCorporationsV1Async), responseModel.Error, responseModel.Message, responseModel.LegacyWarning, logger);
 
-            return ReturnModelDTO<List<int>>(responseModel);
+            return ReturnModelDTO<List<int>>(responseModel, allianceId);
+        }
+
+        /// <summary>
+        /// Get a list of corporation structures.
+        /// <para>GET /corporations/{corporation_id}/structures/</para>
+        /// <para>Requires one of the following EVE corporation role(s): StationManager</para>
+        /// </summary>
+        /// <param name="auth">The <see cref="AuthDTO"/> object.</param>
+        /// <param name="corporationId">An EVE corporation ID.</param>
+        /// <param name="page">Which page of results to return. Default value: 1.</param>
+        /// <param name="ifNoneMatch">ETag from a previous request. A 304 will be returned if this matches the current ETag.</param>
+        /// <param name="language">Language to use in the response</param>
+        /// <returns><see cref="ESIModelDTO{T}"/> containing a list of corporation structures’ information.</returns>
+        public async Task<ESIModelDTO<List<CorporationStructure>>> GetCorporationStructuresV3Async(AccessTokenDetails auth, int corporationId, int page = 1, string language = "en-us", string ifNoneMatch = null)
+        {
+            //CheckAuth(auth, Scopes.ESI_CORPORATIONS_READ_STRUCTURES_1);
+
+            var queryParameters = new Dictionary<string, string>
+            {
+                { "page", page.ToString() },
+                { "language", language }
+            };
+            //  /v4/corporations/{corporation_id}/structures/
+            var responseModel = await GetAsync($"/v3/corporations/{corporationId}/structures/", auth, ifNoneMatch, queryParameters);
+
+            //CheckResponse(nameof(GetCorporationStructuresV3Async), responseModel.Error, responseModel.Message, responseModel.LegacyWarning, logger);
+
+            return ReturnModelDTO<List<CorporationStructure>>(responseModel);
+        }
+
+        public async Task<ESIModelDTO<List<MarketPrice>>> ListMarketPricesV1Async(string ifNoneMatch = null)
+        {
+            var responseModel = await GetAsync("/v1/markets/prices/", ifNoneMatch);
+
+            //CheckResponse(nameof(ListMarketPricesV1Async), responseModel.Error, responseModel.Message, responseModel.LegacyWarning, logger);
+
+            return ReturnModelDTO<List<MarketPrice>>(responseModel);
+        }
+
+
+
+        public async Task<Dictionary<string, FuzzworkBuySellData>> GetFuzzworkPrices(Uri uri)
+        {
+            var request = new HttpRequestMessage
+            {
+                RequestUri = uri,
+                Method = HttpMethod.Get,
+            };
+            string json = "";
+
+            var response = await HTTP.SendAsync(request).ConfigureAwait(false);
+            if (response.IsSuccessStatusCode)
+            {
+                json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            }
+
+            Dictionary<string, FuzzworkBuySellData> marketData = JsonConvert.DeserializeObject<Dictionary<string, FuzzworkBuySellData>>(json);
+            return marketData;
         }
     }
 }

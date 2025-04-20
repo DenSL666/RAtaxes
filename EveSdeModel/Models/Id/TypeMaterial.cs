@@ -14,6 +14,32 @@ namespace EveSdeModel.Models
 {
     public class TypeMaterial : IYamlEntity
     {
+        [YamlIgnore]
+        private int? _id;
+
+        [YamlIgnore]
+        public int TypeId
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(Id))
+                {
+                    return -1;
+                }
+                else
+                {
+                    if (!_id.HasValue && int.TryParse(Id, out int _val))
+                    {
+                        _id = _val;
+                    }
+                    if (_id.HasValue)
+                        return _id.Value;
+                    else
+                        return -1;
+                }
+            }
+        }
+
         public string Id { get; set; }
 
         [JsonPropertyName("materials")]
@@ -112,24 +138,31 @@ namespace EveSdeModel.Models
             }
         }
 
-        public Dictionary<EntityType, int> Refine(string count, double efficency)
+        public Dictionary<EntityType, long> Refine(long count, double efficency)
         {
-            var result = new Dictionary<EntityType, int>();
-            if (efficency > 0 && PortionSizeInt > 0 && int.TryParse(count, out int countInt) && countInt >= PortionSizeInt)
+            var result = new Dictionary<EntityType, long>();
+            if (efficency > 0 && PortionSizeInt > 0 && count >= PortionSizeInt)
             {
-                int multiple = countInt / PortionSizeInt;
+                long multiple = count / PortionSizeInt;
                 //  result = Materials.Sum(x => (int)Math.Floor(Math.Floor(x.Value * multiple * efficiency) * x.Price));
                 foreach (var pair in RefineMaterials)
                 {
-                    if (int.TryParse(pair.Value, out int _value))
+                    if (long.TryParse(pair.Value, out long _value))
                     {
                         var key = pair.Key.DeepCopy();
-                        var _res = (int)Math.Floor(_value * multiple * efficency);
+                        var _res = (long)Math.Floor(_value * multiple * efficency);
                         result.Add(key, _res);
                     }
                 }
             }
             return result;
+        }
+
+        public Dictionary<EntityType, long> Refine(string count, double efficency)
+        {
+            if (long.TryParse(count, out long countInt))
+                return Refine(countInt, efficency);
+            return new Dictionary<EntityType, long>();
         }
 
         public override string ToString()

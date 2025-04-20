@@ -283,5 +283,20 @@ namespace EveWebClient.SSO.Models
                 Model = JsonSerializer.Deserialize<T>(response.JSONString ?? "")
             };
         }
+
+        protected ESIModelDTO<T> ReturnModelDTO<T>(APIResponse response, int objectId)
+        {
+            return new ESIModelDTO<T>()
+            {
+                NotModified = response.NotModified,
+                ETag = response.ETag,
+                Language = response.Language,
+                Expires = response.Expires,
+                LastModified = response.LastModified,
+                MaxPages = response.MaxPages,
+                Model = JsonSerializer.Deserialize<T>(response.JSONString ?? ""),
+                ObjectId = objectId
+            };
+        }
     }
 }

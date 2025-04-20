@@ -7,4 +7,19 @@
 		<scope>copyYourValue</scope>
 		<scope>copyYourValue</scope>
 	</scopes>
+	<lastUpdateDateTime>2025-04-23T21:59:11.1069071+04:00</lastUpdateDateTime>
+	<hoursBeforeUpdate>6</hoursBeforeUpdate>
+	<taxParams>
+		<refineEffincency>0.9063</refineEffincency>
+		<taxIce>0.1</taxIce>
+		<taxMinerals>0.1</taxMinerals>
+		<taxMoonR4>0.1</taxMoonR4>
+		<taxMoonR8>0.1</taxMoonR8>
+		<taxMoonR16>0.1</taxMoonR16>
+		<taxMoonR32>0.1</taxMoonR32>
+		<taxMoonR64>0.2</taxMoonR64>
+		<!--Allows you to choose which price to use when calculating taxes-->
+		<!--0 - eve average; 1 - jita sell; 2 - jita buy; 3 - jita split-->
+		<priceSource>0</priceSource>
+	</taxParams>
 </singleSignOn>

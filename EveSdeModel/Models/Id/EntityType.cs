@@ -14,6 +14,32 @@ namespace EveSdeModel.Models
 {
     public class EntityType : IYamlEntity
     {
+        [YamlIgnore]
+        private int? _id;
+
+        [YamlIgnore]
+        public int TypeId
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(Id))
+                {
+                    return -1;
+                }
+                else
+                {
+                    if (!_id.HasValue && int.TryParse(Id, out int _val))
+                    {
+                        _id = _val;
+                    }
+                    if (_id.HasValue)
+                        return _id.Value;
+                    else
+                        return -1;
+                }
+            }
+        }
+
         public string Id { get; set; }
 
         [JsonPropertyName("mass")]

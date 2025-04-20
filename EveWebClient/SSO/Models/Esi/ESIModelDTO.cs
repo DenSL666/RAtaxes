@@ -16,5 +16,7 @@ namespace EveWebClient.SSO.Models.Esi
         public DateTimeOffset? LastModified { get; set; }
         public int MaxPages { get; set; }
         public int RemainingErrors { get; set; }
+
+        public int ObjectId { get; set; }
     }
 }

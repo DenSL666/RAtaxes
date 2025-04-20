@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EveWebClient.External
+namespace EveWebClient.SSO.Models.External
 {
-    internal class FuzzworkBuySellData
+    public class FuzzworkBuySellData
     {
         [JsonProperty("buy")]
         public FuzzworkPrice Buy { get; set; }
@@ -16,7 +16,7 @@ namespace EveWebClient.External
         public FuzzworkPrice Sell { get; set; }
     }
 
-    internal class FuzzworkPrice
+    public class FuzzworkPrice
     {
         [JsonProperty("weightedAverage")]
         public double? WeightedAverage { get; set; }
