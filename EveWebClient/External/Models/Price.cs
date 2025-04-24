@@ -1,12 +1,12 @@
-﻿using System;
+﻿using EveWebClient.SSO.Models;
+using EveWebClient.SSO.Models.Esi;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EveWebClient.SSO.Models;
-using EveWebClient.SSO.Models.Esi;
 
-namespace EveWebClient.SSO.Models.External
+namespace EveWebClient.External.Models
 {
     public sealed class Price
     {
@@ -46,7 +46,7 @@ namespace EveWebClient.SSO.Models.External
 
         public const string FuzzworkUrl = "https://market.fuzzwork.co.uk/aggregates/?region=30000142&types=";
 
-        public static async Task<List<Price>> GetPrices(IEnumerable<string> ids, EsiHelper esiHelper, string esiPricesPath)
+        public static async Task<List<Price>> GetPrices(IEnumerable<string> ids, WebHelper webHelper, string esiPricesPath)
         {
             var result = new List<Price>();
 
@@ -55,7 +55,7 @@ namespace EveWebClient.SSO.Models.External
                 var esiData = MarketPrice.Read(esiPricesPath);
 
                 var idString = string.Join(",", ids);
-                var fuzzworkData = await esiHelper.GetFuzzworkPrices(new Uri(FuzzworkUrl + idString));
+                var fuzzworkData = await webHelper.GetFuzzworkPrices(new Uri(FuzzworkUrl + idString));
 
                 foreach (var id in ids)
                 {

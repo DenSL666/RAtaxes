@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EveWebClient.SSO.Models.External
+namespace EveWebClient.External.Models
 {
     public class FuzzworkBuySellData
     {

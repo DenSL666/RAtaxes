@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "EveTaxes (update)": {
+      "commandName": "Project",
+      "commandLineArgs": "-update"
+    },
+    "EveTaxes (report)": {
+      "commandName": "Project",
+      "commandLineArgs": "-report"
+    }
+  }
+}

@@ -1,15 +1,15 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using EveWebClient.SSO.Models.Esi;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO.Compression;
 using System.Linq;
-using System.Net.Http.Headers;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
-using EveWebClient.SSO.Models.Esi;
 
 namespace EveWebClient.SSO.Models
 {
@@ -272,6 +272,17 @@ namespace EveWebClient.SSO.Models
 
         protected ESIModelDTO<T> ReturnModelDTO<T>(APIResponse response)
         {
+            if (response.Error)
+                return null;
+            T _model = default(T);
+            try
+            {
+                _model = JsonSerializer.Deserialize<T>(response.JSONString ?? "");
+            }
+            catch (Exception e)
+            {
+
+            }
             return new ESIModelDTO<T>()
             {
                 NotModified = response.NotModified,
@@ -280,12 +291,23 @@ namespace EveWebClient.SSO.Models
                 Expires = response.Expires,
                 LastModified = response.LastModified,
                 MaxPages = response.MaxPages,
-                Model = JsonSerializer.Deserialize<T>(response.JSONString ?? "")
+                Model = _model,
             };
         }
 
         protected ESIModelDTO<T> ReturnModelDTO<T>(APIResponse response, int objectId)
         {
+            if (response.Error)
+                return null;
+            T _model = default(T);
+            try
+            {
+                _model = JsonSerializer.Deserialize<T>(response.JSONString ?? "");
+            }
+            catch (Exception e)
+            {
+
+            }
             return new ESIModelDTO<T>()
             {
                 NotModified = response.NotModified,
@@ -294,7 +316,7 @@ namespace EveWebClient.SSO.Models
                 Expires = response.Expires,
                 LastModified = response.LastModified,
                 MaxPages = response.MaxPages,
-                Model = JsonSerializer.Deserialize<T>(response.JSONString ?? ""),
+                Model = _model,
                 ObjectId = objectId
             };
         }

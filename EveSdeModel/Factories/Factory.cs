@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reflection;
-
-using EveSdeModel.Interfaces;
-
-using YamlDotNet.RepresentationModel;
+﻿using EveSdeModel.Interfaces;
 using EveSdeModel.Models;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
+using YamlDotNet.RepresentationModel;
 
 namespace EveSdeModel.Factories
 {

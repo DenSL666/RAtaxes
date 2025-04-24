@@ -10,6 +10,7 @@
 	<lastUpdateDateTime>2025-04-23T21:59:11.1069071+04:00</lastUpdateDateTime>
 	<hoursBeforeUpdate>6</hoursBeforeUpdate>
 	<taxParams>
+		<miningHoldingCorporationId>123456</miningHoldingCorporationId>
 		<refineEffincency>0.9063</refineEffincency>
 		<taxIce>0.1</taxIce>
 		<taxMinerals>0.1</taxMinerals>
@@ -22,4 +23,8 @@
 		<!--0 - eve average; 1 - jita sell; 2 - jita buy; 3 - jita split-->
 		<priceSource>0</priceSource>
 	</taxParams>
+	<seatParams>
+		<seatUrl>https://seat.domain.ru</seatUrl>
+		<seatToken>your_seat_api_token</seatToken>
+	</seatParams>
 </singleSignOn>

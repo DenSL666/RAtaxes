@@ -24,6 +24,13 @@ namespace EveSdeModel
         public static ReadOnlyCollection<EntityType> EntityTypes { get; private set; }
         public static ReadOnlyCollection<TypeMaterial> TypeMaterials { get; private set; }
 
+        private static bool IsInitializedAll =>
+            Categories != null && Categories.Any() &&
+            Groups != null && Groups.Any() &&
+            Blueprints != null && Blueprints.Any() &&
+            EntityTypes != null && EntityTypes.Any() &&
+            TypeMaterials != null && TypeMaterials.Any();
+
         static SdeMain()
         {
             Categories = new ReadOnlyCollection<Category>([]);
@@ -33,14 +40,47 @@ namespace EveSdeModel
             TypeMaterials = new ReadOnlyCollection<TypeMaterial>([]);
         }
 
-        public static void InitializeAll(bool needRewriteTypesSde = true)
-        {
-            InitGroups();
-            InitTypes();
-            InitMaterials();
 
-            if (needRewriteTypesSde)
-                TryRewriteTypesSde();
+        private static List<TypeMaterial> _asteroid;
+        public static List<TypeMaterial> Asteroid
+        {
+            get
+            {
+                if (TypeMaterials == null || !TypeMaterials.Any())
+                    InitializeAll();
+
+                if (_asteroid == null)
+                    _asteroid = TypeMaterials.Where(x => x.IsAsteroid).ToList();
+                return _asteroid;
+            }
+        }
+
+        private static List<EntityType> _asteroidRefineItems;
+        public static List<EntityType> AsteroidRefineItems
+        {
+            get
+            {
+                if (_asteroidRefineItems == null)
+                    _asteroidRefineItems = Asteroid.SelectMany(x => x.RefineMaterials.Keys).GroupBy(x => x.Id).Select(x => x.First()).ToList();
+                return _asteroidRefineItems;
+            }
+        }
+
+        public static void InitializeAll()
+        {
+            if (!IsInitializedAll)
+            {
+                InitGroups();
+                InitTypes();
+                InitMaterials();
+
+                var file = new FileInfo(Path.Combine(PathToFiles, TypeIDFilename));
+                var sizeBytes = file.Length;
+                var sizeMBytes = (double)sizeBytes / 1024 / 1024;
+
+                if (sizeMBytes > 20)
+                    TryRewriteTypesSde();
+            }
         }
 
         public static void InitGroups()

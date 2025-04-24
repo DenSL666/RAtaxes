@@ -1,17 +1,16 @@
-﻿using System;
+﻿using EveSdeModel.Factories;
+using EveSdeModel.Models;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using YamlDotNet.Core.Events;
 using YamlDotNet.Core;
+using YamlDotNet.Core.Events;
+using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 using YamlDotNet.Serialization.Utilities;
-using YamlDotNet.Serialization;
-
-using EveSdeModel.Models;
-using EveSdeModel.Factories;
 
 namespace EveSdeModel.Serialization
 {

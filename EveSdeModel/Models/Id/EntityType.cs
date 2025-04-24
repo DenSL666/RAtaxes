@@ -1,13 +1,12 @@
-﻿using EveSdeModel.Interfaces;
-using EveSdeModel.Factories;
+﻿using EveSdeModel.Factories;
+using EveSdeModel.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-
-using YamlDotNet.RepresentationModel;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
+using YamlDotNet.RepresentationModel;
 using YamlDotNet.Serialization;
 
 namespace EveSdeModel.Models
@@ -209,7 +208,7 @@ namespace EveSdeModel.Models
         private static List<string> Modules_2 = new List<string>
         {
             "Null", "Void", "Spike", "Javelin", "Barrage", "Hail", "Quake", "Tremor", "Scorch", "Conflagration", "Aurora", "Gleam", "Tetryon", "Baryon", "Meson", "Mystic", "Occult", "Imperial Navy", "Ammatar Navy", "Caldari Navy",
-            "Dark Blood", "Domination", "Dread Guristas", "Federation Navy", "Republic Fleet", "Sisters", "Shadow Serpentis", "True Sansha", "Veles", "Integrated", "Augmented", "Harvester", "Excavator", "Precision", "Fury", "High-grade", "Mid-grade", "Low-grade", 
+            "Dark Blood", "Domination", "Dread Guristas", "Federation Navy", "Republic Fleet", "Sisters", "Shadow Serpentis", "True Sansha", "Veles", "Integrated", "Augmented", "Harvester", "Excavator", "Precision", "Fury", "High-grade", "Mid-grade", "Low-grade",
             "Navy Issue", "Fleet Issue",
         };
 

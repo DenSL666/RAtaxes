@@ -1,13 +1,12 @@
-﻿using EveSdeModel.Interfaces;
-using EveSdeModel.Factories;
+﻿using EveSdeModel.Factories;
+using EveSdeModel.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-
-using YamlDotNet.RepresentationModel;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
+using YamlDotNet.RepresentationModel;
 
 
 namespace EveSdeModel.Models
@@ -124,7 +123,7 @@ namespace EveSdeModel.Models
         public Dictionary<EntityType, string> Products { get; }
         public EntityType Product => Products.Keys.FirstOrDefault();
 
-        public bool HasManufactory => Activities != null && 
+        public bool HasManufactory => Activities != null &&
             (Activities.Manufacturing != null && Activities.Manufacturing.Products.Any() ||
             Activities.Reaction != null && Activities.Reaction.Products.Any())
             && Product != null && Product.IsPublished && IsPublished;

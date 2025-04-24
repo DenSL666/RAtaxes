@@ -1,13 +1,10 @@
 ﻿using EveWebClient.SSO.Models.Esi;
-using EveWebClient.SSO.Models.External;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace EveWebClient.SSO.Models
 {
@@ -170,27 +167,6 @@ namespace EveWebClient.SSO.Models
             //CheckResponse(nameof(ListMarketPricesV1Async), responseModel.Error, responseModel.Message, responseModel.LegacyWarning, logger);
 
             return ReturnModelDTO<List<MarketPrice>>(responseModel);
-        }
-
-
-
-        public async Task<Dictionary<string, FuzzworkBuySellData>> GetFuzzworkPrices(Uri uri)
-        {
-            var request = new HttpRequestMessage
-            {
-                RequestUri = uri,
-                Method = HttpMethod.Get,
-            };
-            string json = "";
-
-            var response = await HTTP.SendAsync(request).ConfigureAwait(false);
-            if (response.IsSuccessStatusCode)
-            {
-                json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            }
-
-            Dictionary<string, FuzzworkBuySellData> marketData = JsonConvert.DeserializeObject<Dictionary<string, FuzzworkBuySellData>>(json);
-            return marketData;
         }
     }
 }

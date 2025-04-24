@@ -1,22 +1,22 @@
-﻿using System;
+﻿using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Sockets;
+using System.Reflection;
+using System.Reflection.Metadata;
+using System.Reflection.PortableExecutable;
 using System.Security.Cryptography;
 using System.Text;
-using System.Web;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using System.Reflection.Metadata;
-using System.Net;
-using System.Diagnostics;
-using System.Net.Sockets;
-using System.Reflection.PortableExecutable;
-using static System.Formats.Asn1.AsnWriter;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json.Serialization;
-using System.Reflection;
+using System.Threading.Tasks;
+using System.Web;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace EveWebClient.SSO
 {

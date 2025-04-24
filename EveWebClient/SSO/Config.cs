@@ -37,7 +37,10 @@ namespace EveWebClient.SSO
         public int HoursBeforeUpdate { get; set; }
 
         [XmlElement("taxParams")]
-        public TaxParams TaxParams { get; set;}
+        public TaxParams TaxParams { get; set; }
+
+        [XmlElement("seatParams")]
+        public SeatParams SeatParams { get; set; }
 
         internal Config()
         {
@@ -74,7 +77,7 @@ namespace EveWebClient.SSO
     public class TaxParams
     {
         [XmlElement("miningHoldingCorporationId")]
-        public string MiningHoldingCorporationId { get; set; }
+        public int MiningHoldingCorporationId { get; set; }
         [XmlElement("refineEffincency")]
         public double RefineEffincency { get; set; }
         [XmlElement("taxIce")]
@@ -100,4 +103,12 @@ namespace EveWebClient.SSO
         public int PriceSource { get; set; }
     }
 
+    public class SeatParams
+    {
+        [XmlElement("seatUrl")]
+        public string SeatUrl { get; set; }
+
+        [XmlElement("seatToken")]
+        public string SeatToken { get; set; }
+    }
 }

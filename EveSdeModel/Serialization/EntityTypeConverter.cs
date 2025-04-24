@@ -2,15 +2,15 @@
 using EveSdeModel.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using YamlDotNet.Core.Events;
 using YamlDotNet.Core;
-using YamlDotNet.Serialization.NamingConventions;
+using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
-using System.Data.Common;
-using System.Data;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace EveSdeModel.Serialization
 {
