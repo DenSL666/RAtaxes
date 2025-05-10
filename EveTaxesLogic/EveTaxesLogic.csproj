@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EveCommon\EveCommon.csproj" />
     <ProjectReference Include="..\EveDataStorage\EveDataStorage.csproj" />
     <ProjectReference Include="..\EveSdeModel\EveSdeModel.csproj" />
     <ProjectReference Include="..\EveWebClient\EveWebClient.csproj" />

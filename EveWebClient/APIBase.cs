@@ -1,4 +1,6 @@
-﻿using EveWebClient.SSO.Models.Esi;
+﻿using EveCommon.Interfaces;
+using EveWebClient.Esi.Models;
+using EveWebClient.SSO;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -11,26 +13,25 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace EveWebClient.SSO.Models
+namespace EveWebClient
 {
     public class APIBase
     {
-        private static HttpClient http;
-        //private static readonly ILogger logger = LibraryLogging.CreateLogger<APIBase>();
-        private static string TRANQUILITY_ESI_BASE = "https://esi.evetech.net";
-        private static string SERENITY_ESI_BASE = "https://esi.evepc.163.com";
+        private const string TRANQUILITY_ESI_BASE = "https://esi.evetech.net";
+        private const string SERENITY_ESI_BASE = "https://esi.evepc.163.com";
 
         public readonly string ESI_BASE;
         private readonly string dataSource;
-        internal HttpClient HTTP { get => http; set => http = value; }
+        protected IHttpClient GlobalHttpClient { get; }
 
-        internal APIBase(OAuthHelper helper)
+        protected IConfig Config { get; }
+
+        internal APIBase(IHttpClient globalHttpClient, IConfig config)
         {
-            this.dataSource = dataSource ?? "tranquility";
-            this.ESI_BASE = TRANQUILITY_ESI_BASE;
-
-            if (HTTP == null)
-                HTTP = helper.HttpClient;
+            dataSource = dataSource ?? "tranquility";
+            ESI_BASE = TRANQUILITY_ESI_BASE;
+            GlobalHttpClient = globalHttpClient;
+            Config = config;
         }
 
         internal async Task<APIResponse> GetAsync(string uri, string ifNoneMatch = null, Dictionary<string, string> queryParameters = null)
@@ -60,7 +61,7 @@ namespace EveWebClient.SSO.Models
 
         private async Task<APIResponse> RequestAsync(HttpMethod method, string uri, AccessTokenDetails auth, string ifNoneMatch = null, Dictionary<string, string> queryParameters = null, object body = null)
         {
-            var queryParams = HttpUtility.ParseQueryString(String.Empty);
+            var queryParams = HttpUtility.ParseQueryString(string.Empty);
             queryParams.Add("datasource", dataSource);
 
             if (queryParameters != null)
@@ -105,7 +106,7 @@ namespace EveWebClient.SSO.Models
                     request.Headers.Add("If-None-Match", ifNoneMatch);
                 }
 
-                var authResponse = await HTTP.SendAsync(request).ConfigureAwait(false);
+                var authResponse = await GlobalHttpClient.HttpClient.SendAsync(request).ConfigureAwait(false);
 
                 return await ProcessResponse(authResponse);
             }
@@ -115,18 +116,18 @@ namespace EveWebClient.SSO.Models
             }
         }
 
-        //protected static void CheckAuth(AccessTokenDetails auth, string scope)
-        //{
-        //    if (auth?.AccessToken == null || auth.CharacterId == 0 || scope == null || auth.Scopes == null)
-        //    {
-        //        throw new ArgumentNullException();
-        //    }
+        protected void CheckAuth(AccessTokenDetails auth, string scope)
+        {
+            if (auth?.AccessToken == null || scope == null || Config.Scopes == null)
+            {
+                throw new ArgumentNullException();
+            }
 
-        //    if (!auth.Scopes.Contains(scope))
-        //    {
-        //        throw new EVEStandardScopeNotAcquired("Missing scope: " + scope);
-        //    }
-        //}
+            if (!Config.Scopes.Contains(scope))
+            {
+                throw new EVEStandardScopeNotAcquired("Missing scope: " + scope);
+            }
+        }
 
         private static async Task<APIResponse> ProcessResponse(HttpResponseMessage response)
         {
@@ -197,7 +198,7 @@ namespace EveWebClient.SSO.Models
             if (response.Headers.Contains("warning"))
             {
                 model.LegacyWarning = true;
-                model.Message = String.Join(", ", response.Headers.GetValues("warning"));
+                model.Message = string.Join(", ", response.Headers.GetValues("warning"));
             }
             try
             {
@@ -274,7 +275,7 @@ namespace EveWebClient.SSO.Models
         {
             if (response.Error)
                 return null;
-            T _model = default(T);
+            T _model = default;
             try
             {
                 _model = JsonSerializer.Deserialize<T>(response.JSONString ?? "");
@@ -299,7 +300,7 @@ namespace EveWebClient.SSO.Models
         {
             if (response.Error)
                 return null;
-            T _model = default(T);
+            T _model = default;
             try
             {
                 _model = JsonSerializer.Deserialize<T>(response.JSONString ?? "");

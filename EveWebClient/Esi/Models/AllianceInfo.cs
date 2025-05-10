@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace EveWebClient.SSO.Models.Esi
+namespace EveWebClient.Esi.Models
 {
     public class AllianceInfo : ModelBase<AllianceInfo>
     {

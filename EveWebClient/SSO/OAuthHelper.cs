@@ -1,4 +1,6 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using EveCommon.Models;
+using EveCommon.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -24,18 +26,12 @@ namespace EveWebClient.SSO
     {
         #region Construct
 
-        public OAuthHelper(string clientId, string redirectUrl, IEnumerable<string> scopes)
+        public OAuthHelper(IHttpClient globalHttpClient, IConfig config)
         {
-            ClientId = clientId;
-            RedirectUrl = redirectUrl;
-            Scopes = scopes;
-
-            HttpClient = new HttpClient();
-        }
-
-        public OAuthHelper(Config config) : this(config.ClientId, config.CallbackUrl, config.Scopes)
-        {
-
+            ClientId = config.ClientId;
+            RedirectUrl = config.CallbackUrl;
+            Scopes = config.Scopes;
+            GlobalHttpClient = globalHttpClient;
         }
 
         #endregion
@@ -46,7 +42,7 @@ namespace EveWebClient.SSO
         private string ClientId { get; }
         private string RedirectUrl { get; }
         private IEnumerable<string> Scopes { get; }
-        internal HttpClient HttpClient { get; }
+        private IHttpClient GlobalHttpClient { get; }
         private string CodeVerifier { get; set; }
         private string CodeChallenge { get; set; }
 
@@ -164,7 +160,7 @@ namespace EveWebClient.SSO
 
                 var content = new FormUrlEncodedContent(payload);
 
-                var response = await HttpClient.PostAsync(TokenUrl, content);
+                var response = await GlobalHttpClient.HttpClient.PostAsync(TokenUrl, content);
                 response.EnsureSuccessStatusCode();
 
                 var token = await response.Content.ReadAsStringAsync();
@@ -195,7 +191,7 @@ namespace EveWebClient.SSO
 
             var content = new FormUrlEncodedContent(payload);
 
-            var response = await HttpClient.PostAsync(TokenUrl, content);
+            var response = await GlobalHttpClient.HttpClient.PostAsync(TokenUrl, content);
             response.EnsureSuccessStatusCode();
 
             string responseString = await response.Content.ReadAsStringAsync();

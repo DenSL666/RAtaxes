@@ -1,5 +1,7 @@
-﻿using EveDataStorage.Models;
+﻿using EveCommon;
+using EveDataStorage.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +15,7 @@ namespace EveDataStorage.Contexts
     {
         static StorageContext()
         {
-            if (!Directory.Exists("data"))
-                Directory.CreateDirectory("data");
+            PathDb = DIManager.Configuration.GetValue<string>("ConnectionStrings:eveStorageConnectionString");
         }
 
         public StorageContext()
@@ -22,7 +23,7 @@ namespace EveDataStorage.Contexts
 
         }
 
-        public const string PathDb = "data/storage.db";
+        public static string PathDb { get; }
 
         public DbSet<ObservedMining> ObservedMinings => Set<ObservedMining>();
         public DbSet<Character> Characters => Set<Character>();

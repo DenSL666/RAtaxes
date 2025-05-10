@@ -1,4 +1,6 @@
-﻿using EveDataStorage.Contexts;
+﻿using EveCommon.Interfaces;
+using EveCommon.Models;
+using EveDataStorage.Contexts;
 using EveDataStorage.Models;
 using EveSdeModel;
 using EveSdeModel.Models;
@@ -15,7 +17,7 @@ namespace EveTaxesLogic
 {
     public static class Taxes
     {
-        public static List<CorporationTax> CalculateCorporations(IEnumerable<TypeMaterial> oreList, IEnumerable<ObservedMining> corpLedger, IEnumerable<CharacterMain> characterMains, IEnumerable<ItemPrice> prices, Config config)
+        public static List<CorporationTax> CalculateCorporations(IEnumerable<TypeMaterial> oreList, IEnumerable<ObservedMining> corpLedger, IEnumerable<CharacterMain> characterMains, IEnumerable<ItemPrice> prices, IConfig config)
         {
             var charactersMoonMining = CalculateMoonMiningCharacters(oreList, corpLedger, prices, config);
             var userTaxes = new List<UserTax>();
@@ -67,7 +69,7 @@ namespace EveTaxesLogic
             return corpTaxes;
         }
 
-        public static List<CharacterTax> CalculateMoonMiningCharacters(IEnumerable<TypeMaterial> oreList, IEnumerable<ObservedMining> corpLedger, IEnumerable<ItemPrice> prices, Config config)
+        public static List<CharacterTax> CalculateMoonMiningCharacters(IEnumerable<TypeMaterial> oreList, IEnumerable<ObservedMining> corpLedger, IEnumerable<ItemPrice> prices, IConfig config)
         {
             var grouped = corpLedger.GroupBy(x => x.CharacterId).Where(x => x.ToArray().Any()).Select(x => new CharacterTax(x)).ToList();
 
@@ -78,7 +80,7 @@ namespace EveTaxesLogic
             return grouped;
         }
 
-        private static void CalculateCharacterTax(CharacterTax characterTax, IEnumerable<TypeMaterial> oreList, IEnumerable<ItemPrice> prices, Config config)
+        private static void CalculateCharacterTax(CharacterTax characterTax, IEnumerable<TypeMaterial> oreList, IEnumerable<ItemPrice> prices, IConfig config)
         {
             characterTax.MinedDictionary_Names = characterTax.MinedDictionary_Ids.ToDictionary(x => oreList.FirstOrDefault(y => y.TypeId == x.Key)?.Entity?.Name.English, x => x.Value);
             foreach (var pair in characterTax.MinedDictionary_Ids)
@@ -135,7 +137,7 @@ namespace EveTaxesLogic
 
         }
 
-        private static double SelectPrice(this ItemPrice price, Config config)
+        private static double SelectPrice(this ItemPrice price, IConfig config)
         {
             switch (config.TaxParams.PriceSource)
             {
@@ -152,7 +154,7 @@ namespace EveTaxesLogic
             }
         }
 
-        private static double SelectTax(this TypeMaterial ore, Config config)
+        private static double SelectTax(this TypeMaterial ore, IConfig config)
         {
             if (ore == null)
                 return 0;

@@ -1,10 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using EveCommon.Models;
+using EveCommon;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Formats.Asn1.AsnWriter;
+using Microsoft.Extensions.Configuration;
 
 namespace EveWebClient.SSO
 {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EveWebClient.SSO.Models
+namespace EveWebClient
 {
     internal class EVEStandardException : Exception
     {

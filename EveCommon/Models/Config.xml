@@ -9,8 +9,17 @@
 	</scopes>
 	<lastUpdateDateTime>2025-04-23T21:59:11.1069071+04:00</lastUpdateDateTime>
 	<hoursBeforeUpdate>6</hoursBeforeUpdate>
+	<fuzzworkPricesUrl>https://market.fuzzwork.co.uk/aggregates/?region=30000142&amp;types=</fuzzworkPricesUrl>
 	<taxParams>
 		<miningHoldingCorporationId>123456</miningHoldingCorporationId>
+		<allianceIdsToCalcTaxes>
+			<allianceId>123456</allianceId>
+			<allianceId>123456</allianceId>
+		</allianceIdsToCalcTaxes>
+		<corpIdsToExceptCollectWallet>
+			<corpId>123456</corpId>
+			<corpId>123456</corpId>
+		</corpIdsToExceptCollectWallet>
 		<refineEffincency>0.9063</refineEffincency>
 		<taxIce>0.1</taxIce>
 		<taxMinerals>0.1</taxMinerals>
@@ -24,7 +33,7 @@
 		<priceSource>0</priceSource>
 	</taxParams>
 	<seatParams>
-		<seatUrl>https://seat.domain.ru</seatUrl>
+		<seatUrl>https://seat.temp_domain.ru</seatUrl>
 		<seatToken>your_seat_api_token</seatToken>
 	</seatParams>
 </singleSignOn>

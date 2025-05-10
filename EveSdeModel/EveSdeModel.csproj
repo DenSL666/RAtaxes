@@ -11,6 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EveCommon\EveCommon.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="sde\blueprints.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

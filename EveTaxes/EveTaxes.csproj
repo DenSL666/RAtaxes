@@ -8,10 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EveCommon\EveCommon.csproj" />
     <ProjectReference Include="..\EveDataStorage\EveDataStorage.csproj" />
     <ProjectReference Include="..\EveSdeModel\EveSdeModel.csproj" />
     <ProjectReference Include="..\EveTaxesLogic\EveTaxesLogic.csproj" />
     <ProjectReference Include="..\EveWebClient\EveWebClient.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
