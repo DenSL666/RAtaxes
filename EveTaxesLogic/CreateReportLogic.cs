@@ -4,6 +4,9 @@ using EveDataStorage.Contexts;
 using EveDataStorage.Models;
 using EveSdeModel;
 using EveSdeModel.Models;
+using EveWebClient.Esi;
+using Microsoft.Extensions.Logging;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,17 +15,11 @@ using System.Threading.Tasks;
 
 namespace EveTaxesLogic
 {
-    public class CreateReportLogic
+    public class CreateReportLogic(IConfig config, ILogger<CreateReportLogic> logger, SdeMain sdeMain)
     {
-        protected IConfig Config { get; }
-
-        protected SdeMain SdeMain { get; }
-
-        public CreateReportLogic(IConfig config, SdeMain sdeMain)
-        {
-            Config = config;
-            SdeMain = sdeMain;
-        }
+        protected IConfig Config { get; } = config;
+        protected SdeMain SdeMain { get; } = sdeMain;
+        protected ILogger<CreateReportLogic> Logger { get; } = logger;
 
         public void CreateReport(string[] args)
         {
@@ -65,14 +62,15 @@ namespace EveTaxesLogic
             var ledger = GetLedger(startDate.Value, endDate.Value, alliIds: Config.TaxParams.AllianceIdsToCalcTaxes);
             var charMains = GetCharacterMains(alliIds: Config.TaxParams.AllianceIdsToCalcTaxes);
             var prices = GetPrices(SdeMain.AsteroidRefineItems.Select(x => x.TypeId).ToList());
+            var wallets = GetWalletTransactions(startDate.Value, endDate.Value, alliIds: Config.TaxParams.AllianceIdsToCalcTaxes);
 
-            var calculated = Taxes.CalculateCorporations(SdeMain.Asteroid, ledger, charMains, prices, Config);
+            var calculated = Taxes.CalculateCorporations(SdeMain.Asteroid, ledger, charMains, prices, wallets, Config);
 
             var name = $"taxesReport_{startDate.Value.ToLocalTime():yyyy_MM_dd}_{endDate.Value.ToLocalTime():yyyy_MM_dd}.xlsx";
             Epplus.Export(name, calculated);
         }
 
-        private List<ObservedMining> GetLedger(DateTime start, DateTime end, int[] corpIds = null, int[] alliIds = null)
+        private List<ObservedMining> GetLedger(DateTime start, DateTime end, int[]? corpIds = null, int[]? alliIds = null)
         {
             var result = new List<ObservedMining>();
             using (var context = new StorageContext())
@@ -103,7 +101,7 @@ namespace EveTaxesLogic
             return result;
         }
 
-        private List<CharacterMain> GetCharacterMains(int[] corpIds = null, int[] alliIds = null)
+        private List<CharacterMain> GetCharacterMains(int[]? corpIds = null, int[]? alliIds = null)
         {
             var result = new List<CharacterMain>();
             using (var context = new StorageContext())
@@ -145,5 +143,33 @@ namespace EveTaxesLogic
             return result;
         }
 
+        private List<WalletTransaction> GetWalletTransactions(DateTime start, DateTime end, int[]? corpIds = null, int[]? alliIds = null)
+        {
+            var result = new List<WalletTransaction>();
+
+            using (var context = new StorageContext())
+            {
+                if ((corpIds == null || !corpIds.Any()) && alliIds != null && alliIds.Any())
+                {
+                    corpIds = context.Corporations.Where(x => x.AllianceId.HasValue && alliIds.Contains(x.AllianceId.Value)).Select(x => x.CorporationId).ToArray();
+                }
+
+                if (corpIds != null && corpIds.Any())
+                {
+                    result = context.WalletTransactions.Where(x => start <= x.DateTime && x.DateTime < end && corpIds.Contains(x.CorporationId)).ToList();
+                }
+
+                foreach (var line in result)
+                {
+                    line.Character = context.Characters.FirstOrDefault(x => x.CharacterId == line.CharacterId);
+                    line.Corporation = context.Corporations.FirstOrDefault(x => x.CorporationId == line.CorporationId);
+                    if (line.Corporation != null)
+                    {
+                        line.Corporation.Alliance = context.Alliances.FirstOrDefault(x => x.AllianceId == line.Corporation.AllianceId);
+                    }
+                }
+            }
+            return result;
+        }
     }
 }

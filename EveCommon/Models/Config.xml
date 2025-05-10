@@ -20,6 +20,12 @@
 			<corpId>123456</corpId>
 			<corpId>123456</corpId>
 		</corpIdsToExceptCollectWallet>
+		<corpTransactTypes>
+			<corpTransactType>bounty_prizes</corpTransactType>
+			<corpTransactType>ess_escrow_transfer</corpTransactType>
+			<corpTransactType>corporate_reward_payout</corpTransactType>
+		</corpTransactTypes>
+		<taxRatting>0.08</taxRatting>
 		<refineEffincency>0.9063</refineEffincency>
 		<taxIce>0.1</taxIce>
 		<taxMinerals>0.1</taxMinerals>

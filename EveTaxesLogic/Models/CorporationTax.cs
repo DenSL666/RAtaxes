@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EveTaxesLogic.Models
 {
-    public class CorporationTax
+    public class CorporationTax : BaseTax
     {
         public int CorporationId { get; }
         public string CorporationName { get; }
@@ -17,9 +17,6 @@ namespace EveTaxesLogic.Models
         public Alliance? Alliance { get; }
 
         public List<UserTax> UserTaxes { get; }
-
-        public long TotalIskGain_MoonMining { get; set; }
-        public long TotalIskTax_MoonMining { get; set; }
 
         protected CorporationTax()
         {
@@ -43,10 +40,13 @@ namespace EveTaxesLogic.Models
                 Alliance = corporation.Alliance;
         }
 
-        public void SummTaxes()
+        public override void SummTaxes()
         {
             TotalIskGain_MoonMining = UserTaxes.Sum(x => x.TotalIskGain_MoonMining);
             TotalIskTax_MoonMining = UserTaxes.Sum(x => x.TotalIskTax_MoonMining);
+
+            TotalIskGain_Ratting = UserTaxes.Sum(x => x.TotalIskGain_Ratting);
+            TotalIskTax_Ratting = UserTaxes.Sum(x => x.TotalIskTax_Ratting);
         }
 
         public override string ToString()

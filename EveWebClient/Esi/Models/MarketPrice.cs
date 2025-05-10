@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Nodes;
@@ -17,6 +18,7 @@ namespace EveWebClient.Esi.Models
         static MarketPrice()
         {
             Path = DIManager.Configuration.GetValue<string>("Runtime:PathEsiPrices");
+            Path = System.IO.Path.Combine(AppContext.BaseDirectory, Path);
         }
 
         [System.Text.Json.Serialization.JsonIgnore]

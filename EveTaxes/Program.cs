@@ -12,6 +12,7 @@ using EveWebClient.External.Models.Seat;
 using EveWebClient.SSO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NLog;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -37,35 +38,54 @@ namespace EveTaxes
             if (!ARGS.Contains(param1))
                 return;
 
-            ServiceCollection services = new();
-            DIManager.Registry(services);
-            services.AddSingleton<OAuthHelper>();
-            services.AddSingleton<EsiHelper>();
-            services.AddSingleton<WebHelper>();
-            services.AddSingleton<SdeMain>();
-            services.AddSingleton<UpdateDataLogic>();
-            services.AddSingleton<CreateReportLogic>();
+            var logger = LogManager.GetCurrentClassLogger();
 
-            using ServiceProvider provider = services.BuildServiceProvider();
-            DIManager.ServiceProvider = provider;
-
-            StorageContext.Migrate();
-
-            switch (param1)
+            try
             {
-                case UpdateArg:
-                    {
-                        var updateDataLogic = DIManager.ServiceProvider.GetService<UpdateDataLogic>();
-                        await updateDataLogic.Update(args);
-                        break;
-                    }
-                    ;
-                case ReportArg:
-                    {
-                        var createReportLogic = DIManager.ServiceProvider.GetService<CreateReportLogic>();
-                        createReportLogic.CreateReport(args);
-                        break;
-                    }
+                ServiceCollection services = new();
+                DIManager.Registry(services);
+
+                services.AddScoped<OAuthHelper>();
+                services.AddScoped<EsiHelper>();
+                services.AddScoped<WebHelper>();
+
+                services.AddHttpClient<OAuthHelper>();
+                services.AddHttpClient<EsiHelper>();
+                services.AddHttpClient<WebHelper>();
+
+                services.AddSingleton<SdeMain>();
+                services.AddScoped<UpdateDataLogic>();
+                services.AddScoped<CreateReportLogic>();
+
+                using ServiceProvider provider = services.BuildServiceProvider();
+                DIManager.ServiceProvider = provider;
+
+                StorageContext.Migrate();
+
+                switch (param1)
+                {
+                    case UpdateArg:
+                        {
+                            var updateDataLogic = DIManager.ServiceProvider.GetService<UpdateDataLogic>();
+                            await updateDataLogic.Update(args);
+                            break;
+                        }
+                        ;
+                    case ReportArg:
+                        {
+                            var createReportLogic = DIManager.ServiceProvider.GetService<CreateReportLogic>();
+                            createReportLogic.CreateReport(args);
+                            break;
+                        }
+                }
+            }
+            catch (Exception exc)
+            {
+                logger.Error(exc, "Stopped program because of exception");
+            }
+            finally
+            {
+                LogManager.Shutdown();
             }
         }
     }

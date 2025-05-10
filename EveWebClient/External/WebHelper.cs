@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -23,12 +24,12 @@ namespace EveWebClient.External
         private const string SeatCorporationWalletJournalUrl = "/api/v2/corporation/wallet-journal";
 
         private IConfig Config { get; }
-        private IHttpClient GlobalHttpClient { get; }
+        private HttpClient HttpClient { get; }
 
-        public WebHelper(IHttpClient globalHttpClient, IConfig config)
+        public WebHelper(HttpClient httpClient, IConfig config)
         {
             Config = config;
-            GlobalHttpClient = globalHttpClient;
+            HttpClient = httpClient;
         }
 
         #region Получение всех цен
@@ -89,7 +90,7 @@ namespace EveWebClient.External
             };
             string json = "";
 
-            var response = await GlobalHttpClient.HttpClient.SendAsync(request).ConfigureAwait(false);
+            var response = await HttpClient.SendAsync(request).ConfigureAwait(false);
             if (response.IsSuccessStatusCode)
             {
                 json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -158,22 +159,31 @@ namespace EveWebClient.External
             var list = new List<WalletTransaction>();
             if (!page.HasValue)
                 page = 1;
+            int startPage = page.Value;
             int lastPage = 1;
 
             var result = new KeyValuePair<int, List<WalletTransaction>>(lastPage, list);
 
-            var page1 = await CreateSeatTask<CorporationWalletJournal>(page.Value, fullUrl, filter);
-            page++;
-            if (page1 == null || page1.WalletTransactions == null)
-                return result;
-            list.AddRange(page1.WalletTransactions);
-
-            lastPage = page1.Meta.last_page;
-            for (; page <= lastPage; page++)
+            try
             {
-                var _result = await CreateSeatTask<CorporationWalletJournal>(page.Value, fullUrl);
+                var page1 = await CreateSeatTask<CorporationWalletJournal>(page.Value, fullUrl, filter);
+                page++;
+                if (page1 == null || page1.WalletTransactions == null)
+                    return result;
+                list.AddRange(page1.WalletTransactions);
 
-                list.AddRange(_result.WalletTransactions);
+                lastPage = page1.Meta.last_page;
+                for (; page <= lastPage; page++)
+                {
+                    var _result = await CreateSeatTask<CorporationWalletJournal>(page.Value, fullUrl);
+
+                    list.AddRange(_result.WalletTransactions);
+                }
+            }
+            catch (Exception ex)
+            {
+                //  сохраним последнюю страницу, как предыдущую, с которой не было ошибки
+                lastPage = (new [] { page.Value - 1, startPage}).Max();
             }
 
             result = new KeyValuePair<int, List<WalletTransaction>>(lastPage, list);
@@ -207,7 +217,7 @@ namespace EveWebClient.External
             {
                 var request = CreateRequest(page, url, filter);
 
-                var response = await GlobalHttpClient.HttpClient.SendAsync(request).ConfigureAwait(false);
+                var response = await HttpClient.SendAsync(request).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
                     json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);

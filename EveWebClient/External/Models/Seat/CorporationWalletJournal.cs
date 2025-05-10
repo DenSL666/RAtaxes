@@ -9,7 +9,7 @@ namespace EveWebClient.External.Models.Seat
 {
     public class CorpTransact
     {
-        public long CorporationId { get; set; }
+        public int CorporationId { get; set; }
         public WTransaction[] Transactions { get; set; }
         public int LastPage { get; set; }
 
@@ -25,14 +25,14 @@ namespace EveWebClient.External.Models.Seat
         public DateTime DateTime { get; set; }
         public int Division { get; set; }
         public string RefType { get; set; }
-        public long IssuerId { get; set; }
+        public int IssuerId { get; set; }
 
         public WTransaction()
         {
 
         }
 
-        public WTransaction(long amount, DateTime dateTime, int division, string refType, long issuerId)
+        public WTransaction(long amount, DateTime dateTime, int division, string refType, int issuerId)
         {
             Amount = amount;
             DateTime = dateTime;
@@ -84,7 +84,7 @@ namespace EveWebClient.External.Models.Seat
 
     public class Party
     {
-        public long? entity_id { get; set; }
+        public int? entity_id { get; set; }
         public string name { get; set; }
         public string category { get; set; }
     }

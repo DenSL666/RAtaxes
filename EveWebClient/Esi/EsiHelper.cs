@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,7 +13,7 @@ namespace EveWebClient.Esi
 {
     public class EsiHelper : APIBase
     {
-        public EsiHelper(IHttpClient globalHttpClient, IConfig config) : base(globalHttpClient, config)
+        public EsiHelper(HttpClient httpClient, IConfig config) : base(httpClient, config)
         {
 
         }

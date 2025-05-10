@@ -15,7 +15,9 @@ namespace EveDataStorage.Contexts
     {
         static StorageContext()
         {
-            PathDb = DIManager.Configuration.GetValue<string>("ConnectionStrings:eveStorageConnectionString");
+            PathDb = "data\\storage.db";
+            //PathDb = DIManager.Configuration.GetValue<string>("ConnectionStrings:eveStorageConnectionString");
+            PathDb = Path.Combine(AppContext.BaseDirectory, PathDb);
         }
 
         public StorageContext()
@@ -31,6 +33,8 @@ namespace EveDataStorage.Contexts
         public DbSet<Alliance> Alliances => Set<Alliance>();
         public DbSet<ItemPrice> Prices => Set<ItemPrice>();
         public DbSet<CharacterMain> CharacterMains => Set<CharacterMain>();
+        public DbSet<WalletTransaction> WalletTransactions => Set<WalletTransaction>();
+        public DbSet<WalletTransactionType> WalletTransactionTypes => Set<WalletTransactionType>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -44,6 +48,7 @@ namespace EveDataStorage.Contexts
 
         public static void Migrate()
         {
+            CreateBackup();
             using (var context = new StorageContext())
             {
                 context.Database.Migrate();

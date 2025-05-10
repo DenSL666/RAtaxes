@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EveTaxesLogic.Models
 {
-    public class CharacterTax
+    public class CharacterTax : BaseTax
     {
         public int CharacterId { get; }
         public string CharacterName { get; }
@@ -20,10 +20,15 @@ namespace EveTaxesLogic.Models
         public Dictionary<int, long> RefinedMaterials_Ids { get; }
         public Dictionary<string, long> RefinedMaterials_Names { get; set; }
 
-        public long TotalIskGain_MoonMining { get; set; }
-        public long TotalIskTax_MoonMining { get; set; }
+        protected CharacterTax()
+        {
+            MinedDictionary_Ids = new Dictionary<int, long>();
+            RefinedMaterials_Ids = new Dictionary<int, long>();
+            MinedDictionary_Names = new Dictionary<string, long>();
+            RefinedMaterials_Names = new Dictionary<string, long>();
+        }
 
-        public CharacterTax(IGrouping<int, ObservedMining> group)
+        public CharacterTax(IGrouping<int, ObservedMining> group) : this()
         {
             CharacterId = group.Key;
             var mined = group.ToList();
@@ -31,10 +36,13 @@ namespace EveTaxesLogic.Models
             Corporation = mined.FirstOrDefault(x => x.Corporation != null)?.Corporation;
 
             MinedDictionary_Ids = mined.GroupBy(x => x.TypeId).ToDictionary(x => x.Key, x => x.Sum(y => y.Quantity));
+        }
 
-            RefinedMaterials_Ids = new Dictionary<int, long>();
-            MinedDictionary_Names = new Dictionary<string, long>();
-            RefinedMaterials_Names = new Dictionary<string, long>();
+        public CharacterTax(KeyValuePair<int, WalletTransaction[]> pair) : this()
+        {
+            CharacterId = pair.Key;
+            CharacterName = pair.Value.FirstOrDefault(x => x.Character != null)?.Character?.Name;
+            Corporation = pair.Value.FirstOrDefault(x => x.Corporation != null)?.Corporation;
         }
 
         public override string ToString()
@@ -43,6 +51,11 @@ namespace EveTaxesLogic.Models
                 return CharacterName;
 
             return $"[{Corporation.Name}] {CharacterName}";
+        }
+
+        public override void SummTaxes()
+        {
+            
         }
     }
 }

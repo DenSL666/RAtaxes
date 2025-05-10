@@ -22,15 +22,15 @@ namespace EveWebClient
 
         public readonly string ESI_BASE;
         private readonly string dataSource;
-        protected IHttpClient GlobalHttpClient { get; }
+        protected HttpClient HttpClient { get; }
 
         protected IConfig Config { get; }
 
-        internal APIBase(IHttpClient globalHttpClient, IConfig config)
+        internal APIBase(HttpClient httpClient, IConfig config)
         {
             dataSource = dataSource ?? "tranquility";
             ESI_BASE = TRANQUILITY_ESI_BASE;
-            GlobalHttpClient = globalHttpClient;
+            HttpClient = httpClient;
             Config = config;
         }
 
@@ -106,7 +106,7 @@ namespace EveWebClient
                     request.Headers.Add("If-None-Match", ifNoneMatch);
                 }
 
-                var authResponse = await GlobalHttpClient.HttpClient.SendAsync(request).ConfigureAwait(false);
+                var authResponse = await HttpClient.SendAsync(request).ConfigureAwait(false);
 
                 return await ProcessResponse(authResponse);
             }

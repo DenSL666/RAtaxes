@@ -10,6 +10,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.Configuration;
 
 using EveCommon.Interfaces;
+using System.IO;
 
 namespace EveCommon.Models
 {
@@ -42,6 +43,7 @@ namespace EveCommon.Models
         {
             _configuration = configuration;
             var pathConfig = _configuration.GetValue<string>("Runtime:PathConfig");
+            pathConfig = Path.Combine(AppContext.BaseDirectory, pathConfig);
             var config = Read(pathConfig);
 
             ClientId = config.ClientId;
@@ -59,6 +61,7 @@ namespace EveCommon.Models
         public void Write()
         {
             var pathConfig = _configuration.GetValue<string>("Runtime:PathConfig");
+            pathConfig = Path.Combine(AppContext.BaseDirectory, pathConfig);
             XmlSerializer serializer = new XmlSerializer(typeof(Config));
             using (Stream writer = new FileStream(pathConfig, FileMode.Create))
             {
@@ -198,6 +201,13 @@ namespace EveCommon.Models
         [XmlArray("corpIdsToExceptCollectWallet")]
         [XmlArrayItem("corpId", IsNullable = false)]
         public int[] CorpIdsToExceptCollectWallet { get; set; }
+
+        [XmlArray("corpTransactTypes")]
+        [XmlArrayItem("corpTransactType", IsNullable = false)]
+        public string[] CorpTransactTypes { get; set; }
+
+        [XmlElement("taxRatting")]
+        public double TaxRatting { get; set; }
 
         [XmlElement("refineEffincency")]
         public double RefineEffincency { get; set; }

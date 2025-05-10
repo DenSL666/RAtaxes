@@ -3,6 +3,7 @@ using System;
 using EveDataStorage.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EveDataStorage.Migrations
 {
     [DbContext(typeof(StorageContext))]
-    partial class StorageContextModelSnapshot : ModelSnapshot
+    [Migration("20250510160131_state5")]
+    partial class state5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.4");
@@ -30,7 +33,7 @@ namespace EveDataStorage.Migrations
 
                     b.HasKey("AllianceId");
 
-                    b.ToTable("Alliances", (string)null);
+                    b.ToTable("Alliances");
                 });
 
             modelBuilder.Entity("EveDataStorage.Models.Character", b =>
@@ -46,7 +49,7 @@ namespace EveDataStorage.Migrations
 
                     b.HasKey("CharacterId");
 
-                    b.ToTable("Characters", (string)null);
+                    b.ToTable("Characters");
                 });
 
             modelBuilder.Entity("EveDataStorage.Models.CharacterMain", b =>
@@ -72,7 +75,7 @@ namespace EveDataStorage.Migrations
 
                     b.HasKey("CharacterId");
 
-                    b.ToTable("CharacterMains", (string)null);
+                    b.ToTable("CharacterMains");
                 });
 
             modelBuilder.Entity("EveDataStorage.Models.Corporation", b =>
@@ -83,9 +86,6 @@ namespace EveDataStorage.Migrations
                         .HasColumnName("corporation_id");
 
                     b.Property<int?>("AllianceId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("LastSeatWalletPage")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -99,7 +99,7 @@ namespace EveDataStorage.Migrations
 
                     b.HasIndex("AllianceId");
 
-                    b.ToTable("Corporations", (string)null);
+                    b.ToTable("Corporations");
                 });
 
             modelBuilder.Entity("EveDataStorage.Models.ItemPrice", b =>
@@ -125,7 +125,7 @@ namespace EveDataStorage.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ItemPrices", (string)null);
+                    b.ToTable("ItemPrices");
                 });
 
             modelBuilder.Entity("EveDataStorage.Models.ObservedMining", b =>
@@ -158,49 +158,7 @@ namespace EveDataStorage.Migrations
 
                     b.HasIndex("CorporationId");
 
-                    b.ToTable("ObservedMinings", (string)null);
-                });
-
-            modelBuilder.Entity("EveDataStorage.Models.WalletTransaction", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<long>("Amount")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<long>("CharacterId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("CorporationId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("corporation_id");
-
-                    b.Property<DateTime>("DateTime")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("WalletTransactionType")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("WalletTransactions", (string)null);
-                });
-
-            modelBuilder.Entity("EveDataStorage.Models.WalletTransactionType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("WalletTransactionTypes", (string)null);
+                    b.ToTable("ObservedMinings");
                 });
 
             modelBuilder.Entity("EveDataStorage.Models.Corporation", b =>

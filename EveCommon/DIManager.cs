@@ -4,10 +4,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using NLog;
+using NLog.Extensions.Logging;
 
 using EveCommon.Models;
-using Microsoft.Extensions.Configuration;
 using EveCommon.Interfaces;
 
 namespace EveCommon
@@ -33,16 +36,23 @@ namespace EveCommon
         {
             Configuration = LoadConfiguration();
             services.AddSingleton(Configuration);
+            services.AddLogging(loggingBuilder =>
+            {
+                // configure Logging with NLog
+                loggingBuilder.ClearProviders();
+                loggingBuilder.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+                loggingBuilder.AddNLog(Configuration);
+            });
 
             services.AddSingleton<IConfig, Config>();
-            services.AddSingleton<IHttpClient, GlobalHttpClient>();
         }
 
         private static IConfiguration LoadConfiguration()
         {
+            var settingsPath = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+                .AddJsonFile(settingsPath, optional: true, reloadOnChange: true);
 
             return builder.Build();
         }

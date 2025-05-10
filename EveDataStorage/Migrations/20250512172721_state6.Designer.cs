@@ -3,6 +3,7 @@ using System;
 using EveDataStorage.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EveDataStorage.Migrations
 {
     [DbContext(typeof(StorageContext))]
-    partial class StorageContextModelSnapshot : ModelSnapshot
+    [Migration("20250512172721_state6")]
+    partial class state6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.4");
@@ -30,7 +33,7 @@ namespace EveDataStorage.Migrations
 
                     b.HasKey("AllianceId");
 
-                    b.ToTable("Alliances", (string)null);
+                    b.ToTable("Alliances");
                 });
 
             modelBuilder.Entity("EveDataStorage.Models.Character", b =>
@@ -46,7 +49,7 @@ namespace EveDataStorage.Migrations
 
                     b.HasKey("CharacterId");
 
-                    b.ToTable("Characters", (string)null);
+                    b.ToTable("Characters");
                 });
 
             modelBuilder.Entity("EveDataStorage.Models.CharacterMain", b =>
@@ -72,7 +75,7 @@ namespace EveDataStorage.Migrations
 
                     b.HasKey("CharacterId");
 
-                    b.ToTable("CharacterMains", (string)null);
+                    b.ToTable("CharacterMains");
                 });
 
             modelBuilder.Entity("EveDataStorage.Models.Corporation", b =>
@@ -99,7 +102,7 @@ namespace EveDataStorage.Migrations
 
                     b.HasIndex("AllianceId");
 
-                    b.ToTable("Corporations", (string)null);
+                    b.ToTable("Corporations");
                 });
 
             modelBuilder.Entity("EveDataStorage.Models.ItemPrice", b =>
@@ -125,7 +128,7 @@ namespace EveDataStorage.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ItemPrices", (string)null);
+                    b.ToTable("ItemPrices");
                 });
 
             modelBuilder.Entity("EveDataStorage.Models.ObservedMining", b =>
@@ -158,7 +161,7 @@ namespace EveDataStorage.Migrations
 
                     b.HasIndex("CorporationId");
 
-                    b.ToTable("ObservedMinings", (string)null);
+                    b.ToTable("ObservedMinings");
                 });
 
             modelBuilder.Entity("EveDataStorage.Models.WalletTransaction", b =>
@@ -185,7 +188,7 @@ namespace EveDataStorage.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WalletTransactions", (string)null);
+                    b.ToTable("WalletTransactions");
                 });
 
             modelBuilder.Entity("EveDataStorage.Models.WalletTransactionType", b =>
@@ -200,7 +203,7 @@ namespace EveDataStorage.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WalletTransactionTypes", (string)null);
+                    b.ToTable("WalletTransactionTypes");
                 });
 
             modelBuilder.Entity("EveDataStorage.Models.Corporation", b =>

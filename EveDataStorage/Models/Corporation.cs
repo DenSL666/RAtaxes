@@ -18,9 +18,13 @@ namespace EveDataStorage.Models
         [Required]
         public string Name { get; set; }
 
+        public float TaxRate { get; set; }
+
         public int? AllianceId { get; set; }
 
         public Alliance? Alliance { get; set; }
+
+        public int? LastSeatWalletPage { get; set; }
 
         public override string ToString()
         {

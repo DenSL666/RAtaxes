@@ -4,6 +4,7 @@ using EveCommon.Models;
 using EveDataStorage.Contexts;
 using EveDataStorage.Models;
 using EveSdeModel;
+using EveSdeModel.Models;
 using EveWebClient.Esi;
 using EveWebClient.Esi.Models;
 using EveWebClient.External;
@@ -11,8 +12,11 @@ using EveWebClient.External.Models;
 using EveWebClient.External.Models.Seat;
 using EveWebClient.SSO;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,58 +24,53 @@ using System.Xml.Serialization;
 
 namespace EveTaxesLogic
 {
-    public class UpdateDataLogic
+    public class UpdateDataLogic(IConfiguration configuration, IConfig config, ILogger<UpdateDataLogic> logger, OAuthHelper authHelper, EsiHelper esiHelper, WebHelper webHelper, SdeMain sdeMain)
     {
-        protected IConfiguration Configuration { get; }
-
-        protected IConfig Config { get; }
-
-        protected OAuthHelper AuthHelper { get; }
-
-        protected EsiHelper EsiHelper { get; }
-
-        protected WebHelper WebHelper { get; }
-
-        protected SdeMain SdeMain { get; }
-
-        public UpdateDataLogic (IConfiguration configuration, IConfig config, OAuthHelper authHelper, EsiHelper esiHelper, WebHelper webHelper, SdeMain sdeMain)
-        {
-            Configuration = configuration;
-            Config = config;
-            AuthHelper = authHelper;
-            EsiHelper = esiHelper;
-            WebHelper = webHelper;
-            SdeMain = sdeMain;
-        }
+        protected IConfiguration Configuration { get; } = configuration;
+        protected IConfig Config { get; } = config;
+        protected OAuthHelper AuthHelper { get; } = authHelper;
+        protected EsiHelper EsiHelper { get; } = esiHelper;
+        protected WebHelper WebHelper { get; } = webHelper;
+        protected SdeMain SdeMain { get; } = sdeMain;
+        protected ILogger<UpdateDataLogic> Logger { get; } = logger;
 
         public async Task Update(string[] args)
         {
-            var _date = Config.LastUpdateDateTime.AddHours(Config.HoursBeforeUpdate);
-            if (_date < DateTime.Now)
+            try
             {
-                StorageContext.CreateBackup();
+                var _date = Config.LastUpdateDateTime.AddHours(Config.HoursBeforeUpdate);
+                if (_date < DateTime.Now)
+                {
+                    var refineIdsStr = SdeMain.AsteroidRefineItems.Select(x => x.Id).ToList();
 
-                var refineIdsStr = SdeMain.AsteroidRefineItems.Select(x => x.Id).ToList();
+                    var token = await GetAndUpdateToken();
 
-                var token = await GetAndUpdateToken();
+                    await SaveCharacterMainsInfo();
 
-                await SaveCharacterMainsInfo();
+                    await UpdateCorpMiningStructureLedger(token);
 
-                await UpdateCorpMiningStructureLedger(token);
+                    var esiData = await EsiHelper.ListMarketPricesV1Async();
+                    MarketPrice.Save(esiData.Model);
 
-                var esiData = await EsiHelper.ListMarketPricesV1Async();
-                MarketPrice.Save(esiData.Model);
+                    await UpdatePrices(refineIdsStr);
 
-                await UpdatePrices(refineIdsStr);
+                    var wallets = await GetCorpWalletInfo();
+                    await SaveCorpWalletInfo(wallets);
 
-                Config.LastUpdateDateTime = DateTime.Now;
-                Config.Write();
+                    Config.LastUpdateDateTime = DateTime.Now;
+                    Config.Write();
+                }
+            }
+            catch (Exception exc)
+            {
+                Logger.LogError(exc, "Ошибка при попытке обновления данных");
             }
         }
 
         public async Task<AccessTokenDetails> GetAndUpdateToken()
         {
             var path = Configuration.GetValue<string>("Runtime:PathAuth");
+            path = Path.Combine(AppContext.BaseDirectory, path);
             var token = AccessTokenDetails.Read(path);
             if (!token.IsEmpty)
             {
@@ -184,6 +183,8 @@ namespace EveTaxesLogic
             var observers = await EsiHelper.CorporationMiningObserversV1Async(token, Config.TaxParams.MiningHoldingCorporationId);
             using (var context = new StorageContext())
             {
+                var hashes = context.ObservedMinings.Select(x => x.Hash).ToHashSet();
+
                 foreach (var observer in observers.Model.OrderBy(x => x.LastUpdated))
                 {
                     bool setMaxPage = false;
@@ -209,8 +210,8 @@ namespace EveTaxesLogic
                             foreach (var _observed in observed.Model)
                             {
                                 var _hash = ObservedMining.GetHash(_observed.CharacterId, _observed.LastUpdated, observer.ObserverId, _observed.TypeId);
-                                var foundObserved = context.ObservedMinings.ToList().FirstOrDefault(x => x.Hash == _hash);
-                                if (foundObserved == null)
+                                
+                                if (!hashes.Contains(_hash))
                                 {
                                     var _obs = new ObservedMining()
                                     {
@@ -222,10 +223,13 @@ namespace EveTaxesLogic
                                         ObserverId = observer.ObserverId,
                                     };
                                     context.ObservedMinings.Add(_obs);
+                                    hashes.Add(_hash);
                                 }
                                 else
                                 {
-                                    foundObserved.Quantity = _observed.Quantity;
+                                    var foundObserved = context.ObservedMinings.ToList().FirstOrDefault(x => x.Hash == _hash);
+                                    if (foundObserved != null)
+                                        foundObserved.Quantity = _observed.Quantity;
                                 }
                                 context.SaveChanges();
                             }
@@ -272,18 +276,9 @@ namespace EveTaxesLogic
 
         private async Task SaveCorporationsInfo(IEnumerable<int> corpIds, StorageContext context)
         {
-            var except = new List<int>();
-            foreach (var id in corpIds)
+            if (corpIds.Any())
             {
-                var found = context.Corporations.FirstOrDefault(x => x.CorporationId == id);
-                if (found != null)
-                    except.Add(id);
-            }
-            var _corpIds = corpIds.Except(except).ToArray();
-
-            if (_corpIds.Any())
-            {
-                var tasks = _corpIds.Select(async x => await EsiHelper.GetCorporationInfoV5Async(x)).ToArray();
+                var tasks = corpIds.Select(async x => await EsiHelper.GetCorporationInfoV5Async(x)).ToArray();
                 var corpInfos = await Task.WhenAll(tasks);
                 corpInfos = corpInfos.Where(x => x != null).ToArray();
 
@@ -300,8 +295,14 @@ namespace EveTaxesLogic
                             CorporationId = info.ObjectId,
                             AllianceId = info.Model.AllianceId,
                             Name = info.Model.Name,
+                            TaxRate = info.Model.TaxRate,
                         };
                         context.Corporations.Add(corp);
+                    }
+                    else
+                    {
+                        found.AllianceId = info.Model.AllianceId;
+                        found.TaxRate = info.Model.TaxRate;
                     }
                 }
                 context.SaveChanges();
@@ -384,24 +385,117 @@ namespace EveTaxesLogic
         }
 
 
-        private async Task SaveCorporationWallet(int[] allianceIds)
+        private async Task SaveCorpWalletInfo(IEnumerable<CorpTransact> corps)
         {
-            var corpIds = new List<int>();
-            foreach (var id in allianceIds)
+            using (var context = new StorageContext())
             {
-                var _res = await EsiHelper.ListAllianceCorporationsV1Async(id);
-                corpIds.Add(id);
+                var validTypes = context.WalletTransactionTypes.Where(x => Config.TaxParams.CorpTransactTypes.Contains(x.Name)).ToArray();
+                var hashes = context.WalletTransactions.Select(x => x.Hash).ToHashSet();
+
+                var charIds = corps.SelectMany(x => x.Transactions.Select(y => y.IssuerId)).Distinct().ToArray();
+                await SaveCharactersInfo(charIds, context);
+
+                var corpIds = corps.Select(x => x.CorporationId).Distinct().ToArray();
+                await SaveCorporationsInfo(corpIds, context);
+
+                foreach (var corp in corps)
+                {
+                    corp.Transactions = corp.Transactions.Where(x => Config.TaxParams.CorpTransactTypes.Contains(x.RefType)).ToArray();
+
+                    var foundCorp = context.Corporations.FirstOrDefault(x => x.CorporationId == corp.CorporationId);
+                    if (foundCorp != null)
+                    {
+                        foundCorp.LastSeatWalletPage = corp.LastPage;
+                        context.SaveChanges();
+                    }
+
+                    if (foundCorp != null && corp.Transactions.Any())
+                    {
+                        foreach (var trx in corp.Transactions)
+                        {
+                            var foundType = validTypes.FirstOrDefault(x => x.Name == trx.RefType);
+                            if (foundType != null)
+                            {
+                                var _hash = EveDataStorage.Models.WalletTransaction.GetHash(corp.CorporationId, trx.DateTime, foundType.Id, trx.IssuerId, trx.Amount);
+                                if (!hashes.Contains(_hash))
+                                {
+                                    var foundWalletTransact = new EveDataStorage.Models.WalletTransaction
+                                    {
+                                        CorporationId = corp.CorporationId,
+                                        WalletTransactionType = foundType.Id,
+                                        Amount = trx.Amount,
+                                        DateTime = trx.DateTime,
+                                        CharacterId = trx.IssuerId,
+                                    };
+                                    context.WalletTransactions.Add(foundWalletTransact);
+                                    context.SaveChanges();
+                                    hashes.Add(_hash);
+                                }
+
+                            }
+                        }
+                    }
+                }
             }
-            corpIds = corpIds.Distinct().Except(Config.TaxParams.CorpIdsToExceptCollectWallet).ToList();
+        }
 
+        private async Task<List<CorpTransact>> GetCorpWalletInfo()
+        {
+            var result = new List<CorpTransact>();
+            var dict = new Dictionary<int, int>();
 
-            XmlSerializer serializer = new XmlSerializer(typeof(List<CorpTransact>));
-            var corps = new List<CorpTransact>();
-            foreach (var corpId in corpIds)
+            try
             {
+                var corpIds = new List<int>();
+                foreach (var id in Config.TaxParams.AllianceIdsToCalcTaxes)
+                {
+                    var _res = await EsiHelper.ListAllianceCorporationsV1Async(id);
+                    corpIds.AddRange(_res.Model);
+                }
+                corpIds = corpIds.Distinct().Except(Config.TaxParams.CorpIdsToExceptCollectWallet).ToList();
+
+                using (var context = new StorageContext())
+                {
+                    var notFoundCorpIds = new List<int>();
+
+                    foreach (var corpId in corpIds)
+                    {
+                        var foundCorp = context.Corporations.FirstOrDefault(x => x.CorporationId == corpId);
+                        if (foundCorp == null)
+                        {
+                            notFoundCorpIds.Add(corpId);
+                        }
+                    }
+
+                    if (notFoundCorpIds.Count > 0)
+                    {
+                        await SaveCorporationsInfo(notFoundCorpIds, context);
+                    }
+
+                    foreach (var corpId in corpIds)
+                    {
+                        var foundCorp = context.Corporations.FirstOrDefault(x => x.CorporationId == corpId);
+                        if (foundCorp != null)
+                        {
+                            var page = foundCorp.LastSeatWalletPage ?? 1;
+                            dict.Add(corpId, page);
+                        }
+                    }
+                }
+            }
+            catch (Exception exc)
+            {
+                Logger.LogError(exc, "Ошибка при подготовке словаря для получения данных валлета из сеата");
+            }
+
+            foreach (var pair in dict)
+            {
+                var corpId = pair.Key;
+                var _startPage = pair.Value;
                 try
                 {
-                    int _startPage = await WebHelper.SearchPageSeatCorporationWalletJournal(corpId, DateTime.Parse("2025-01-01"));
+                    if (_startPage == 1)
+                        _startPage = await WebHelper.SearchPageSeatCorporationWalletJournal(corpId, DateTime.Parse("2025-01-01"));
                     if (_startPage == -1)
                         continue;
 
@@ -409,19 +503,19 @@ namespace EveTaxesLogic
                     var _corp = new CorpTransact();
                     _corp.CorporationId = corpId;
                     _corp.LastPage = _res.Key;
-                    _corp.Transactions = _res.Value.Where(x => x != null && x.second_party != null && x.second_party.entity_id.HasValue && x.second_party.category == "character").Select(x => new WTransaction(x)).ToArray();
-                    corps.Add(_corp);
-
-                    using (Stream writer = new FileStream($"transactions_.xml", FileMode.Create))
-                    {
-                        serializer.Serialize(writer, corps);
-                    }
+                    _corp.Transactions = _res.Value
+                        .Where(x => x != null && x.division == 1 && x.second_party != null && x.second_party.entity_id.HasValue && x.second_party.category == "character" && Config.TaxParams.CorpTransactTypes.Contains(x.ref_type))
+                        .Select(x => new WTransaction(x))
+                        .ToArray();
+                    result.Add(_corp);
                 }
-                catch (Exception ex)
+                catch (Exception exc)
                 {
-
+                    Logger.LogError(exc, $"Ошибка при получении данных валлета из сеата для корпорации {corpId} со страницы {_startPage}");
                 }
             }
+
+            return result;
         }
     }
 }

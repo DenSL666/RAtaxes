@@ -24,14 +24,17 @@ namespace EveTaxesLogic
                 ExcelWorksheet sheet = package.Workbook.Worksheets.Add("MySheet");
 
                 var rowNum = 2;
-                var headers = new string[] { "Альянс", "Корпорация", "Имя персонажа", "Общий доход с лун", "Общий налог с лун" };
+                var headers = new string[] { "Альянс", "Корпорация", "Имя персонажа", "Общий доход", "Общий налог", "Общий доход с лун", "Общий налог с лун", "Крабский доход", "Крабский налог"};
                 int numberColumn1 = headers.Length - 1, numberColumn2 = headers.Length;
                 sheet.FillRow(1, 1, headers);
 
                 foreach (var character in characterTaxes.OrderBy(x => x.Corporation.AllianceId).ThenBy(x => x.Corporation.Name).ThenBy(x => x.CharacterName))
                 {
                     var values = new string[] { (character.Corporation.Alliance != null ? character.Corporation.Alliance.Name : ""),
-                        character.Corporation.Name, character.CharacterName, character.TotalIskGain_MoonMining.ToString(), character.TotalIskTax_MoonMining.ToString() };
+                        character.Corporation.Name, character.CharacterName, character.TotalIskGain.ToString(), character.TotalIskTax.ToString(), 
+                        character.TotalIskGain_MoonMining.ToString(), character.TotalIskTax_MoonMining.ToString(),
+                        character.TotalIskGain_Ratting.ToString(), character.TotalIskTax_Ratting.ToString(),
+                    };
                     sheet.FillRow(rowNum, 1, values);
                     rowNum++;
                 }
@@ -52,7 +55,7 @@ namespace EveTaxesLogic
 
                 var startCol = 1;
                 var rowNum = 1;
-                var headers = new string[] { "Альянс", "Корпорация", "Имя пользователя", "Имя персонажа", "Общий доход с лун", "Общий налог с лун" };
+                var headers = new string[] { "Альянс", "Корпорация", "Имя пользователя", "Имя персонажа", "Общий доход", "Общий налог", "Общий доход с лун", "Общий налог с лун", "Крабский доход", "Крабский налог" };
                 int numberColumn1 = headers.Length - 1, numberColumn2 = headers.Length;
                 sheet.FillRow(rowNum, startCol, headers);
                 rowNum++;
@@ -67,16 +70,23 @@ namespace EveTaxesLogic
                     {
                         allianceName = allianceInfo.Name;
                     }
+
+                    var summAllianceGain = alliance.Value.Sum(x => x.TotalIskGain);
+                    var summAllianceTaxes = alliance.Value.Sum(x => x.TotalIskTax);
+
                     var summAllianceGain_MoonMining = alliance.Value.Sum(x => x.TotalIskGain_MoonMining);
                     var summAllianceTaxes_MoonMining = alliance.Value.Sum(x => x.TotalIskTax_MoonMining);
 
-                    var allianceHeader = new object[] { allianceName, "", "", "", summAllianceGain_MoonMining, summAllianceTaxes_MoonMining };
+                    var summAllianceGain_Ratting = alliance.Value.Sum(x => x.TotalIskGain_Ratting);
+                    var summAllianceTaxes_Ratting = alliance.Value.Sum(x => x.TotalIskTax_Ratting);
+
+                    var allianceHeader = new object[] { allianceName, "", "", "", summAllianceGain, summAllianceTaxes, summAllianceGain_MoonMining, summAllianceTaxes_MoonMining, summAllianceGain_Ratting, summAllianceTaxes_Ratting };
                     sheet.FillRow(rowNum, startCol, allianceHeader);
                     rowNum++;
 
                     foreach (var corporation in alliance.Value.OrderBy(x => x.CorporationId))
                     {
-                        var corporationHeader = new object[] { "", corporation.CorporationName, "", "", corporation.TotalIskGain_MoonMining, corporation.TotalIskTax_MoonMining };
+                        var corporationHeader = new object[] { "", corporation.CorporationName, "", "", corporation.TotalIskGain, corporation.TotalIskTax, corporation.TotalIskGain_MoonMining, corporation.TotalIskTax_MoonMining, corporation.TotalIskGain_Ratting, corporation.TotalIskTax_Ratting };
                         sheet.FillRow(rowNum, startCol, corporationHeader);
                         rowNum++;
 
@@ -85,13 +95,13 @@ namespace EveTaxesLogic
                             //  если персонажей несколько
                             if (user.CharacterTaxes.Count > 1)
                             {
-                                var userHeader = new object[] { "", "", user.Name, "", user.TotalIskGain_MoonMining, user.TotalIskTax_MoonMining };
+                                var userHeader = new object[] { "", "", user.Name, "", user.TotalIskGain, user.TotalIskTax, user.TotalIskGain_MoonMining, user.TotalIskTax_MoonMining, user.TotalIskGain_Ratting, user.TotalIskTax_Ratting };
                                 sheet.FillRow(rowNum, startCol, userHeader);
                                 rowNum++;
 
                                 foreach (var characterTax in user.CharacterTaxes.OrderBy(x => x.CharacterId))
                                 {
-                                    var characterTaxRow = new object[] { "", "", "", characterTax.CharacterName, characterTax.TotalIskGain_MoonMining, characterTax.TotalIskTax_MoonMining };
+                                    var characterTaxRow = new object[] { "", "", "", characterTax.CharacterName, characterTax.TotalIskGain, characterTax.TotalIskTax, characterTax.TotalIskGain_MoonMining, characterTax.TotalIskTax_MoonMining, characterTax.TotalIskGain_Ratting, characterTax.TotalIskTax_Ratting };
                                     sheet.FillRow(rowNum, startCol, characterTaxRow);
                                     rowNum++;
                                 }
@@ -101,7 +111,7 @@ namespace EveTaxesLogic
                                 var _char = user.CharacterTaxes.FirstOrDefault();
                                 if (_char != null)
                                 {
-                                    var userHeader = new object[] { "", "", user.Name, _char.CharacterName, user.TotalIskGain_MoonMining, user.TotalIskTax_MoonMining };
+                                    var userHeader = new object[] { "", "", user.Name, _char.CharacterName, user.TotalIskGain, user.TotalIskTax, user.TotalIskGain_MoonMining, user.TotalIskTax_MoonMining, user.TotalIskGain_Ratting, user.TotalIskTax_Ratting };
                                     sheet.FillRow(rowNum, startCol, userHeader);
                                     rowNum++;
                                 }

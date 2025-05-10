@@ -26,11 +26,11 @@ namespace EveSdeModel
 
         public SdeMain(IConfiguration configuration)
         {
-            CategoriesPath = configuration.GetValue<string>("Runtime:PathSdeCategories");
-            GroupsPath = configuration.GetValue<string>("Runtime:PathSdeGroups");
-            TypeIDPath = configuration.GetValue<string>("Runtime:PathSdeTypes");
-            TypeMaterialsPath = configuration.GetValue<string>("Runtime:PathSdeTypeMaterials");
-            BlueprintsPath = configuration.GetValue<string>("Runtime:PathSdeBlueprints");
+            CategoriesPath = Path.Combine(AppContext.BaseDirectory, configuration.GetValue<string>("Runtime:PathSdeCategories"));
+            GroupsPath = Path.Combine(AppContext.BaseDirectory, configuration.GetValue<string>("Runtime:PathSdeGroups"));
+            TypeIDPath = Path.Combine(AppContext.BaseDirectory, configuration.GetValue<string>("Runtime:PathSdeTypes"));
+            TypeMaterialsPath = Path.Combine(AppContext.BaseDirectory, configuration.GetValue<string>("Runtime:PathSdeTypeMaterials"));
+            BlueprintsPath = Path.Combine(AppContext.BaseDirectory, configuration.GetValue<string>("Runtime:PathSdeBlueprints"));
 
             Categories = new ReadOnlyCollection<Category>([]);
             Groups = new ReadOnlyCollection<Group>([]);
