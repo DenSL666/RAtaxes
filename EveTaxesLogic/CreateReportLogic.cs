@@ -171,5 +171,68 @@ namespace EveTaxesLogic
             }
             return result;
         }
+
+        /// <summary>
+        /// Временный код по сохранению sde в БД
+        /// </summary>
+        [Obsolete]
+        private void SaveUniverseSde()
+        {
+            var regions = SdeMain.InvItems.Where(x => x.IsRegion).ToList();
+            var constellations = SdeMain.InvItems.Where(x => x.IsConstellation).ToList();
+            var solarSystems = SdeMain.InvItems.Where(x => x.IsSolarSystem).ToList();
+
+            using (var context = new StorageContext())
+            {
+                foreach (var region in regions)
+                {
+                    var id = int.Parse(region.Id);
+                    var found = context.Regions.FirstOrDefault(x => x.Id == id);
+                    if (found == null)
+                    {
+                        context.Regions.Add(new Region
+                        {
+                            Id = id,
+                            Name = region.Name,
+                        });
+                        context.SaveChanges();
+                    }
+                }
+
+                foreach (var constellation in constellations)
+                {
+                    var id = int.Parse(constellation.Id);
+                    var locId = int.Parse(constellation.LocationID);
+                    var found = context.Constellations.FirstOrDefault(x => x.Id == id);
+                    if (found == null)
+                    {
+                        context.Constellations.Add(new Constellation
+                        {
+                            Id = id,
+                            Name = constellation.Name,
+                            RegionId = locId,
+                        });
+                        context.SaveChanges();
+                    }
+                }
+
+                foreach (var solarSystem in solarSystems)
+                {
+                    var id = int.Parse(solarSystem.Id);
+                    var locId = int.Parse(solarSystem.LocationID);
+                    var found = context.SolarSystems.FirstOrDefault(x => x.Id == id);
+                    if (found == null)
+                    {
+                        context.SolarSystems.Add(new SolarSystem
+                        {
+                            Id = id,
+                            Name = solarSystem.Name,
+                            ConstellationId = locId,
+                        });
+                        context.SaveChanges();
+                    }
+                }
+            }
+        }
     }
 }

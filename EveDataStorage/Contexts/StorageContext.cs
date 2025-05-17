@@ -36,6 +36,10 @@ namespace EveDataStorage.Contexts
         public DbSet<WalletTransaction> WalletTransactions => Set<WalletTransaction>();
         public DbSet<WalletTransactionType> WalletTransactionTypes => Set<WalletTransactionType>();
 
+        public DbSet<Region> Regions => Set<Region>();
+        public DbSet<Constellation> Constellations => Set<Constellation>();
+        public DbSet<SolarSystem> SolarSystems => Set<SolarSystem>();
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite($"Data Source={PathDb}");

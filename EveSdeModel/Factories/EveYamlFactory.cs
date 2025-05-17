@@ -72,6 +72,26 @@ namespace EveSdeModel.Factories
             return result;
         }
 
+        public static List<T> ParseFileSequence<T>(string pathToFile) where T : IYamlEntity, new()
+        {
+            var result = new List<T>();
+            using (var rd = new StreamReader(pathToFile))
+            {
+                // Load the stream
+                var yaml = new YamlStream();
+                yaml.Load(rd);
+
+                // Examine the stream
+                var mapping = (YamlSequenceNode)yaml.Documents[0].RootNode;
+                foreach (YamlMappingNode entry in mapping.Children)
+                {
+                    var _res = GetObject<T>(entry);
+                    result.Add(_res);
+                }
+            }
+            return result;
+        }
+
         public static string GetAttr(this string attrName, Type type)
         {
             var result = type.GetProperty(attrName)?.GetCustomAttribute<JsonPropertyNameAttribute>()?.Name;

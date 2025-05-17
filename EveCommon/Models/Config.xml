@@ -25,6 +25,9 @@
 			<corpTransactType>ess_escrow_transfer</corpTransactType>
 			<corpTransactType>corporate_reward_payout</corpTransactType>
 		</corpTransactTypes>
+		<mineralTaxMiningRegions>
+			<mineralTaxMiningRegion>123456</mineralTaxMiningRegion>
+		</mineralTaxMiningRegions>
 		<taxRatting>0.08</taxRatting>
 		<refineEffincency>0.9063</refineEffincency>
 		<taxIce>0.1</taxIce>

@@ -1,5 +1,6 @@
 ﻿using EveSdeModel.Factories;
 using EveSdeModel.Models;
+using EveSdeModel.Models.Id;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,8 @@ namespace EveSdeModel
         public ReadOnlyCollection<Blueprint> Blueprints { get; private set; }
         public ReadOnlyCollection<EntityType> EntityTypes { get; private set; }
         public ReadOnlyCollection<TypeMaterial> TypeMaterials { get; private set; }
+        public ReadOnlyCollection<InvItem> InvItems { get; private set; }
+        public ReadOnlyCollection<InvUniqueName> InvUniqueNames { get; private set; }
 
         public SdeMain(IConfiguration configuration)
         {
@@ -37,6 +40,8 @@ namespace EveSdeModel
             Blueprints = new ReadOnlyCollection<Blueprint>([]);
             EntityTypes = new ReadOnlyCollection<EntityType>([]);
             TypeMaterials = new ReadOnlyCollection<TypeMaterial>([]);
+            InvItems = new ReadOnlyCollection<InvItem>([]);
+            InvUniqueNames = new ReadOnlyCollection<InvUniqueName>([]);
 
             InitGroups();
             InitTypes();
@@ -123,6 +128,21 @@ namespace EveSdeModel
                 Blueprints = new ReadOnlyCollection<Blueprint>(EveYamlFactory.ParseFile<Blueprint>(BlueprintsPath));
                 foreach (var blueprint in Blueprints)
                     blueprint.FillMaterials(EntityTypes);
+            }
+        }
+
+        private void InitInvItems()
+        {
+            if (!EntityTypes.Any())
+            {
+                InitGroups();
+            }
+            if (!InvItems.Any())
+            {
+                InvUniqueNames = new ReadOnlyCollection<InvUniqueName>(EveYamlFactory.ParseFileSequence<InvUniqueName>(Path.Combine(AppContext.BaseDirectory, "sde", "invUniqueNames.yaml")));
+                InvItems = new ReadOnlyCollection<InvItem>(EveYamlFactory.ParseFileSequence<InvItem>(Path.Combine(AppContext.BaseDirectory, "sde", "invItems.yaml")));
+                foreach (var invItem in InvItems.Where(x => x.IsSolarSystem || x.IsConstellation || x.IsRegion))
+                    invItem.FillNames(InvUniqueNames);
             }
         }
 

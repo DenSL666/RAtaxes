@@ -206,6 +206,10 @@ namespace EveCommon.Models
         [XmlArrayItem("corpTransactType", IsNullable = false)]
         public string[] CorpTransactTypes { get; set; }
 
+        [XmlArray("mineralTaxMiningRegions")]
+        [XmlArrayItem("mineralTaxMiningRegion", IsNullable = false)]
+        public int[] MineralTaxMiningRegions { get; set; }
+
         [XmlElement("taxRatting")]
         public double TaxRatting { get; set; }
 

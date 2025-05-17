@@ -185,7 +185,7 @@ namespace EveTaxesLogic
             {
                 var hashes = context.ObservedMinings.Select(x => x.Hash).ToHashSet();
 
-                foreach (var observer in observers.Model.OrderBy(x => x.LastUpdated))
+                foreach (var observer in observers.Model.Where(x => x != null).OrderBy(x => x.LastUpdated))
                 {
                     bool setMaxPage = false;
                     int maxPage = 1, i = 1;
