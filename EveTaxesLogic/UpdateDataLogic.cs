@@ -38,6 +38,8 @@ namespace EveTaxesLogic
         {
             try
             {
+                await SaveMineralMiningInfo();
+
                 var _date = Config.LastUpdateDateTime.AddHours(Config.HoursBeforeUpdate);
                 if (_date < DateTime.Now)
                 {
@@ -516,6 +518,65 @@ namespace EveTaxesLogic
             }
 
             return result;
+        }
+
+        private async Task SaveMineralMiningInfo()
+        {
+            var minings = new List<MineralMining>();
+            var list = new List<string[]>();
+            using (var rd = new StreamReader(@"F:\mining.csv"))
+            {
+                while(!rd.EndOfStream)
+                {
+                    var str = rd.ReadLine();
+                    if (!string.IsNullOrEmpty(str))
+                    {
+                        var arr = str.Split(',').Select(x => x.Trim('\"')).ToArray();
+                        if (arr.Length == 7 && int.TryParse(arr[0], out int val))
+                        {
+                            // charId, solarSys, typeId, quantity, corpId, allianceId, date
+                            list.Add(arr);
+                        }
+                    }
+                }
+            }
+            var charIds = list.Select(x => int.Parse(x[0])).Distinct().ToArray();
+            var corpIds = list.Select(x => int.Parse(x[4])).Distinct().ToArray();
+            using (var context = new StorageContext())
+            {
+                var hashes = context.MineralMinings.Select(x => x.Hash).ToHashSet();
+                //await SaveCharactersInfo(charIds, context);
+
+                //await SaveCorporationsInfo(corpIds, context);
+
+                foreach (var arr in list)
+                {
+                    var charId = int.Parse(arr[0]);
+                    var solarSystemId = long.Parse(arr[1]);
+                    var typeId = int.Parse(arr[2]);
+                    var quantity = int.Parse(arr[3]);
+                    var corpId = int.Parse(arr[4]);
+                    var date = DateTime.Parse(arr[6]);
+
+                    var _hash = MineralMining.GetHash(charId, date, solarSystemId, typeId, corpId, quantity);
+
+                    if (!hashes.Contains(_hash))
+                    {
+                        var mineralMining = new MineralMining
+                        {
+                            CorporationId = corpId,
+                            TypeId = typeId,
+                            Quantity = quantity,
+                            LastUpdated = date,
+                            CharacterId = charId,
+                            SolarSystemId = solarSystemId,
+                        };
+                        context.MineralMinings.Add(mineralMining);
+                        context.SaveChanges();
+                        hashes.Add(_hash);
+                    }
+                }
+            }
         }
     }
 }

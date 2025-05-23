@@ -40,6 +40,8 @@ namespace EveDataStorage.Contexts
         public DbSet<Constellation> Constellations => Set<Constellation>();
         public DbSet<SolarSystem> SolarSystems => Set<SolarSystem>();
 
+        public DbSet<MineralMining> MineralMinings => Set<MineralMining>();
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite($"Data Source={PathDb}");
