@@ -6,7 +6,7 @@
     },
     "EveTaxes (report)": {
       "commandName": "Project",
-      "commandLineArgs": "-report 01.12.2024 14.06.2025"
+      "commandLineArgs": "-report 01.04.2024 01.05.2025"
     }
   }
 }

@@ -64,7 +64,10 @@ namespace EveTaxesLogic.Models
             TotalIskGain_MoonMining = CharacterTaxes.Sum(x => x.TotalIskGain_MoonMining);
             TotalIskTax_MoonMining = CharacterTaxes.Sum(x => x.TotalIskTax_MoonMining);
 
-            TotalIskGain_Ratting = CharacterTaxes.Sum(x => x.TotalIskGain_Ratting);
+			TotalIskGain_MineralMining = CharacterTaxes.Sum(x => x.TotalIskGain_MineralMining);
+			TotalIskTax_MineralMining = CharacterTaxes.Sum(x => x.TotalIskTax_MineralMining);
+
+			TotalIskGain_Ratting = CharacterTaxes.Sum(x => x.TotalIskGain_Ratting);
             TotalIskTax_Ratting = CharacterTaxes.Sum(x => x.TotalIskTax_Ratting);
         }
 

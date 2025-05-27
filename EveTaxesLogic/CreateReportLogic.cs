@@ -5,6 +5,7 @@ using EveDataStorage.Models;
 using EveSdeModel;
 using EveSdeModel.Models;
 using EveWebClient.Esi;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NLog;
 using System;
@@ -59,15 +60,26 @@ namespace EveTaxesLogic
                 startDate = t;
             }
 
+            var oreFilter = SdeMain.Asteroid.Where(x => x.IsMineral || x.IsIce).Select(x => x.TypeId).ToArray();
+
             var ledger = GetLedger(startDate.Value, endDate.Value, alliIds: Config.TaxParams.AllianceIdsToCalcTaxes);
             var charMains = GetCharacterMains(alliIds: Config.TaxParams.AllianceIdsToCalcTaxes);
-            var prices = GetPrices(SdeMain.AsteroidRefineItems.Select(x => x.TypeId).ToList());
+            var prices = GetPrices(SdeMain.AsteroidRefineItems.Select(x => x.TypeId).ToList()).OrderBy(x => x.DateUpdate).ThenBy(x => x.TypeId).ToList();
             var wallets = GetWalletTransactions(startDate.Value, endDate.Value, alliIds: Config.TaxParams.AllianceIdsToCalcTaxes);
+            var mineralMining = GetMineralMiningList(startDate.Value, endDate.Value, 
+                alliIds: Config.TaxParams.AllianceIdsToCalcTaxes, 
+                regionIds: Config.TaxParams.MineralTaxMiningRegions,
+                oreTypeIds: oreFilter);
 
-            var calculated = Taxes.CalculateCorporations(SdeMain.Asteroid, ledger, charMains, prices, wallets, Config);
+            var calculated = Taxes.CalculateCorporations(SdeMain.Asteroid, ledger, charMains, prices, wallets, mineralMining, Config);
+
+            var directory = Path.Combine(AppContext.BaseDirectory, "report");
+            if (!Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
 
             var name = $"taxesReport_{startDate.Value.ToLocalTime():yyyy_MM_dd}_{endDate.Value.ToLocalTime():yyyy_MM_dd}.xlsx";
-            Epplus.Export(name, calculated);
+            var filePath = Path.Combine(directory, name);
+            Epplus.Export(filePath, calculated, Config.TaxParams.AllianceIdsToCalcTaxes);
         }
 
         private List<ObservedMining> GetLedger(DateTime start, DateTime end, int[]? corpIds = null, int[]? alliIds = null)
@@ -172,6 +184,51 @@ namespace EveTaxesLogic
             return result;
         }
 
+        private List<MineralMining> GetMineralMiningList(DateTime start, DateTime end, int[]? corpIds = null, int[]? alliIds = null, int[]? oreTypeIds = null, int[]? regionIds = null)
+        {
+            var result = new List<MineralMining>();
+
+            using (var context = new StorageContext())
+            {
+                List<int> solarSystems = null;
+                if (regionIds != null)
+                {
+                    solarSystems = new List<int>();
+                    foreach (var regionId in regionIds)
+                    {
+                        var constellations = context.Constellations.Where(x => x.RegionId == regionId).Select(x => x.Id).Distinct().ToArray();
+                        solarSystems.AddRange(context.SolarSystems.Where(x => constellations.Contains(x.ConstellationId)).Select(x => x.Id).Distinct());
+                    }
+                    solarSystems = solarSystems.Distinct().ToList();
+                }
+
+                if ((corpIds == null || !corpIds.Any()) && alliIds != null && alliIds.Any())
+                {
+                    corpIds = context.Corporations.Where(x => x.AllianceId.HasValue && alliIds.Contains(x.AllianceId.Value)).Select(x => x.CorporationId).ToArray();
+                }
+
+                if (corpIds != null && corpIds.Any())
+                {
+                    result = context.MineralMinings
+                        .Where(x => 
+                        start <= x.LastUpdated && x.LastUpdated < end 
+                        && corpIds.Contains(x.CorporationId) 
+                        && (oreTypeIds == null || oreTypeIds.Contains(x.TypeId))
+                        && (solarSystems == null || solarSystems.Contains(x.SolarSystemId))).ToList();
+                }
+
+                foreach (var line in result)
+                {
+                    line.Character = context.Characters.FirstOrDefault(x => x.CharacterId == line.CharacterId);
+                    line.Corporation = context.Corporations.FirstOrDefault(x => x.CorporationId == line.CorporationId);
+                    if (line.Corporation != null)
+                    {
+                        line.Corporation.Alliance = context.Alliances.FirstOrDefault(x => x.AllianceId == line.Corporation.AllianceId);
+                    }
+                }
+            }
+            return result;
+        }
         /// <summary>
         /// Временный код по сохранению sde в БД
         /// </summary>

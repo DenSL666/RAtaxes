@@ -38,8 +38,6 @@ namespace EveTaxesLogic
         {
             try
             {
-                await SaveMineralMiningInfo();
-
                 var _date = Config.LastUpdateDateTime.AddHours(Config.HoursBeforeUpdate);
                 if (_date < DateTime.Now)
                 {
@@ -183,6 +181,8 @@ namespace EveTaxesLogic
         private async Task UpdateCorpMiningStructureLedger(AccessTokenDetails token)
         {
             var observers = await EsiHelper.CorporationMiningObserversV1Async(token, Config.TaxParams.MiningHoldingCorporationId);
+            if (observers == null)
+                return;
             using (var context = new StorageContext())
             {
                 var hashes = context.ObservedMinings.Select(x => x.Hash).ToHashSet();
@@ -552,7 +552,7 @@ namespace EveTaxesLogic
                 foreach (var arr in list)
                 {
                     var charId = int.Parse(arr[0]);
-                    var solarSystemId = long.Parse(arr[1]);
+                    var solarSystemId = int.Parse(arr[1]);
                     var typeId = int.Parse(arr[2]);
                     var quantity = int.Parse(arr[3]);
                     var corpId = int.Parse(arr[4]);

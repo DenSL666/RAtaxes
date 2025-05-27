@@ -19,10 +19,25 @@ namespace EveTaxesLogic
     public static class Taxes
     {
         public static List<CorporationTax> CalculateCorporations(IReadOnlyCollection<TypeMaterial> oreList, IReadOnlyCollection<ObservedMining> corpLedger, 
-            IReadOnlyCollection<CharacterMain> characterMains, IReadOnlyCollection<ItemPrice> prices, IReadOnlyCollection<WalletTransaction> walletTransactions, IConfig config)
+            IReadOnlyCollection<CharacterMain> characterMains, IReadOnlyCollection<ItemPrice> prices, IReadOnlyCollection<WalletTransaction> walletTransactions,
+            IReadOnlyCollection<MineralMining> mineralMinings, IConfig config)
         {
-            var charactersTaxes = CalculateMoonMiningCharacters(oreList, corpLedger, prices, config);
-            charactersTaxes = CalculateWalletTransaction(charactersTaxes, walletTransactions, config);
+            //  превращаем лунный леджер в сущность персонажа
+            var charactersTaxes = corpLedger.GroupBy(x => x.CharacterId).Where(x => x.ToArray().Any()).Select(x => new CharacterTax(x)).ToList();
+
+            //  обновляем список сущностей и добавляем в них минеральные руды
+            charactersTaxes = AddMineralMiningCharacters(charactersTaxes, mineralMinings);
+
+            //  обновляем список сущностей и добавляем в них крабские налоги
+            charactersTaxes = AddWalletTransactionCharacters(charactersTaxes, walletTransactions);
+
+            //  делаем расчет налогов
+            foreach (var character in charactersTaxes)
+            {
+                character.CalculateOreTax(oreList, prices, config);
+                character.CalculateRatTax(config);
+            }
+
             var userTaxes = new List<UserTax>();
             foreach (var _charTax in charactersTaxes)
             {
@@ -72,75 +87,70 @@ namespace EveTaxesLogic
             return corpTaxes;
         }
 
-        public static List<CharacterTax> CalculateMoonMiningCharacters(IReadOnlyCollection<TypeMaterial> oreList, IReadOnlyCollection<ObservedMining> corpLedger, IReadOnlyCollection<ItemPrice> prices, IConfig config)
+        #region Вспомогательные методы и селекторы
+
+        public static List<CharacterTax> AddMineralMiningCharacters(List<CharacterTax> characterTaxes, IReadOnlyCollection<IOreModel> mineralMinings)
         {
-            var grouped = corpLedger.GroupBy(x => x.CharacterId).Where(x => x.ToArray().Any()).Select(x => new CharacterTax(x)).ToList();
+            var grouped = mineralMinings.GroupBy(x => x.CharacterId).Where(x => x.ToArray().Any());//.Select(x => new CharacterTax(x)).ToList();
 
-            foreach (var character in grouped)
+            foreach (var group in grouped)
             {
-                CalculateCharacterTax(character, oreList, prices, config);
-            }
-            return grouped;
-        }
-
-        private static void CalculateCharacterTax(CharacterTax characterTax, IReadOnlyCollection<TypeMaterial> oreList, IReadOnlyCollection<ItemPrice> prices, IConfig config)
-        {
-            characterTax.MinedDictionary_Names = characterTax.MinedDictionary_Ids.ToDictionary(x => oreList.FirstOrDefault(y => y.TypeId == x.Key)?.Entity?.Name.English, x => x.Value);
-            foreach (var pair in characterTax.MinedDictionary_Ids)
-            {
-                var typeIdMined = pair.Key;
-                var quantityMined = pair.Value;
-
-                var foundOre = oreList.FirstOrDefault(x => x.TypeId == typeIdMined);
-                if (foundOre != null)
+                var charId = group.Key;
+                var foundChar = characterTaxes.FirstOrDefault(x => x.CharacterId == charId);
+                if (foundChar == null)
                 {
-                    var refined = foundOre.Refine(quantityMined, config.TaxParams.RefineEffincency);
-
-                    //  для текущей руды берём налоговую ставку, цену материалов и считаем налог
-                    foreach (var item in refined)
-                    {
-                        var material = item.Key;
-                        var quantity = item.Value;
-
-                        var foundPrice = prices.FirstOrDefault(x => x.TypeId == material.TypeId);
-                        if (foundPrice != null)
-                        {
-                            var _value = (long)Math.Round(quantity * foundPrice.SelectPrice(config));
-                            var _tax = (long)Math.Round(_value * foundOre.SelectTax(config));
-
-                            characterTax.TotalIskGain_MoonMining += _value;
-                            characterTax.TotalIskTax_MoonMining += _tax;
-                        }
-                    }
-
-                    //просто так считаем все собранные материалы
-                    foreach (var item in refined)
-                    {
-                        if (!characterTax.RefinedMaterials_Ids.ContainsKey(item.Key.TypeId))
-                        {
-                            characterTax.RefinedMaterials_Ids.Add(item.Key.TypeId, item.Value);
-                        }
-                        else
-                        {
-                            characterTax.RefinedMaterials_Ids[item.Key.TypeId] += item.Value;
-                        }
-
-                        if (!characterTax.RefinedMaterials_Names.ContainsKey(item.Key.Name.English))
-                        {
-                            characterTax.RefinedMaterials_Names.Add(item.Key.Name.English, item.Value);
-                        }
-                        else
-                        {
-                            characterTax.RefinedMaterials_Names[item.Key.Name.English] += item.Value;
-                        }
-                    }
+                    foundChar = new CharacterTax(group);
+                    if (string.IsNullOrEmpty(foundChar.CharacterName) || foundChar.Corporation == null)
+                        continue;
+                    characterTaxes.Add(foundChar);
+                }
+                else
+                {
+                    foundChar.AddOre(group);
                 }
             }
-
-
+            return characterTaxes;
         }
 
-        private static double SelectPrice(this ItemPrice price, IConfig config)
+        private static List<CharacterTax> AddWalletTransactionCharacters(List<CharacterTax> characterTaxes, IReadOnlyCollection<WalletTransaction> walletTransactions)
+        {
+            var dict = walletTransactions.GroupBy(x => x.CharacterId).ToDictionary(x => x.Key, x => x.ToArray());
+            foreach (var pair in dict)
+            {
+                var charId = pair.Key;
+                var transactions = pair.Value;
+
+                var foundChar = characterTaxes.FirstOrDefault(x => x.CharacterId == charId);
+                if (foundChar == null)
+                {
+                    foundChar = new CharacterTax(pair);
+                    if (string.IsNullOrEmpty(foundChar.CharacterName) || foundChar.Corporation == null)
+                        continue;
+                    characterTaxes.Add(foundChar);
+                }
+
+                foundChar.SetWalletTrasactions(transactions);
+            }
+
+            return characterTaxes;
+        }
+
+        public static ItemPrice SelectNearestDatePrice(this IReadOnlyCollection<ItemPrice> prices, int typeId, DateTime dateTime)
+        {
+            if (prices == null || prices.Count == 0)
+                return null;
+
+            var pricesById = prices.Where(x => x.TypeId == typeId).ToArray();
+            if (!pricesById.Any())
+                return null;
+            if (pricesById.Length == 1)
+                return pricesById[0];
+
+            var result = pricesById.OrderBy(x => Math.Abs((x.DateUpdate - dateTime).Ticks)).First();
+            return result;
+        }
+
+        public static double SelectPrice(this ItemPrice price, IConfig config)
         {
             switch (config.TaxParams.PriceSource)
             {
@@ -157,7 +167,7 @@ namespace EveTaxesLogic
             }
         }
 
-        private static double SelectTax(this TypeMaterial ore, IConfig config)
+        public static double SelectTax(this TypeMaterial ore, IConfig config)
         {
             if (ore == null)
                 return 0;
@@ -178,46 +188,16 @@ namespace EveTaxesLogic
             return 0;
         }
 
-        private static CharacterMain FindMain(this IReadOnlyCollection<CharacterMain> characterMains, int characterId)
+        public static CharacterMain FindMain(this IReadOnlyCollection<CharacterMain> characterMains, int characterId)
         {
             return characterMains.FirstOrDefault(x => x.CharacterId == characterId || x.AssociatedCharacterIds.Contains(characterId));
         }
 
-        private static UserTax FindUser(this IReadOnlyCollection<UserTax> userTaxes, int characterId)
+        public static UserTax FindUser(this IReadOnlyCollection<UserTax> userTaxes, int characterId)
         {
             return userTaxes.FirstOrDefault(x => x.MainCharacterId == characterId || x.AssociatedCharacterIds.Contains(characterId));
         }
 
-        private static List<CharacterTax> CalculateWalletTransaction(List<CharacterTax> characterTaxes, IReadOnlyCollection<WalletTransaction> walletTransactions, IConfig config)
-        {
-            var dict = walletTransactions.GroupBy(x => x.CharacterId).ToDictionary(x => x.Key, x => x.ToArray());
-            foreach (var pair in dict)
-            {
-                var charId = pair.Key;
-                var transactions = pair.Value;
-
-                var foundChar = characterTaxes.FirstOrDefault(x => x.CharacterId == charId);
-                if (foundChar == null)
-                {
-                    foundChar = new CharacterTax(pair);
-                    if (string.IsNullOrEmpty(foundChar.CharacterName) || foundChar.Corporation == null)
-                        continue;
-                    characterTaxes.Add(foundChar);
-                }
-
-                if (foundChar.Corporation != null && foundChar.Corporation.TaxRate > 0)
-                {
-                    var _value = transactions.Sum(x => x.Amount);
-                    var totalGain = (long)Math.Round((double)_value / foundChar.Corporation.TaxRate);
-
-                    var _tax = (long)Math.Round(totalGain * config.TaxParams.TaxRatting);
-
-                    foundChar.TotalIskGain_Ratting = totalGain;
-                    foundChar.TotalIskTax_Ratting = _tax;
-                }
-            }
-
-            return characterTaxes;
-        }
+        #endregion
     }
 }

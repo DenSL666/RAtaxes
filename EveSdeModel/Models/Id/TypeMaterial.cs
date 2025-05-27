@@ -137,12 +137,21 @@ namespace EveSdeModel.Models
             }
         }
 
-        public Dictionary<EntityType, long> Refine(long count, double efficency)
+        /// <summary>
+        /// Выполняет переработку указанного числа материала с указанным процентом переработки
+        /// </summary>
+        /// <param name="count">Число материалов</param>
+        /// <param name="efficency">Процент переработки</param>
+        /// <param name="excess">Излишек материалов, оставшихся после переработки</param>
+        /// <returns>Словарь сущностей переработки и их количество</returns>
+        public Dictionary<EntityType, long> Refine(long count, double efficency, out long excess)
         {
+            excess = 0;
             var result = new Dictionary<EntityType, long>();
             if (efficency > 0 && PortionSizeInt > 0 && count >= PortionSizeInt)
             {
                 long multiple = count / PortionSizeInt;
+                excess = count % PortionSizeInt;
                 //  result = Materials.Sum(x => (int)Math.Floor(Math.Floor(x.Value * multiple * efficiency) * x.Price));
                 foreach (var pair in RefineMaterials)
                 {
@@ -157,10 +166,18 @@ namespace EveSdeModel.Models
             return result;
         }
 
-        public Dictionary<EntityType, long> Refine(string count, double efficency)
+        /// <summary>
+        /// Выполняет переработку указанного числа материала с указанным процентом переработки
+        /// </summary>
+        /// <param name="count">Число материалов</param>
+        /// <param name="efficency">Процент переработки</param>
+        /// <param name="excess">Излишек материалов, оставшихся после переработки</param>
+        /// <returns>Словарь сущностей переработки и их количество</returns>
+        public Dictionary<EntityType, long> Refine(string count, double efficency, out long excess)
         {
+            excess = 0;
             if (long.TryParse(count, out long countInt))
-                return Refine(countInt, efficency);
+                return Refine(countInt, efficency, out excess);
             return new Dictionary<EntityType, long>();
         }
 

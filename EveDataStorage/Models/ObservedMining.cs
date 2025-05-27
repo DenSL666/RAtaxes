@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace EveDataStorage.Models
 {
     [Table("ObservedMinings")]
-    public class ObservedMining
+    public class ObservedMining : IOreModel
     {
         [Key]
         public int Id { get; set; }

@@ -30,5 +30,18 @@ namespace EveDataStorage.Models
         public Corporation? Corporation { get; set; }
         [NotMapped]
         public Alliance? Alliance { get; set; }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            if (AllianceId.HasValue && Alliance != null)
+                sb.Append($"[{Alliance.Name}]");
+
+            if (Corporation != null)
+                sb.Append($" ({Corporation.Name}) ");
+
+            sb.Append(Name);
+            return sb.ToString().Trim();
+        }
     }
 }

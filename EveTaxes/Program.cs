@@ -28,6 +28,7 @@ namespace EveTaxes
     {
         const string UpdateArg = "update";
         const string ReportArg = "report";
+        const string GoogleSdeArg = "googleSde";
         static readonly string[] ARGS = [UpdateArg, ReportArg];
 
         private static async Task Main(string[] args)
@@ -75,6 +76,39 @@ namespace EveTaxes
                         {
                             var createReportLogic = DIManager.ServiceProvider.GetService<CreateReportLogic>();
                             createReportLogic.CreateReport(args);
+                            break;
+                        }
+                    case GoogleSdeArg:
+                        {
+                            var sdeMain = DIManager.ServiceProvider.GetService<SdeMain>();
+                            sdeMain.InitBlueprints();
+                            {
+                                var writeTypes = sdeMain.EntityTypes
+                                    .Where(x => x.IsPublished && x.Name != null
+                                                && !x.Name.en.Contains("SKIN") 
+                                                && !x.Name.en.EndsWith("Blueprint")
+                                                && !x.Name.en.EndsWith("Emblem") 
+                                                && !x.Name.en.EndsWith("Limited") 
+                                                && !x.Name.en.EndsWith("Unlimited"))
+                                    .Select(x => $"  {x.Id}: \"{x.Name.en.Replace('\"', '\'')}\",").ToList();
+                                using (var wr = new StreamWriter("items.txt"))
+                                {
+                                    foreach (var item in writeTypes)
+                                    {
+                                        wr.WriteLine(item);
+                                    }
+                                }
+
+                                //фильтр и вывод блюпринтов
+                                var hasManu = sdeMain.Blueprints.Where(x => x.HasManufactory && !x.IsFuelBlock).ToList();
+                                using (var wr = new StreamWriter("bps.txt"))
+                                {
+                                    foreach (var bp in hasManu.OrderBy(x => x.Product.Name.en.Replace("'", "").Replace("’", "")))
+                                    {
+                                        wr.WriteLine(bp.Write());
+                                    }
+                                }
+                            }
                             break;
                         }
                 }

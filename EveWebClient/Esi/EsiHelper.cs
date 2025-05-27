@@ -13,7 +13,7 @@ namespace EveWebClient.Esi
 {
     public class EsiHelper : APIBase
     {
-        public EsiHelper(HttpClient httpClient, IConfig config) : base(httpClient, config)
+        public EsiHelper(HttpClient httpClient, IConfig config, ILogger<APIBase> logger) : base(httpClient, config, logger)
         {
 
         }

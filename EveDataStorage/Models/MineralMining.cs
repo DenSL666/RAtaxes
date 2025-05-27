@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace EveDataStorage.Models
 {
     [Table("MineralMinings")]
-    public class MineralMining
+    public class MineralMining : IOreModel
     {
         [Key]
         public int Id { get; set; }
@@ -24,7 +24,7 @@ namespace EveDataStorage.Models
 
         public int TypeId { get; set; }
 
-        public long SolarSystemId { get; set; }
+        public int SolarSystemId { get; set; }
 
         public Character? Character { get; set; }
 

@@ -132,6 +132,6 @@ namespace EveSdeModel.Models
         public bool IsPrint => Activities != null && Activities.Manufacturing != null && Activities.Manufacturing.Products != null && Activities.Manufacturing.Products.Any();
         public bool IsFormula => Activities != null && Activities.Reaction != null && Activities.Reaction.Products != null && Activities.Reaction.Products.Any();
 
-        public string Write() => $"new Blueprint(\"{Product.Name.English.Replace("'", "").Replace("’", "")}\", {Products[Product]}, \"{(IsFormula ? "Formula" : $"{Product.Group?.Category?.Name?.English} {Product.GetTech()}")}\", \"{string.Join("$", ManufactoryMaterials.Select(p => $"{p.Key.Name.English}&{p.Value}"))}\"),";
+        public string Write() => $"  new Blueprint(\"{Product.Name.English.Replace("'", "").Replace("’", "")}\", {Products[Product]}, \"{(IsFormula ? "Formula" : $"{Product.Group?.Category?.Name?.English} {Product.GetTech()}")}\", \"{string.Join("$", ManufactoryMaterials.Select(p => $"{p.Key.Name.English}&{p.Value}"))}\"),";
     }
 }

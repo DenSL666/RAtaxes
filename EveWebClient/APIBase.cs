@@ -25,13 +25,15 @@ namespace EveWebClient
         protected HttpClient HttpClient { get; }
 
         protected IConfig Config { get; }
+        protected ILogger<APIBase> Logger { get; }
 
-        internal APIBase(HttpClient httpClient, IConfig config)
+        internal APIBase(HttpClient httpClient, IConfig config, ILogger<APIBase> logger)
         {
             dataSource = dataSource ?? "tranquility";
             ESI_BASE = TRANQUILITY_ESI_BASE;
             HttpClient = httpClient;
             Config = config;
+            Logger = logger;
         }
 
         internal async Task<APIResponse> GetAsync(string uri, string ifNoneMatch = null, Dictionary<string, string> queryParameters = null)
@@ -274,7 +276,10 @@ namespace EveWebClient
         protected ESIModelDTO<T> ReturnModelDTO<T>(APIResponse response)
         {
             if (response.Error)
+            {
+                Logger.LogError(response.Message);
                 return null;
+            }
             T _model = default;
             try
             {
@@ -299,7 +304,10 @@ namespace EveWebClient
         protected ESIModelDTO<T> ReturnModelDTO<T>(APIResponse response, int objectId)
         {
             if (response.Error)
+            {
+                Logger.LogError(response.Message);
                 return null;
+            }
             T _model = default;
             try
             {
