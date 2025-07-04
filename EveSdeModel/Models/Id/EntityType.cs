@@ -187,23 +187,262 @@ namespace EveSdeModel.Models
             throw new NotImplementedException();
         }
 
-        private static List<string> Ships_2 = new List<string>
+        private static List<string> FactionNavy = new List<string>
         {
-            "Imperial Navy Slicer", "Caldari Navy Hookbill", "Federation Navy Comet", "Republic Fleet Firetail", "Magnate Navy Issue", "Heron Navy Issue", "Imicus Navy Issue", "Probe Fleet Issue",
-            "Crucifier Navy Issue", "Griffin Navy Issue", "Maulus Navy Issue", "Vigil Fleet Issue", "Astero", "Cruor", "Daredevil", "Dramiel", "Garmur", "Succubus", "Worm", "Sentinel", "Kitsune",
-            "Keres", "Hyena", "Malediction", "Crow", "Ares", "Stiletto", "Imp", "Whiptail", "Crusader", "Raptor", "Taranis", "Claw", "Anathema", "Buzzard", "Helios", "Cheetah", "Purifier", "Manticore",
-            "Nemesis", "Hound", "Vengeance", "Harpy", "Hawk", "Jaguar", "Nergal", "Retribution", "Enyo", "Ishkur", "Wolf", "Deacon", "Kirin", "Thalia", "Scalpel", "Endurance", "Prospect", "Kikimora",
-            "Coercer Navy Issue", "Cormorant Navy Issue", "Catalyst Navy Issue", "Thrasher Fleet Issue", "Mamba", "Mekubal", "Heretic", "Flycatcher", "Eris", "Sabre", "Pontifex", "Bifrost", "Stork", "Magus",
-            "Draugur", "Confessor", "Svipul", "Jackdaw", "Hecate", "Rodiva", "Vedmak", "Augoror Navy Issue", "Omen Navy Issue", "Caracal Navy Issue", "Osprey Navy Issue", "Exequror Navy Issue", "Vexor Navy Issue",
-            "Scythe Fleet Issue", "Stabber Fleet Issue", "Ashimmu", "Cynabal", "Gila", "Orthrus", "Phantasm", "Stratios", "Vigilant", "Pilgrim", "Curse", "Falcon", "Rook", "Arazu", "Lachesis", "Rapier", "Huginn",
-            "Zealot", "Sacrilege", "Cerberus", "Eagle", "Ishtar", "Deimos", "Muninn", "Vagabond", "Ikitursa", "Devoter", "Onyx", "Phobos", "Broadsword", "Guardian", "Basilisk", "Oneiros", "Scimitar", "Zarmazd",
-            "Monitor", "Legion", "Tengu", "Proteus", "Loki", "Harbinger Navy Issue", "Prophecy Navy Issue", "Drake Navy Issue", "Ferox Navy Issue", "Brutix Navy Issue", "Myrmidon Navy Issue", "Hurricane Fleet Issue",
-            "Cyclone Fleet Issue", "Absolution", "Nighthawk", "Astarte", "Sleipnir", "Damnation", "Vulture", "Eos", "Claymore", "Redeemer", "Widow", "Sin", "Panther", "Marshal", "Ark", "Rhea", "Anshar", "Nomad",
-            "Vehement", "Chemosh", "Caiman", "Zirnitra", "Revelation Navy Issue", "Phoenix Navy Issue", "Moros Navy Issue", "Naglfar Fleet Issue", "Dagon", "Loggerhead", "Revenant", "Vendetta", "Vanquisher", "Molok", "Komodo",
-            "Azariel", "Alligator", "Bane", "Bhaalgorn", "Bustard", "Crane", "Damavik", "Deluge", "Torrent", "Drekavac", "Enforcer", "Golem", "Hubris", "Hulk", "Impel", "Karura", "Khizriel", "Kronos", "Leshak",
-            "Machariel", "Mackinaw", "Mamba", "Mastodon", "Nestor", "Nightmare", "Occator", "Pacifier", "Paladin", "Prorator", "Prowler", "Rattlesnake", "Skiff", "Skybreaker", "Stormbringer", "Thunderchild",
-            "Valravn", "Vargur", "Viator", "Vindicator"
+            "Navy", "Fleet",
         };
+
+        private static List<string> AmarrT2 = new List<string>
+        {
+            "Retribution",
+            "Vengeance",
+            "Anathema",
+            "Purifier",
+            "Sentinel",
+            "Crusader",
+            "Malediction",
+            "Deacon",
+            "Pontifex",
+            "Heretic",
+            "Confessor",
+            "Sacrilege",
+            "Zealot",
+            "Devoter",
+            "Guardian",
+            "Curse",
+            "Pilgrim",
+            "Legion",
+            "Absolution",
+            "Damnation",
+            "Redeemer",
+            "Paladin",
+            "Prorator",
+            "Impel",
+            "Ark",
+            "Bane",
+        };
+
+        private static List<string> MinmatarT2 = new List<string>
+        {
+            "Jaguar",
+            "Wolf",
+            "Cheetah",
+            "Hound",
+            "Hyena",
+            "Claw",
+            "Stiletto",
+            "Scalpel",
+            "Bifrost",
+            "Sabre",
+            "Svipul",
+            "Muninn",
+            "Vagabond",
+            "Broadsword",
+            "Scimitar",
+            "Huginn",
+            "Rapier",
+            "Loki",
+            "Claymore",
+            "Sleipnir",
+            "Panther",
+            "Vargur",
+            "Prowler",
+            "Mastodon",
+            "Nomad",
+            "Valravn",
+        };
+
+        private static List<string> CaldariT2 = new List<string>
+        {
+            "Harpy",
+            "Hawk",
+            "Buzzard",
+            "Manticore",
+            "Kitsune",
+            "Crow",
+            "Raptor",
+            "Kirin",
+            "Stork",
+            "Flycatcher",
+            "Jackdaw",
+            "Cerberus",
+            "Eagle",
+            "Onyx",
+            "Basilisk",
+            "Falcon",
+            "Rook",
+            "Tengu",
+            "Nighthawk",
+            "Vulture",
+            "Widow",
+            "Golem",
+            "Crane",
+            "Bustard",
+            "Rhea",
+            "Karura",
+        };
+
+        private static List<string> GallenteT2 = new List<string>
+        {
+            "Enyo",
+            "Ishkur",
+            "Helios",
+            "Nemesis",
+            "Keres",
+            "Ares",
+            "Taranis",
+            "Thalia",
+            "Magus",
+            "Eris",
+            "Hecate",
+            "Deimos",
+            "Ishtar",
+            "Phobos",
+            "Oneiros",
+            "Arazu",
+            "Lachesis",
+            "Proteus",
+            "Astarte",
+            "Eos",
+            "Sin",
+            "Kronos",
+            "Viator",
+            "Occator",
+            "Anshar",
+            "Hubris",
+        };
+
+        private static List<string> OreT2 = new List<string>
+        {
+            "Prospect",
+            "Endurance",
+            "Hulk",
+            "Skiff",
+            "Mackinaw",
+        };
+
+        private static List<string> Guristas = new List<string>
+        {
+            "Worm",
+            "Mamba",
+            "Gila",
+            "Alligator",
+            "Rattlesnake",
+            "Caiman",
+            "Loggerhead",
+            "Komodo",
+        };
+
+        private static List<string> Sansha = new List<string>
+        {
+            "Succubus",
+            "Phantasm",
+            "Nightmare",
+            "Revenant",
+        };
+
+        private static List<string> Blood = new List<string>
+        {
+            "Cruor",
+            "Ashimmu",
+            "Bhaalgorn",
+            "Chemosh",
+            "Dagon",
+            "Molok",
+        };
+
+        private static List<string> Angel = new List<string>
+        {
+            "Dramiel",
+            "Mekubal",
+            "Cynabal",
+            "Khizriel",
+            "Machariel",
+            "Sarathiel",
+            "Azariel",
+        };
+
+        private static List<string> Serpentis = new List<string>
+        {
+            "Daredevil",
+            "Vigilant",
+            "Vindicator",
+            "Vehement",
+            "Vendetta",
+            "Vanquisher",
+        };
+
+        private static List<string> Sisters = new List<string>
+        {
+            "Astero",
+            "Stratios",
+            "Nestor",
+        };
+
+        private static List<string> Mordu = new List<string>
+        {
+            "Garmur",
+            "Orthrus",
+            "Barghest",
+        };
+
+        private static List<string> Triglav = new List<string>
+        {
+            "Damavik",
+            "Nergal",
+            "Kikimora",
+            "Draugur",
+            "Vedmak",
+            "Rodiva",
+            "Ikitursa",
+            "Zarmazd",
+            "Drekavac",
+            "Leshak",
+            "Babaroga",
+            "Zirnitra",
+        };
+
+        private static List<string> Edencom = new List<string>
+        {
+            "Skybreaker",
+            "Stormbringer",
+            "Thunderchild",
+            "Deluge",
+            "Torrent",
+        };
+
+        private static List<string> Concord = new List<string>
+        {
+            "Pacifier",
+            "Enforcer",
+            "Monitor",
+            "Marshal",
+        };
+
+        private static List<string> Deathless = new List<string>
+        {
+            "Tholos",
+            "Cenotaph",
+        };
+
+        private static List<string> Ships_2 =
+            AmarrT2
+            .Concat(MinmatarT2)
+            .Concat(CaldariT2)
+            .Concat(GallenteT2)
+            .Concat(OreT2)
+            .Concat(Guristas)
+            .Concat(Sansha)
+            .Concat(Blood)
+            .Concat(Angel)
+            .Concat(Serpentis)
+            .Concat(Sisters)
+            .Concat(Mordu)
+            .Concat(Triglav)
+            .Concat(Edencom)
+            .Concat(Concord)
+            .Concat(Deathless)
+            .ToList();
 
         private static List<string> Modules_2 = new List<string>
         {
@@ -216,6 +455,8 @@ namespace EveSdeModel.Models
         {
             if (Name == null || string.IsNullOrEmpty(Name.English))
                 return 0;
+            if (FactionNavy.Any(x => Name.English.Contains(x)))
+                return 2;
             if (Ships_2.Contains(Name.English))
                 return 2;
             if (Modules_2.Any(x => Name.English.Contains(x)))

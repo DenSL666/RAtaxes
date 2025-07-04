@@ -38,6 +38,7 @@ namespace EveTaxesLogic
         {
             try
             {
+                //await SaveMineralMiningInfo();
                 var _date = Config.LastUpdateDateTime.AddHours(Config.HoursBeforeUpdate);
                 if (_date < DateTime.Now)
                 {
@@ -545,9 +546,9 @@ namespace EveTaxesLogic
             using (var context = new StorageContext())
             {
                 var hashes = context.MineralMinings.Select(x => x.Hash).ToHashSet();
-                //await SaveCharactersInfo(charIds, context);
+                await SaveCharactersInfo(charIds, context);
 
-                //await SaveCorporationsInfo(corpIds, context);
+                await SaveCorporationsInfo(corpIds, context);
 
                 foreach (var arr in list)
                 {
