@@ -107,6 +107,10 @@ namespace EveWebClient.Esi.Models
         [JsonPropertyName("war_eligible")]
         public bool WarEligible { get; set; }
 
+
+        [JsonPropertyName("corpId")]
+        public int CorporationId { get; set; }
+
         #endregion Properties
     }
 }

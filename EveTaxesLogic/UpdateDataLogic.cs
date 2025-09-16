@@ -38,6 +38,8 @@ namespace EveTaxesLogic
         {
             try
             {
+                //await WriteCorpAlliInfo();
+                //await WriteCharInfo();
                 //await SaveMineralMiningInfo();
                 var _date = Config.LastUpdateDateTime.AddHours(Config.HoursBeforeUpdate);
                 if (_date < DateTime.Now)
@@ -66,6 +68,43 @@ namespace EveTaxesLogic
             {
                 Logger.LogError(exc, "Ошибка при попытке обновления данных");
             }
+        }
+
+        public async Task WriteCorpAlliInfo()
+        {
+            var corpIds = File.ReadAllLines(@"F:\corpsIds.txt").Select(x => int.Parse(x)).ToArray();
+            var allianceIds = File.ReadAllLines(@"F:\allianceIds.txt").Select(x => int.Parse(x)).ToArray();
+
+            var tasks = corpIds.Select(async x => await EsiHelper.GetCorporationInfoV5Async(x)).ToArray();
+            var corpInfos = await Task.WhenAll(tasks);
+            corpInfos = corpInfos.Where(x => x != null && x.Model != null).ToArray();
+
+            var tasks2 = allianceIds.Select(async x => await EsiHelper.GetAllianceInfoV3Async(x)).ToArray();
+            var allianceInfos = await Task.WhenAll(tasks2);
+            allianceInfos = allianceInfos.Where(x => x != null && x.Model != null).ToArray();
+
+            var corpInfs = corpInfos.Select(x => { x.Model.CorporationId = x.ObjectId; return x.Model; }).ToList();
+            var alliInfs = allianceInfos.Select(x => { x.Model.AllianceId = x.ObjectId; return x.Model; }).ToList();
+
+            string json = Newtonsoft.Json.JsonConvert.SerializeObject(corpInfs);
+            string json2 = Newtonsoft.Json.JsonConvert.SerializeObject(alliInfs);
+
+            File.WriteAllText(@"F:\jsonDataCorps.json", json);
+            File.WriteAllText(@"F:\jsonDataAlli.json", json2);
+        }
+
+        public async Task WriteCharInfo()
+        {
+            var allCharacterIds = File.ReadAllLines(@"F:\charIds.txt").Select(x => int.Parse(x)).ToArray();
+            var tasks = allCharacterIds.Select(async x => await EsiHelper.GetCharacterPublicInfoV5Async(x)).ToArray();
+            var charInfos = await Task.WhenAll(tasks);
+            charInfos = charInfos.Where(x => x != null && x.Model != null).ToArray();
+
+            var models = charInfos.Select(x => x.Model).ToArray();
+            string json = Newtonsoft.Json.JsonConvert.SerializeObject(models);
+
+            var filePathWrite = @"F:\jsonData.json";
+            File.WriteAllText(filePathWrite, json);
         }
 
         public async Task<AccessTokenDetails> GetAndUpdateToken()
@@ -406,7 +445,7 @@ namespace EveTaxesLogic
                     corp.Transactions = corp.Transactions.Where(x => Config.TaxParams.CorpTransactTypes.Contains(x.RefType)).ToArray();
 
                     var foundCorp = context.Corporations.FirstOrDefault(x => x.CorporationId == corp.CorporationId);
-                    if (foundCorp != null)
+                    if (foundCorp != null && corp.LastPage > 1)
                     {
                         foundCorp.LastSeatWalletPage = corp.LastPage;
                         context.SaveChanges();
@@ -498,7 +537,7 @@ namespace EveTaxesLogic
                 try
                 {
                     if (_startPage == 1)
-                        _startPage = await WebHelper.SearchPageSeatCorporationWalletJournal(corpId, DateTime.Parse("2025-01-01"));
+                        _startPage = await WebHelper.SearchPageSeatCorporationWalletJournal(corpId, DateTime.Parse("2025-08-24"));
                     if (_startPage == -1)
                         continue;
 

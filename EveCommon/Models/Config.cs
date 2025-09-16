@@ -198,6 +198,10 @@ namespace EveCommon.Models
         [XmlArrayItem("allianceId", IsNullable = false)]
         public int[] AllianceIdsToCalcTaxes { get; set; }
 
+        [XmlArray("corpIdsToExcludeTaxes")]
+        [XmlArrayItem("corpId", IsNullable = false)]
+        public int[] CorpIdsToExcludeTaxes { get; set; }
+
         [XmlArray("corpIdsToExceptCollectWallet")]
         [XmlArrayItem("corpId", IsNullable = false)]
         public int[] CorpIdsToExceptCollectWallet { get; set; }

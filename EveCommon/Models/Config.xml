@@ -16,6 +16,8 @@
 			<allianceId>123456</allianceId>
 			<allianceId>123456</allianceId>
 		</allianceIdsToCalcTaxes>
+		<corpIdsToExcludeTaxes>
+		</corpIdsToExcludeTaxes>
 		<corpIdsToExceptCollectWallet>
 			<corpId>123456</corpId>
 			<corpId>123456</corpId>

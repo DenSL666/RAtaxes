@@ -4,7 +4,9 @@ using EveWebClient.Esi.Models;
 using EveWebClient.External.Models;
 using EveWebClient.External.Models.Seat;
 using EveWebClient.SSO;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,11 +27,13 @@ namespace EveWebClient.External
 
         private IConfig Config { get; }
         private HttpClient HttpClient { get; }
+        protected ILogger<WebHelper> Logger { get; }
 
-        public WebHelper(HttpClient httpClient, IConfig config)
+        public WebHelper(HttpClient httpClient, IConfig config, ILogger<WebHelper> logger)
         {
             Config = config;
             HttpClient = httpClient;
+            Logger = logger;
         }
 
         #region Получение всех цен
@@ -123,6 +127,8 @@ namespace EveWebClient.External
             if (pageLast.WalletTransactions.Max(x => x.date) < dateTimeStart)
                 return -1;
 
+            var iter = 100;
+
             do
             {
                 var min = page1.WalletTransactions.Min(x => x.date);
@@ -148,6 +154,10 @@ namespace EveWebClient.External
                     }
                 }
                 page1 = await CreateSeatTask<CorporationWalletJournal>(page, fullUrl);
+                iter--;
+
+                if (iter == 0)
+                    return maxPage;
             }
             while (true);
         }
@@ -223,6 +233,10 @@ namespace EveWebClient.External
                     json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
                     result = JsonConvert.DeserializeObject<T>(json);
+                }
+                else
+                {
+                    Logger.LogError("Error during CreateSeatTask()\r\nStatus code:" + response.StatusCode.ToString() + " " + response.ReasonPhrase);
                 }
             }
             catch { }

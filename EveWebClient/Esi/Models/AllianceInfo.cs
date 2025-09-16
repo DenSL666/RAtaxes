@@ -74,6 +74,9 @@ namespace EveWebClient.Esi.Models
         [JsonPropertyName("ticker")]
         public string Ticker { get; set; }
 
+        [JsonPropertyName("allianceId")]
+        public int AllianceId { get; set; }
+
         #endregion Properties
     }
 }

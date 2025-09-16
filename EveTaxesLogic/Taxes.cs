@@ -84,6 +84,11 @@ namespace EveTaxesLogic
 
             corpTaxes.ForEach(x => x.SummTaxes());
 
+            if (config != null && config.TaxParams != null && config.TaxParams.CorpIdsToExcludeTaxes != null && config.TaxParams.CorpIdsToExcludeTaxes.Any())
+            {
+                corpTaxes = corpTaxes.Where(x => !config.TaxParams.CorpIdsToExcludeTaxes.Contains(x.CorporationId)).ToList();
+            }
+
             return corpTaxes;
         }
 

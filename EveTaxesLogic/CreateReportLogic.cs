@@ -24,6 +24,15 @@ namespace EveTaxesLogic
 
         public void CreateReport(string[] args)
         {
+            //using (var context = new StorageContext())
+            //{
+            //    var consts = context.Constellations.Where(x => x.RegionId == 10000014 || x.RegionId == 10000047).ToList();
+            //    var constaIds = consts.Select(x => x.Id).ToList();
+            //    var solarSystems = context.SolarSystems.Where(x => constaIds.Contains(x.ConstellationId)).ToList();
+            //    var solarIds = solarSystems.Select(x => x.Id.ToString()).ToArray();
+            //    File.WriteAllLines(@"F:\solars.txt", solarIds);
+            //}
+
             DateTime? startDate = null, endDate = null;
             //  -report 03.03.2025 14.06.2025
             var _args = args.Skip(1).ToArray();
@@ -72,6 +81,7 @@ namespace EveTaxesLogic
                 oreTypeIds: oreFilter);
 
             var calculated = Taxes.CalculateCorporations(SdeMain.Asteroid, ledger, charMains, prices, wallets, mineralMining, Config);
+            calculated = calculated.Where(x => x.TotalIskTax >= 30000000).ToList();
 
             var directory = Path.Combine(AppContext.BaseDirectory, "report");
             if (!Directory.Exists(directory))
