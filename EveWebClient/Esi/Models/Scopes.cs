@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace EveWebClient.Esi.Models
 {
+    /// <summary>
+    /// Постоянные значения строковых данных для указания запрашиваемых прав при авторизации.
+    /// </summary>
     public static class Scopes
     {
         public const string ESI_ALLIANCE_READ_CONTACTS_1 = "esi-alliances.read_contacts.v1";

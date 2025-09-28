@@ -11,19 +11,37 @@ using YamlDotNet.RepresentationModel;
 
 namespace EveSdeModel.Models
 {
+    /// <summary>
+    /// Описывает способы использования чертежа.
+    /// </summary>
     public class Blueprint : IYamlEntity
     {
+        /// <summary>
+        /// Id чертежа
+        /// </summary>
         public string Id { get; set; }
 
+        /// <summary>
+        /// Контейнер, содержащий сведения о способах использования чертежа.
+        /// </summary>
         [JsonPropertyName("activities")]
         public Activities Activities { get; set; }
 
+        /// <summary>
+        /// Id чертежа
+        /// </summary>
         [JsonPropertyName("blueprintTypeID")]
         public string BlueprintTypeID { get; set; }
 
+        /// <summary>
+        /// Максимальное количество прогонов чертежа.
+        /// </summary>
         [JsonPropertyName("maxProductionLimit")]
         public string MaxProductionLimit { get; set; }
 
+        /// <summary>
+        /// Является ли результат производства чертежа опубликованным (доступным игрокам).
+        /// </summary>
         public bool IsPublished { get; set; }
 
 
@@ -119,19 +137,44 @@ namespace EveSdeModel.Models
             }
         }
 
+        /// <summary>
+        /// Словарь, описывающий какие материалы и в каком количестве используются при создании одного прогона продукции.
+        /// </summary>
         public Dictionary<EntityType, string> ManufactoryMaterials { get; }
+        /// <summary>
+        /// Словарь, описывающий какая продукция и в каком количестве будет создано в результате одного прогона.
+        /// </summary>
         public Dictionary<EntityType, string> Products { get; }
+        /// <summary>
+        /// Зачастую продукция это один тип предмета.
+        /// </summary>
         public EntityType Product => Products.Keys.FirstOrDefault();
 
+        /// <summary>
+        /// Возможно ли создать с помощью чертежа что-либо доступное игрокам.
+        /// </summary>
         public bool HasManufactory => Activities != null &&
             (Activities.Manufacturing != null && Activities.Manufacturing.Products.Any() ||
             Activities.Reaction != null && Activities.Reaction.Products.Any())
             && Product != null && Product.IsPublished && IsPublished;
 
+        /// <summary>
+        /// Создаёт ли чертеж топливные блоки.
+        /// </summary>
         public bool IsFuelBlock => Product != null && Product.IsPublished && Product.Name.English.ToLower().Contains("fuel block");
+        /// <summary>
+        /// Является ли чертеж производственным.
+        /// </summary>
         public bool IsPrint => Activities != null && Activities.Manufacturing != null && Activities.Manufacturing.Products != null && Activities.Manufacturing.Products.Any();
+        /// <summary>
+        /// Является ли чертеж формулой реакции.
+        /// </summary>
         public bool IsFormula => Activities != null && Activities.Reaction != null && Activities.Reaction.Products != null && Activities.Reaction.Products.Any();
 
+        /// <summary>
+        /// Строковый формат чертежа, используемый в скрипте гугл таблицы.
+        /// </summary>
+        /// <returns></returns>
         public string Write() => $"  new Blueprint(\"{Product.Name.English.Replace("'", "").Replace("’", "")}\", {Products[Product]}, \"{(IsFormula ? "Formula" : $"{Product.Group?.Category?.Name?.English} {Product.GetTech()}")}\", \"{string.Join("$", ManufactoryMaterials.Select(p => $"{p.Key.Name.English}&{p.Value}"))}\"),";
     }
 }

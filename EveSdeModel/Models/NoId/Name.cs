@@ -11,6 +11,9 @@ using YamlDotNet.Serialization;
 
 namespace EveSdeModel.Models
 {
+    /// <summary>
+    /// Контейнер, описывающий имя сущности на различных языках.
+    /// </summary>
     public class Name : IYamlEntity
     {
         [YamlIgnore]

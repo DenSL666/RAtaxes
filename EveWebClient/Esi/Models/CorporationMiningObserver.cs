@@ -9,12 +9,21 @@ namespace EveWebClient.Esi.Models
 {
     public class CorporationMiningObserver : ModelBase<CorporationMiningObserver>
     {
+        /// <summary>
+        /// Дата добычи руды.
+        /// </summary>
         [JsonPropertyName("last_updated")]
         public DateTime LastUpdated { get; set; }
 
+        /// <summary>
+        /// Id структуры, где была добыта руда.
+        /// </summary>
         [JsonPropertyName("observer_id")]
         public long ObserverId { get; set; }
 
+        /// <summary>
+        /// Тип структуры?
+        /// </summary>
         [JsonPropertyName("observer_type")]
         public string ObserverType { get; set; }
     }

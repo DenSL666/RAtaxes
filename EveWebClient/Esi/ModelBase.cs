@@ -5,6 +5,10 @@ using System.Text.Json;
 
 namespace EveWebClient.Esi
 {
+    /// <summary>
+    /// Обёртка для ответа от сервера EVE Esi.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class ModelBase<T> : IEquatable<T>
     {
         #region Methods

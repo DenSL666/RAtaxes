@@ -11,11 +11,17 @@ using YamlDotNet.Serialization;
 
 namespace EveSdeModel.Models
 {
+    /// <summary>
+    /// Описывает типы сущностей, вроде конкретных кораблей, модулей или минерал.
+    /// </summary>
     public class EntityType : IYamlEntity
     {
         [YamlIgnore]
         private int? _id;
 
+        /// <summary>
+        /// Числовый вид Id сущности.
+        /// </summary>
         [YamlIgnore]
         public int TypeId
         {
@@ -39,26 +45,51 @@ namespace EveSdeModel.Models
             }
         }
 
+        /// <summary>
+        /// Id сущности.
+        /// </summary>
         public string Id { get; set; }
 
+        /// <summary>
+        /// Масса сущности.
+        /// </summary>
         [JsonPropertyName("mass")]
         public string Mass { get; set; }
 
+        /// <summary>
+        /// Минимальное количество сущностей, которые могут быть разобраны на материалы.<br/>
+        /// Например, руды разбираются не менее, чем 100 единиц.
+        /// </summary>
         [JsonPropertyName("portionSize")]
         public string PortionSize { get; set; }
 
+        /// <summary>
+        /// Является ли сущность публичной, т.е. доступной игрокам.
+        /// </summary>
         [JsonPropertyName("published")]
         public string Published { get; set; }
 
+        /// <summary>
+        /// Объем сущности.
+        /// </summary>
         [JsonPropertyName("volume")]
         public string Volume { get; set; }
 
+        /// <summary>
+        /// Радиус сущности.
+        /// </summary>
         [JsonPropertyName("radius")]
         public string Radius { get; set; }
 
+        /// <summary>
+        /// Id иконки в игре.
+        /// </summary>
         [JsonPropertyName("iconID")]
         public string IconID { get; set; }
 
+        /// <summary>
+        /// Id группы.
+        /// </summary>
         [JsonPropertyName("groupID")]
         public string GroupID { get; set; }
 
@@ -95,12 +126,22 @@ namespace EveSdeModel.Models
         [JsonPropertyName("sofMaterialSetID")]
         public string SofMaterialSetID { get; set; }
 
+        /// <summary>
+        /// Контейнер, описывающий имя сущности на разных языках.
+        /// </summary>
         [JsonPropertyName("name")]
         public Name Name { get; set; }
 
+        /// <summary>
+        /// Контейнер, описывающий сущность в игре на разных языках.<br/>
+        /// Не читаю его, чтобы не сохранять при перезаписи файла SDE.
+        /// </summary>
         [JsonPropertyName("description")]
         public Name Description { get; set; }
 
+        /// <summary>
+        /// Группа сущности.
+        /// </summary>
         public Group Group { get; private set; }
 
         public EntityType()
@@ -156,6 +197,9 @@ namespace EveSdeModel.Models
             Group = entity.Group.DeepCopy();
         }
 
+        /// <summary>
+        /// Является объект опубликованным (доступным игрокам).
+        /// </summary>
         [YamlIgnore]
         public bool IsPublished => !string.IsNullOrEmpty(Published) && Published == "true";
 
@@ -187,11 +231,17 @@ namespace EveSdeModel.Models
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Список префиксов имени, содержащийся в т1 фракционных вариантах сущноостей.
+        /// </summary>
         private static List<string> FactionNavy = new List<string>
         {
             "Navy", "Fleet",
         };
 
+        /// <summary>
+        /// Имена т2 кораблей амарской фракции.
+        /// </summary>
         private static List<string> AmarrT2 = new List<string>
         {
             "Retribution",
@@ -222,6 +272,9 @@ namespace EveSdeModel.Models
             "Bane",
         };
 
+        /// <summary>
+        /// Имена т2 кораблей минматарской фракции.
+        /// </summary>
         private static List<string> MinmatarT2 = new List<string>
         {
             "Jaguar",
@@ -252,6 +305,9 @@ namespace EveSdeModel.Models
             "Valravn",
         };
 
+        /// <summary>
+        /// Имена т2 кораблей калдарской фракции.
+        /// </summary>
         private static List<string> CaldariT2 = new List<string>
         {
             "Harpy",
@@ -282,6 +338,9 @@ namespace EveSdeModel.Models
             "Karura",
         };
 
+        /// <summary>
+        /// Имена т2 кораблей галлентской фракции.
+        /// </summary>
         private static List<string> GallenteT2 = new List<string>
         {
             "Enyo",
@@ -312,6 +371,9 @@ namespace EveSdeModel.Models
             "Hubris",
         };
 
+        /// <summary>
+        /// Имена т2 кораблей рудной фракции.
+        /// </summary>
         private static List<string> OreT2 = new List<string>
         {
             "Prospect",
@@ -321,6 +383,9 @@ namespace EveSdeModel.Models
             "Mackinaw",
         };
 
+        /// <summary>
+        /// Имена т2 кораблей фракции пиратов гуристас.
+        /// </summary>
         private static List<string> Guristas = new List<string>
         {
             "Worm",
@@ -333,6 +398,9 @@ namespace EveSdeModel.Models
             "Komodo",
         };
 
+        /// <summary>
+        /// Имена т2 кораблей фракции саньши.
+        /// </summary>
         private static List<string> Sansha = new List<string>
         {
             "Succubus",
@@ -341,6 +409,9 @@ namespace EveSdeModel.Models
             "Revenant",
         };
 
+        /// <summary>
+        /// Имена т2 кораблей фракции кровавых рейдеров.
+        /// </summary>
         private static List<string> Blood = new List<string>
         {
             "Cruor",
@@ -351,6 +422,9 @@ namespace EveSdeModel.Models
             "Molok",
         };
 
+        /// <summary>
+        /// Имена т2 кораблей фракции пиратов ангелов.
+        /// </summary>
         private static List<string> Angel = new List<string>
         {
             "Dramiel",
@@ -362,6 +436,9 @@ namespace EveSdeModel.Models
             "Azariel",
         };
 
+        /// <summary>
+        /// Имена т2 кораблей фракции серпентис.
+        /// </summary>
         private static List<string> Serpentis = new List<string>
         {
             "Daredevil",
@@ -372,6 +449,9 @@ namespace EveSdeModel.Models
             "Vanquisher",
         };
 
+        /// <summary>
+        /// Имена т2 кораблей фракции сестёр евы.
+        /// </summary>
         private static List<string> Sisters = new List<string>
         {
             "Astero",
@@ -379,6 +459,9 @@ namespace EveSdeModel.Models
             "Nestor",
         };
 
+        /// <summary>
+        /// Имена т2 кораблей фракции легион морду.
+        /// </summary>
         private static List<string> Mordu = new List<string>
         {
             "Garmur",
@@ -386,6 +469,9 @@ namespace EveSdeModel.Models
             "Barghest",
         };
 
+        /// <summary>
+        /// Имена т2 кораблей триглавской фракции.
+        /// </summary>
         private static List<string> Triglav = new List<string>
         {
             "Damavik",
@@ -402,6 +488,9 @@ namespace EveSdeModel.Models
             "Zirnitra",
         };
 
+        /// <summary>
+        /// Имена т2 кораблей фракции эденком.
+        /// </summary>
         private static List<string> Edencom = new List<string>
         {
             "Skybreaker",
@@ -411,6 +500,9 @@ namespace EveSdeModel.Models
             "Torrent",
         };
 
+        /// <summary>
+        /// Имена т2 кораблей фракции конкорд.
+        /// </summary>
         private static List<string> Concord = new List<string>
         {
             "Pacifier",
@@ -419,12 +511,18 @@ namespace EveSdeModel.Models
             "Marshal",
         };
 
+        /// <summary>
+        /// Имена т2 кораблей фракции бессмертных.
+        /// </summary>
         private static List<string> Deathless = new List<string>
         {
             "Tholos",
             "Cenotaph",
         };
 
+        /// <summary>
+        /// Список имён кораблей, которые в своём чертеже зачастую содержат 0 материало-эффективность.
+        /// </summary>
         private static List<string> Ships_2 =
             AmarrT2
             .Concat(MinmatarT2)
@@ -444,6 +542,9 @@ namespace EveSdeModel.Models
             .Concat(Deathless)
             .ToList();
 
+        /// <summary>
+        /// Список частей или целых имён модулей, которые в своём чертеже зачастую содержат 0 материало-эффективность.
+        /// </summary>
         private static List<string> Modules_2 = new List<string>
         {
             "Null", "Void", "Spike", "Javelin", "Barrage", "Hail", "Quake", "Tremor", "Scorch", "Conflagration", "Aurora", "Gleam", "Tetryon", "Baryon", "Meson", "Mystic", "Occult", "Imperial Navy", "Ammatar Navy", "Caldari Navy",
@@ -451,6 +552,10 @@ namespace EveSdeModel.Models
             "Navy Issue", "Fleet Issue",
         };
 
+        /// <summary>
+        /// Выбирает число 1 или 2, которое определяет, какая материало-эффективность чертежа текущей сущности (равна 0 или может быть увеличена до 10%).
+        /// </summary>
+        /// <returns></returns>
         public int GetTech()
         {
             if (Name == null || string.IsNullOrEmpty(Name.English))
@@ -466,6 +571,10 @@ namespace EveSdeModel.Models
             return 1;
         }
 
+        /// <summary>
+        /// Заполняет поле группы сущности из списка групп.
+        /// </summary>
+        /// <param name="groups">Список групп.</param>
         public void FillGroups(IEnumerable<Group> groups)
         {
             var found = groups.FirstOrDefault(x => x.Id == GroupID);
@@ -491,41 +600,5 @@ namespace EveSdeModel.Models
         {
             return new EntityType(this);
         }
-
-        [YamlIgnore]
-        public static List<string> Cats = new List<string>
-        {
-            "Charge 1",
-            "Charge 2",
-            "Charge 3",
-            "Module 1",
-            "Module 2",
-            "Subsystem 1",
-            "Subsystem 2",
-            "Ship 1",
-            "Ship 2",
-            "Drone 1",
-            "Drone 2",
-            "Infrastructure Upgrades 1",
-            "Implant 1",
-            "Implant 2",
-            "Fighter 1",
-            "Fighter 2",
-            "Celestial 1",
-            "Commodity 1",
-            "Commodity 2",
-            "Orbitals 1",
-            "Deployable 1",
-            "Deployable 2",
-            "Starbase 1",
-            "Starbase 2",
-            "Entity 1",
-            "Sovereignty Structures 1",
-            "Special Edition Assets 1",
-            "Structure 1",
-            "Structure Module 1",
-            "Structure Module 2",
-            "Formula",
-        };
     }
 }

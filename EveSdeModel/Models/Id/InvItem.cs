@@ -10,6 +10,9 @@ using YamlDotNet.RepresentationModel;
 
 namespace EveSdeModel.Models.Id
 {
+    /// <summary>
+    /// Уникальная сущность, вроде региона, системы, НПЦ корпорации, НПЦ станции.
+    /// </summary>
     public class InvItem : IYamlEntity
     {
         [JsonPropertyName("itemID")]
@@ -61,11 +64,27 @@ namespace EveSdeModel.Models.Id
             }
         }
 
+        /// <summary>
+        /// Является ли сущность регионом.
+        /// </summary>
         public bool IsRegion => TypeID == "3";
+        /// <summary>
+        /// Является ли сущность созвездием.
+        /// </summary>
         public bool IsConstellation => TypeID == "4";
+        /// <summary>
+        /// Является ли сущность системой.
+        /// </summary>
         public bool IsSolarSystem => TypeID == "5";
+        /// <summary>
+        /// Является ли сущность НПЦ корпорацией.
+        /// </summary>
         public bool IsCorporation => TypeID == "2";
 
+        /// <summary>
+        /// Заполняет поле имени сущности из списка имён уникальных сущностей.
+        /// </summary>
+        /// <param name="items">Список всех имён.</param>
         public void FillNames(IEnumerable<InvUniqueName> items)
         {
             var foundItem = items.FirstOrDefault(x => x.Id == Id);
@@ -81,6 +100,9 @@ namespace EveSdeModel.Models.Id
         }
     }
 
+    /// <summary>
+    /// Имя уникальной сущности, вроде региона, системы, НПЦ корпорации, НПЦ станции.
+    /// </summary>
     public class InvUniqueName : IYamlEntity
     {
         [JsonPropertyName("itemID")]

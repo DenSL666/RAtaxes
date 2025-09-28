@@ -22,10 +22,18 @@ using static System.Formats.Asn1.AsnWriter;
 
 namespace EveWebClient.SSO
 {
+    /// <summary>
+    /// Класс для доступа к EVE сервису авторизации.
+    /// </summary>
     public class OAuthHelper
     {
         #region Construct
 
+        /// <summary>
+        /// Конструктор.
+        /// </summary>
+        /// <param name="httpClient">Http клиент получаем с помощью Dependency Injection.</param>
+        /// <param name="config">Конфиг программы получаем с помощью Dependency Injection.</param>
         public OAuthHelper(HttpClient httpClient, IConfig config)
         {
             ClientId = config.ClientId;
@@ -39,15 +47,34 @@ namespace EveWebClient.SSO
 
         #region Properties
 
+        /// <summary>
+        /// Строковый параметр, используемый для авторизации EVE персонажа и уникальный для программы (смотри EVE SSO).
+        /// </summary>
         private string ClientId { get; }
+        /// <summary>
+        /// Строковый параметр, используемый при авторизации EVE персонажа для обработки http ответа от EVE SSO.
+        /// </summary>
         private string RedirectUrl { get; }
+        /// <summary>
+        /// Массив строк, содержащих кодовое значение запрашиваемых прав для получения данных от EVE SSO.
+        /// </summary>
         private IEnumerable<string> Scopes { get; }
         private HttpClient HttpClient { get; }
+
+        /// <summary>
+        /// Строковый параметр, используемый для создания уникальности каждого запроса авторизации к EVE SSO.
+        /// </summary>
         private string CodeVerifier { get; set; }
+        /// <summary>
+        /// Строковый параметр, используемый для создания уникальности каждого запроса авторизации к EVE SSO.
+        /// </summary>
         private string CodeChallenge { get; set; }
 
-        #endregion Constants
+        #endregion
 
+        #region Constants
+
+        //  Постоянные значения, используемые для создания запроса к EVE SSO.
         private const string ExpectedAudience = "EVE Online";
         private const string TRANQUILITY_SSO_BASE_URL = "https://login.eveonline.com/v2";
         private const string SERENITY_SSO_BASE_URL = "https://login.evepc.163.com/v2";
@@ -62,13 +89,20 @@ namespace EveWebClient.SSO
         private static string TokenUrl => TRANQUILITY_SSO_BASE_URL + SSO_TOKEN;
         private static string RevokeUrl => TRANQUILITY_SSO_BASE_URL + SSO_REVOKE;
 
+        #endregion
+
         #region Static properties
 
         private static readonly Random random = new Random();
 
+        /// <summary>
+        /// Хранит данные, используемые при авторизации EVE SSO, которые актуальны лишь ограниченный период времени, чтобы не перезапрашивать эти данные повторно в период их актуальности.
+        /// </summary>
         private static JwksMetadata _jwksMetadata;
+        /// <summary>
+        /// Содержит дату актуальности временных данных, используемых при авторизации EVE SSO.
+        /// </summary>
         private static DateTime _jwksMetadataExpiry = DateTime.MinValue;
-        private static readonly HttpClient _httpClient = new HttpClient();
         private static readonly object _lock = new object();
 
         #endregion
@@ -76,6 +110,9 @@ namespace EveWebClient.SSO
 
         #region private helper methods
 
+        /// <summary>
+        /// Создаёт набор случайных данных для уникальности каждой авторизации EVE SSO.
+        /// </summary>
         private void GenerateCodeChallenge()
         {
             // Generate code verifier
@@ -94,6 +131,14 @@ namespace EveWebClient.SSO
             }
         }
 
+        /// <summary>
+        /// Создаёт набор параметров, отправляемых на сервер авторизации EVE SSO.
+        /// </summary>
+        /// <returns>
+        /// Кортеж из строки авторизации и строки состояния.<br/>
+        /// Строки авторизации содержит упакованный словарь с типом и значением нескольких параметров.<br/>
+        /// Строка состояния содержит случайное значение, которое нужно для проверки корректности ответа сервера.
+        /// </returns>
         private (string url, string state) CreateSsoUrl()
         {
             string state = GenerateRandomString(16);
@@ -124,6 +169,11 @@ namespace EveWebClient.SSO
                 .Replace("=", "");
         }
 
+        /// <summary>
+        /// Создаёт строку указанной длины, состоящую из случайного набора символов [a-z, A-Z, 0-9]
+        /// </summary>
+        /// <param name="length"></param>
+        /// <returns></returns>
         private static string GenerateRandomString(int length)
         {
             const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -135,8 +185,18 @@ namespace EveWebClient.SSO
 
         #region Auth public
 
+        /// <summary>
+        /// Выполняет обновление имеющегося токена авторизации EVE SSO.
+        /// </summary>
+        /// <param name="tokenDetails">Токен авторизации EVE SSO</param>
+        /// <returns></returns>
         public async Task<AccessTokenDetails> RefreshTokenAsync(AccessTokenDetails tokenDetails) => await RefreshTokenAsync(tokenDetails.RefreshToken);
 
+        /// <summary>
+        /// Выполняет обновление имеющегося токена авторизации EVE SSO.
+        /// </summary>
+        /// <param name="refreshToken">Токен обновления авторизации EVE SSO</param>
+        /// <returns></returns>
         public async Task<AccessTokenDetails> RefreshTokenAsync(string refreshToken)
         {
             try
@@ -174,6 +234,11 @@ namespace EveWebClient.SSO
             }
         }
 
+        /// <summary>
+        /// Выполняет запрос на получение токена авторизации EVE SSO с сервера при наличии кода авторизации.
+        /// </summary>
+        /// <param name="authorizationCode">Код авторизации.</param>
+        /// <returns></returns>
         public async Task<AccessTokenDetails> RequestTokenAsync(string authorizationCode)
         {
             var headers = new Dictionary<string, string>
@@ -198,9 +263,14 @@ namespace EveWebClient.SSO
             return JsonConvert.DeserializeObject<AccessTokenDetails>(responseString);
         }
 
+        /// <summary>
+        /// Выполняет запрос к серверу авторизации EVE SSO.
+        /// </summary>
+        /// <returns>Код авторизации, полученный от сервера.</returns>
         public async Task<string> GetAuthCodeFromSSO()
         {
             string responseString = "";
+            //  Создаём локальный http листенер для получения ответа от сервера в браузере.
             HttpListener HttpListener = null;
             GenerateCodeChallenge();
 
@@ -209,22 +279,27 @@ namespace EveWebClient.SSO
             {
                 HttpListener = new HttpListener();
 
+                // Настраиваем http листенер
                 var _redirectUrl = RedirectUrl;
                 if (!_redirectUrl.EndsWith("/"))
                     _redirectUrl += "/";
                 HttpListener.Prefixes.Add(_redirectUrl);
                 HttpListener.Start();
 
+                // Отправляем запрос
                 Process.Start(new ProcessStartInfo
                 {
                     FileName = url,
                     UseShellExecute = true,
                 });
 
+                //  Ловим ответ от сервера в браузере
                 var context = await HttpListener.GetContextAsync();
 
+                //  Записываем ответ
                 responseString = context.Request.Url.ToString();// await response.Content.ReadAsStringAsync();
 
+                //  Показываем пользователю в браузере заготовленную страницу в случае успешной авторизации
                 string myHeader = "Authentication Successful";
                 string body = string.Join("<br/>\n", "\t\tReturn to EveTaxes to continue calculation.", "\t\t", "\t\t<i>This browser window can now be closed.</i>");
 
@@ -232,7 +307,7 @@ namespace EveWebClient.SSO
             }
             catch (Exception ex)
             {
-
+                //  Нужно добавить логгер и корректно обрабатывать ошибки
             }
             finally
             {
@@ -240,6 +315,8 @@ namespace EveWebClient.SSO
                 HttpListener?.Close();
             }
 
+            //  Если получили корректный ответ от сервера, парсим его и проверяем, что ранее сохранённая строка состояние совпадает с ответом сервера
+            //  Если всё правильно, возвращаем код авторизации
             if (!string.IsNullOrEmpty(responseString))
             {
                 var answer = responseString.Replace(RedirectUrl, "").Trim('/').Trim('?');
@@ -353,14 +430,14 @@ namespace EveWebClient.SSO
             }
 
             // Fetch metadata
-            var metadataResponse = await _httpClient.GetAsync(SSO_META_DATA_URL);
+            var metadataResponse = await HttpClient.GetAsync(SSO_META_DATA_URL);
             metadataResponse.EnsureSuccessStatusCode();
 
             var resp = await metadataResponse.Content.ReadAsStringAsync();
             var metadata = JsonConvert.DeserializeObject<OAuthMetadata>(resp);
 
             // Fetch JWKS data
-            var jwksResponse = await _httpClient.GetAsync(metadata.jwks_uri);
+            var jwksResponse = await HttpClient.GetAsync(metadata.jwks_uri);
             jwksResponse.EnsureSuccessStatusCode();
 
             var resp2 = await jwksResponse.Content.ReadAsStringAsync();
@@ -376,24 +453,38 @@ namespace EveWebClient.SSO
 
         #endregion
 
+        /// <summary>
+        /// Отправляет в поток страницы браузера ответ для пользователя после попытки авторизации EVE SSO.
+        /// </summary>
+        /// <param name="stream">Поток страницы браузера.</param>
+        /// <param name="header">Заголовок страницы.</param>
+        /// <param name="body">Текст сообщения для пользователя.</param>
+        /// <returns></returns>
+        /// <exception cref="FileNotFoundException"></exception>
         private Task WriteStringAsync(Stream stream, string header, string body)
         {
+            //  Записанные значения заголовка и текста сообщения, сохранённые в шаблоне страницы.
             string headerTemplate = "header567", bodyTemplate = "text123";
 
+            //  Название шаблона страницы.
             var embededFileName = "EveWebClient.SSO.BrowserPageHtml.txt";
             var assembly = Assembly.GetExecutingAssembly();
+            //  Ищем шаблон во встроенных ресурсах.
             var embededStream = assembly.GetManifestResourceStream(embededFileName);
 
             if (embededStream == null)
             {
                 throw new FileNotFoundException("Cannot find mappings file.", embededFileName);
             }
+            //  Читаем текстовый вид шаблона страницы.
             string buffer;
             using (var _reader = new StreamReader(embededStream)) buffer = _reader.ReadToEnd();
+            //  Обновляем заголовок и текст шаблона на указанные.
             buffer = buffer
                 .Replace(headerTemplate, header)
                 .Replace(bodyTemplate, body);
 
+            //  Записываем текст страницы в поток страницы браузера.
             return Task.Run(() =>
             {
                 using (var writer = new StreamWriter(stream, new UTF8Encoding(false)))

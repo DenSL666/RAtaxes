@@ -19,10 +19,18 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace EveWebClient.External
 {
-
+    /// <summary>
+    /// Класс обращения к различным сервисам помимо EVE SSO и EVE Esi.
+    /// </summary>
     public class WebHelper
     {
+        /// <summary>
+        /// Строка обращения к списку аккаунтов сеата.
+        /// </summary>
         private const string SeatUsersUrl = "/api/v2/users";
+        /// <summary>
+        /// Строка обращения к корпоративному валлету сеата.
+        /// </summary>
         private const string SeatCorporationWalletJournalUrl = "/api/v2/corporation/wallet-journal";
 
         private IConfig Config { get; }
@@ -38,6 +46,11 @@ namespace EveWebClient.External
 
         #region Получение всех цен
 
+        /// <summary>
+        /// Получает актуальные цены на предметы из EVE Esi и Fuzzwork.
+        /// </summary>
+        /// <param name="ids">Id предметов.</param>
+        /// <returns>Список цен.</returns>
         public async Task<List<Price>> GetPrices(IEnumerable<string> ids)
         {
             var result = new List<Price>();
@@ -85,6 +98,11 @@ namespace EveWebClient.External
 
         #region Fuzzwork
 
+        /// <summary>
+        /// Получает словарь цен набора предметов с сайта Fuzzwork.
+        /// </summary>
+        /// <param name="uri">Строка запроса для одного ли нескольких предметов.</param>
+        /// <returns>Словарь с id предмета и его ценой.</returns>
         public async Task<Dictionary<string, FuzzworkBuySellData>> GetFuzzworkPrices(Uri uri)
         {
             var request = new HttpRequestMessage
@@ -109,59 +127,95 @@ namespace EveWebClient.External
 
         #region Seat
 
+        /// <summary>
+        /// Выполняет поиск номера страницы, с которой нужно начать считывание журнала транзакции корпорации из сеата.
+        /// </summary>
+        /// <param name="corporationId">Id корпорации.</param>
+        /// <param name="dateTimeStart">Дата транзакции, для которой ищем номер страницы.</param>
+        /// <returns>Номер страницы сеата.</returns>
         public async Task<int> SearchPageSeatCorporationWalletJournal(int corporationId, DateTime dateTimeStart)
         {
+            /// Так как сеат предоставляет по REST API данные постранично (по 15 записей на страницу), а число записей и страниц может составлять десятки тысяч.
+            /// А фильтр по дате API не поддерживает (в формате odata).
+            /// То в целях того, чтобы не тянуть все десятки тысяч данных за прошедшие года, нужно выбрать такую страницу, на которой впервые встречается транзакция за указанную дату.
+
             var sub1day = dateTimeStart.AddDays(-1);
             var fullUrl = $"{SeatCorporationWalletJournalUrl}/{corporationId}";
 
             int page = 1, lowPage = 0;
-            var page1 = await CreateSeatTask<CorporationWalletJournal>(page, fullUrl);
-            if (page1 == null || page1.WalletTransactions == null)
+            /// Получаем первую страницу транзакций корпорации.
+            /// Если транзакций нет, возвращает -1.
+            var currentPage = await CreateSeatTask<CorporationWalletJournal>(page, fullUrl);
+            if (currentPage == null || currentPage.WalletTransactions == null)
                 return -1;
-            int maxPage = page1.Meta.last_page;
+            /// В полученном ответе есть данные о последней странице.
+            int maxPage = currentPage.Meta.last_page;
 
+            /// Если последняя страница = первой, то найден ответ.
             if (page == maxPage)
                 return page;
 
+            /// Запрашиваем данные с последней страницы.
+            /// Если на последней странице все транзакции по дате меньше нужной даты, значит корпорация не активна (на нужную дату) и ответ -1.
             var pageLast = await CreateSeatTask<CorporationWalletJournal>(maxPage, fullUrl);
             if (pageLast.WalletTransactions.Max(x => x.date) < dateTimeStart)
                 return -1;
 
+            /// Указываем, что максимальное число итераций поиска 100, чтобы не попадать в бесконечный цикл в наихудшем случае.
             var iter = 100;
 
             do
             {
-                var min = page1.WalletTransactions.Min(x => x.date);
+                /// Если текущая страница - первая, и самая старая транзакция на ней больше даты, значит ответ - первая страница.
+                var min = currentPage.WalletTransactions.Min(x => x.date);
                 if (page == 1 && min > dateTimeStart)
                     return page;
 
-                if (page1.WalletTransactions.Any(x => sub1day < x.date) && page1.WalletTransactions.Any(x => x.date < dateTimeStart))
+                /// Если на текущей странице есть транзакция, которая попадает в рамки нужной даты, нашли ответ.
+                if (currentPage.WalletTransactions.Any(x => sub1day < x.date) && currentPage.WalletTransactions.Any(x => x.date < dateTimeStart))
                     return page;
 
                 if (sub1day < min && min < dateTimeStart)
                     return page;
                 else
                 {
+                    /// Если самая старая транзакция на странице меньше нужной даты
                     if (sub1day > min)
                     {
+                        /// Идём по диапазону страниц "вперёд"
+                        /// В качестве нижней границы берём текущую
+                        /// В качестве верхней границы берём середину промежутка между текущей и максимальной страницей.
                         lowPage = page;
                         page = (page + maxPage) / 2;
                     }
+                    /// Если самая старая транзакция на странице больше нужной даты
                     if (min > dateTimeStart)
                     {
+                        /// Идём по диапазону страниц "назад"
+                        /// В качестве верхней границы берём текущую
+                        /// В качестве нижней границы берём середину промежутка между текущей и наименьшей страницей.
                         maxPage = page;
                         page = (page + lowPage) / 2;
                     }
                 }
-                page1 = await CreateSeatTask<CorporationWalletJournal>(page, fullUrl);
+                /// Запрашиваем данные страницы с выбранным номером.
+                currentPage = await CreateSeatTask<CorporationWalletJournal>(page, fullUrl);
                 iter--;
 
+                /// Если исчерпан лимит попыток, то берём номер последней страницы - не повезло.
                 if (iter == 0)
                     return maxPage;
             }
             while (true);
         }
 
+        /// <summary>
+        /// Получает данные о транзакциях корпорации из сеата.
+        /// </summary>
+        /// <param name="corporationId">Id корпорации.</param>
+        /// <param name="page">Начальный номер страницы сеата.</param>
+        /// <param name="filter">Фильтр в формате OData</param>
+        /// <returns>Пара значений: номер последней страницы, с которой были получены данные, и список транзакций.</returns>
         public async Task<KeyValuePair<int, List<WalletTransaction>>> GetSeatCorporationWalletJournal(int corporationId, int? page = null, string filter = null)
         {
             var fullUrl = $"{SeatCorporationWalletJournalUrl}/{corporationId}";
@@ -176,6 +230,7 @@ namespace EveWebClient.External
 
             try
             {
+                /// Получая данные о первой странице, получаем данные еще и о номере последней страницы.
                 var page1 = await CreateSeatTask<CorporationWalletJournal>(page.Value, fullUrl, filter);
                 page++;
                 if (page1 == null || page1.WalletTransactions == null)
@@ -200,6 +255,10 @@ namespace EveWebClient.External
             return result;
         }
 
+        /// <summary>
+        /// Получает данные обо всех аккаунтах, добавленных в сеат.
+        /// </summary>
+        /// <returns>Список аккаунтов.</returns>
         public async Task<List<UserInfo>> GetSeatUserInfo()
         {
             var result = new List<UserInfo>();
@@ -219,6 +278,14 @@ namespace EveWebClient.External
             return result;
         }
 
+        /// <summary>
+        /// Создаёт запрос к сеату.
+        /// </summary>
+        /// <typeparam name="T">Модуль возвращаемых данных.</typeparam>
+        /// <param name="page">Номер страницы сеата.</param>
+        /// <param name="url">Полный адрес запроса без указания номера страницы.</param>
+        /// <param name="filter">Фильтр в формате OData</param>
+        /// <returns></returns>
         private async Task<T> CreateSeatTask<T>(int page, string url, string filter = null) where T : new()
         {
             T result = default;

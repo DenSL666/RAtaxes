@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace EveWebClient.External.Models.Seat
 {
+    /// <summary>
+    /// Обёртка для ответа сеата на запрос списка аккаунтов.
+    /// </summary>
     public class UserList
     {
         [JsonProperty("data")]
@@ -20,6 +23,9 @@ namespace EveWebClient.External.Models.Seat
 
     }
 
+    /// <summary>
+    /// Данные об аккаунте сеата.
+    /// </summary>
     public class UserInfo
     {
         public int id { get; set; }
@@ -28,7 +34,13 @@ namespace EveWebClient.External.Models.Seat
         public bool active { get; set; }
         //public DateTime last_login { get; set; }
         //public string last_login_source { get; set; }
+        /// <summary>
+        /// Список id связанных с аккаунтом персонажей.
+        /// </summary>
         public int[] associated_character_ids { get; set; }
+        /// <summary>
+        /// Id главного персонажа аккаунта.
+        /// </summary>
         public int main_character_id { get; set; }
     }
 

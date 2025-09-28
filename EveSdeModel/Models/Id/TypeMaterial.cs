@@ -16,6 +16,9 @@ namespace EveSdeModel.Models
         [YamlIgnore]
         private int? _id;
 
+        /// <summary>
+        /// Числовый вид Id сущности.
+        /// </summary>
         [YamlIgnore]
         public int TypeId
         {
@@ -39,40 +42,94 @@ namespace EveSdeModel.Models
             }
         }
 
+        /// <summary>
+        /// Id сущности.
+        /// </summary>
         public string Id { get; set; }
 
+        /// <summary>
+        /// Список материалов, на которые разбирается сущность при 100% переработке.
+        /// </summary>
         [JsonPropertyName("materials")]
         public List<Material> Materials { get; set; }
 
+        /// <summary>
+        /// Словарь, содержащий данные о сущностях и их количестве, на которые разбирается сущность при 100% переработке.
+        /// </summary>
         [YamlIgnore]
         public Dictionary<EntityType, string> RefineMaterials { get; }
+        /// <summary>
+        /// Сущность, которая разбирается на материалы.
+        /// </summary>
         [YamlIgnore]
         public EntityType? Entity { get; private set; }
 
+        /// <summary>
+        /// Является ли сущность рудой.
+        /// </summary>
         [YamlIgnore]
         public bool IsAsteroid => Entity != null && Entity.IsPublished && Entity.Group != null && Entity.Group.CategoryID == "25";
+        /// <summary>
+        /// Минимальное количество сущностей, которые могут быть разобраны на материалы.<br/>
+        /// Например, руды разбираются не менее, чем 100 единиц.
+        /// </summary>
         [YamlIgnore]
         public string PortionSize => Entity != null ? Entity.PortionSize : "";
 
+        /// <summary>
+        /// Является ли сущность рудой и относится к группе ледяных руд.
+        /// </summary>
         [YamlIgnore]
         public bool IsIce => IsAsteroid && Entity.Group.Id == "465";
+
+        /// <summary>
+        /// Является ли сущность рудой и относится к группе лунных руд R4.
+        /// </summary>
         [YamlIgnore]
         public bool IsUbiquitousMoon4 => IsAsteroid && Entity.Group.Id == "1884";
+
+        /// <summary>
+        /// Является ли сущность рудой и относится к группе лунных руд R8.
+        /// </summary>
         [YamlIgnore]
         public bool IsCommonMoon8 => IsAsteroid && Entity.Group.Id == "1920";
+
+        /// <summary>
+        /// Является ли сущность рудой и относится к группе лунных руд R16.
+        /// </summary>
         [YamlIgnore]
         public bool IsUncommonMoon16 => IsAsteroid && Entity.Group.Id == "1921";
+
+        /// <summary>
+        /// Является ли сущность рудой и относится к группе лунных руд R32.
+        /// </summary>
         [YamlIgnore]
         public bool IsRareMoon32 => IsAsteroid && Entity.Group.Id == "1922";
+
+        /// <summary>
+        /// Является ли сущность рудой и относится к группе лунных руд R64.
+        /// </summary>
         [YamlIgnore]
         public bool IsExceptionalMoon64 => IsAsteroid && Entity.Group.Id == "1923";
+
+        /// <summary>
+        /// Является ли сущность рудой и относится к группе лунных руд (любых).
+        /// </summary>
         [YamlIgnore]
         public bool IsMoon => IsAsteroid && (IsUbiquitousMoon4 || IsCommonMoon8 || IsUncommonMoon16 || IsRareMoon32 || IsExceptionalMoon64);
+
+        /// <summary>
+        /// Является ли сущность рудой и относится к группе астероидных руд.
+        /// </summary>
         [YamlIgnore]
         public bool IsMineral => IsAsteroid && !IsMoon && !IsIce;
 
         [YamlIgnore]
         private int? _portionSizeInt = null;
+        /// <summary>
+        /// Минимальное количество сущностей, которые могут быть разобраны на материалы.<br/>
+        /// Например, руды разбираются не менее, чем 100 единиц.
+        /// </summary>
         [YamlIgnore]
         public int PortionSizeInt
         {
@@ -119,6 +176,10 @@ namespace EveSdeModel.Models
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Заполняет поле сущности по её Id и словарь сущностей, на которые происходит разбор.
+        /// </summary>
+        /// <param name="items">Список всех сущностей.</param>
         public void FillMaterials(IEnumerable<EntityType> items)
         {
             var foundItem = items.FirstOrDefault(x => x.Id == Id);

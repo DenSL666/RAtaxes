@@ -24,15 +24,6 @@ namespace EveTaxesLogic
 
         public void CreateReport(string[] args)
         {
-            //using (var context = new StorageContext())
-            //{
-            //    var consts = context.Constellations.Where(x => x.RegionId == 10000014 || x.RegionId == 10000047).ToList();
-            //    var constaIds = consts.Select(x => x.Id).ToList();
-            //    var solarSystems = context.SolarSystems.Where(x => constaIds.Contains(x.ConstellationId)).ToList();
-            //    var solarIds = solarSystems.Select(x => x.Id.ToString()).ToArray();
-            //    File.WriteAllLines(@"F:\solars.txt", solarIds);
-            //}
-
             DateTime? startDate = null, endDate = null;
             //  -report 03.03.2025 14.06.2025
             var _args = args.Skip(1).ToArray();
@@ -69,18 +60,35 @@ namespace EveTaxesLogic
                 startDate = t;
             }
 
+            //  коллекция id руд, которые являются минеральными и льдом, чтобы отфильтровать только их из майнинг леджера сеата
             var oreFilter = SdeMain.Asteroid.Where(x => x.IsMineral || x.IsIce).Select(x => x.TypeId).ToArray();
 
+            //  добытая лунная руда. фильтр по альянсам берём из конфига
             var ledger = GetLedger(startDate.Value, endDate.Value, alliIds: Config.TaxParams.AllianceIdsToCalcTaxes);
+
+            //  основные персонажи. фильтр по альянсам берём из конфига
             var charMains = GetCharacterMains(alliIds: Config.TaxParams.AllianceIdsToCalcTaxes);
+
+            //  цены на продукты переработки руды
             var prices = GetPrices(SdeMain.AsteroidRefineItems.Select(x => x.TypeId).ToList()).OrderBy(x => x.DateUpdate).ThenBy(x => x.TypeId).ToList();
+
+            //  налоговые транзакции корпораций. фильтр по альянсам берём из конфига
             var wallets = GetWalletTransactions(startDate.Value, endDate.Value, alliIds: Config.TaxParams.AllianceIdsToCalcTaxes);
+
+            //  добытая минеральная руда и лёд.
+            //  фильтр по альянсам берём из конфига
+            //  фильтр по регионам берём из конфига
+            //  фильтр по типам руд берём oreFilter
             var mineralMining = GetMineralMiningList(startDate.Value, endDate.Value, 
                 alliIds: Config.TaxParams.AllianceIdsToCalcTaxes, 
                 regionIds: Config.TaxParams.MineralTaxMiningRegions,
                 oreTypeIds: oreFilter);
 
+            //  запускаем расчет налогов по корпорациям
             var calculated = Taxes.CalculateCorporations(SdeMain.Asteroid, ledger, charMains, prices, wallets, mineralMining, Config);
+
+            //  фильтруем те корпорации, у которых налог составляем менее 30 миллионов
+            //  величину 30 миллионов лучше вынести в конфиг
             calculated = calculated.Where(x => x.TotalIskTax >= 30000000).ToList();
 
             var directory = Path.Combine(AppContext.BaseDirectory, "report");
@@ -92,9 +100,18 @@ namespace EveTaxesLogic
             Epplus.Export(filePath, calculated, Config.TaxParams.AllianceIdsToCalcTaxes);
         }
 
+        /// <summary>
+        /// Получает список добытой лунной руды в указанный период времени с указанными фильтрами альянсов и корпораций.
+        /// </summary>
+        /// <param name="start">Начальный период времени.</param>
+        /// <param name="end">Конечный период времени.</param>
+        /// <param name="corpIds">Коллекция id корпораций, для которых нужно выбирать добытчиков руды.</param>
+        /// <param name="alliIds">Коллекция id альянсов, для которых нужно выбирать добытчиков руды.</param>
+        /// <returns>Коллекция записей о добытой лунной руде.</returns>
         private List<ObservedMining> GetLedger(DateTime start, DateTime end, int[]? corpIds = null, int[]? alliIds = null)
         {
             var result = new List<ObservedMining>();
+            //  выбираем из БД все записи добычи руды за нужный период
             using (var context = new StorageContext())
             {
                 result = context.ObservedMinings.Where(x => start <= x.LastUpdated && x.LastUpdated < end).ToList();
@@ -109,20 +126,29 @@ namespace EveTaxesLogic
                 }
             }
 
+            //  если указан фильтр альянсов, то фильтруем только те записи, для которых подходит один из альянсов
             if (alliIds != null && alliIds.Any())
             {
                 result = result.Where(x => x.Corporation != null && x.Corporation.AllianceId.HasValue && alliIds.Contains(x.Corporation.AllianceId.Value)).ToList();
             }
 
+            //  если указан фильтр корпораций, то фильтруем только те записи, для которых подходит одна из корпораций
             if (corpIds != null && corpIds.Any())
             {
                 result = result.Where(x => corpIds.Contains(x.CorporationId)).ToList();
             }
+            //  сортируем результаты по возрастанию даты добычи
             result = result.OrderBy(x => x.LastUpdated).ToList();
 
             return result;
         }
 
+        /// <summary>
+        /// Получает коллекцию основных персонажей (и связанных с ним) согласно указанным фильтрам корпораций или альянсов.
+        /// </summary>
+        /// <param name="corpIds">Коллекция id корпораций, для которых нужно выбирать персонажей.</param>
+        /// <param name="alliIds">Коллекция id альянсов, для которых нужно выбирать персонажей.</param>
+        /// <returns>Коллекция основных персонажей.</returns>
         private List<CharacterMain> GetCharacterMains(int[]? corpIds = null, int[]? alliIds = null)
         {
             var result = new List<CharacterMain>();
@@ -152,6 +178,11 @@ namespace EveTaxesLogic
 
         private List<ItemPrice> GetPrices(IEnumerable<TypeMaterial> materials) => GetPrices(materials.Select(x => x.TypeId).ToArray());
 
+        /// <summary>
+        /// Коллекция цен на все предметы за весь период.
+        /// </summary>
+        /// <param name="typeIds">Коллекция id предметов, для которых запрашивается цена.</param>
+        /// <returns>Коллекция цен.</returns>
         private List<ItemPrice> GetPrices(IEnumerable<int> typeIds)
         {
             var result = new List<ItemPrice>();
@@ -165,6 +196,14 @@ namespace EveTaxesLogic
             return result;
         }
 
+        /// <summary>
+        /// Коллекция всех транзакций между персонажем и корпорацией за указанный период для указанных корпораций или альянсов.
+        /// </summary>
+        /// <param name="start">Начальный период времени.</param>
+        /// <param name="end">Конечный период времени.</param>
+        /// <param name="corpIds">Коллекция id корпораций, для которых нужно выбирать транзакции.</param>
+        /// <param name="alliIds">Коллекция id альянсов, для которых нужно выбирать транзакции.</param>
+        /// <returns>Коллекция всех транзакций.</returns>
         private List<WalletTransaction> GetWalletTransactions(DateTime start, DateTime end, int[]? corpIds = null, int[]? alliIds = null)
         {
             var result = new List<WalletTransaction>();
@@ -181,6 +220,7 @@ namespace EveTaxesLogic
                     result = context.WalletTransactions.Where(x => start <= x.DateTime && x.DateTime < end && corpIds.Contains(x.CorporationId)).ToList();
                 }
 
+                //  для каждой транзакции заполняем сущности согласно их id
                 foreach (var line in result)
                 {
                     line.Character = context.Characters.FirstOrDefault(x => x.CharacterId == line.CharacterId);
@@ -194,6 +234,16 @@ namespace EveTaxesLogic
             return result;
         }
 
+        /// <summary>
+        /// Получает список добытой минеральной руды в указанный период времени с указанными фильтрами альянсов и корпораций.
+        /// </summary>
+        /// <param name="start">Начальный период времени.</param>
+        /// <param name="end">Конечный период времени.</param>
+        /// <param name="corpIds">Коллекция id корпораций, для которых нужно выбирать добытчиков руды.</param>
+        /// <param name="alliIds">Коллекция id альянсов, для которых нужно выбирать добытчиков руды.</param>
+        /// <param name="oreTypeIds">Коллекция id типов руд, которые нужно отфильтровать из всех возможных.</param>
+        /// <param name="regionIds">Коллекция id регионов, из которых нужно учитывать добычу руд.</param>
+        /// <returns>Коллекция записей о добытой минеральной руде.</returns>
         private List<MineralMining> GetMineralMiningList(DateTime start, DateTime end, int[]? corpIds = null, int[]? alliIds = null, int[]? oreTypeIds = null, int[]? regionIds = null)
         {
             var result = new List<MineralMining>();
@@ -239,12 +289,14 @@ namespace EveTaxesLogic
             }
             return result;
         }
+        
         /// <summary>
         /// Временный код по сохранению sde в БД
         /// </summary>
         [Obsolete]
         private void SaveUniverseSde()
         {
+            return;
             var regions = SdeMain.InvItems.Where(x => x.IsRegion).ToList();
             var constellations = SdeMain.InvItems.Where(x => x.IsConstellation).ToList();
             var solarSystems = SdeMain.InvItems.Where(x => x.IsSolarSystem).ToList();

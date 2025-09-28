@@ -10,23 +10,44 @@ using YamlDotNet.RepresentationModel;
 
 namespace EveSdeModel.Models
 {
+    /// <summary>
+    /// Контейнер активнсотей, которые можно проводить с чертежом.
+    /// </summary>
     public class Activities : IYamlEntity
     {
+        /// <summary>
+        /// Создание продуктов формулы реакции.
+        /// </summary>
         [JsonPropertyName("reaction")]
         public Manufacturing Reaction { get; set; }
 
+        /// <summary>
+        /// Создание копии из оригинала.
+        /// </summary>
         [JsonPropertyName("copying")]
         public BlueprintOperation Copying { get; set; }
 
+        /// <summary>
+        /// Производство продукта.
+        /// </summary>
         [JsonPropertyName("manufacturing")]
         public Manufacturing Manufacturing { get; set; }
 
+        /// <summary>
+        /// Превращение т1 копии в т2 копию.
+        /// </summary>
         [JsonPropertyName("invention")]
         public Manufacturing Invention { get; set; }
 
+        /// <summary>
+        /// Улучшение оригинала по эффективности расхода материалов.
+        /// </summary>
         [JsonPropertyName("research_material")]
         public BlueprintOperation ResearchMaterial { get; set; }
 
+        /// <summary>
+        /// Улучшение оригинала по эффективности расхода времени.
+        /// </summary>
         [JsonPropertyName("research_time")]
         public BlueprintOperation ResearchTime { get; set; }
 

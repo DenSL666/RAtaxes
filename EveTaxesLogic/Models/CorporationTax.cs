@@ -8,14 +8,34 @@ using System.Threading.Tasks;
 
 namespace EveTaxesLogic.Models
 {
+    /// <summary>
+    /// Описывает модель налогов одной корпорации со всеми её пользователями.
+    /// </summary>
     public class CorporationTax : BaseTax
     {
+        /// <summary>
+        /// Id корпорации.
+        /// </summary>
         public int CorporationId { get; }
+
+        /// <summary>
+        /// Имя корпорации.
+        /// </summary>
         public string CorporationName { get; }
 
+        /// <summary>
+        /// Id альянса.
+        /// </summary>
         public int? AllianceId { get; }
+
+        /// <summary>
+        /// Сущность альянса.
+        /// </summary>
         public Alliance? Alliance { get; }
 
+        /// <summary>
+        /// Коллекция налогов пользователей корпорации.
+        /// </summary>
         public List<UserTax> UserTaxes { get; }
 
         protected CorporationTax()

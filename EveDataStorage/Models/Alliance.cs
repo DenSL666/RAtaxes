@@ -8,13 +8,22 @@ using System.Threading.Tasks;
 
 namespace EveDataStorage.Models
 {
+    /// <summary>
+    /// Сущность альянса.
+    /// </summary>
     [Table("Alliances")]
     public class Alliance
     {
+        /// <summary>
+        /// Id альянса.
+        /// </summary>
         [Key]
         [Column("alliance_id")]
         public int AllianceId { get; set; }
 
+        /// <summary>
+        /// Имя альянса.
+        /// </summary>
         [Required]
         public string Name { get; set; }
 

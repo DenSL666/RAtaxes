@@ -7,19 +7,49 @@ using System.Threading.Tasks;
 
 namespace EveTaxesLogic.Models
 {
+    /// <summary>
+    /// Описывает модель налогов одного пользователя со всеми его связанными персонажами.
+    /// </summary>
     public class UserTax : BaseTax
     {
+        /// <summary>
+        /// Id основного персонажа пользователя.
+        /// </summary>
         public int MainCharacterId { get; }
+
+        /// <summary>
+        /// Имя основного персонажа пользователя.
+        /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// Id корпорации основного персонажа пользователя.
+        /// </summary>
         public int CorporationId { get; set; }
+
+        /// <summary>
+        /// Сущность корпорации основного персонажа пользователя.
+        /// </summary>
         public Corporation? Corporation { get; set; }
 
+        /// <summary>
+        /// Id альянса основного персонажа пользователя.
+        /// </summary>
         public int? AllianceId { get; set; }
+
+        /// <summary>
+        /// Сущность альянса основного персонажа пользователя.
+        /// </summary>
         public Alliance? Alliance { get; set; }
 
+        /// <summary>
+        /// Коллекция налогов связанных персонажей.
+        /// </summary>
         public List<CharacterTax> CharacterTaxes { get; set; }
 
+        /// <summary>
+        /// Коллекция id связанных персонажей с пользователем.
+        /// </summary>
         public int[] AssociatedCharacterIds { get; set; }
 
         protected UserTax()
@@ -28,6 +58,10 @@ namespace EveTaxesLogic.Models
             AssociatedCharacterIds = [];
         }
 
+        /// <summary>
+        /// Создает сущность пользователя на основе пользователя SEAT с главным и связанными персонажами.
+        /// </summary>
+        /// <param name="characterMain">Персонаж.</param>
         public UserTax(CharacterMain characterMain) : this()
         {
             MainCharacterId = characterMain.CharacterId;
@@ -39,6 +73,10 @@ namespace EveTaxesLogic.Models
             AssociatedCharacterIds = characterMain.AssociatedCharacterIds;
         }
 
+        /// <summary>
+        /// Создает сущность пользователя на основе одиночного персонажа.
+        /// </summary>
+        /// <param name="characterTax">Персонаж.</param>
         public UserTax(CharacterTax characterTax) : this()
         {
             MainCharacterId = characterTax.CharacterId;

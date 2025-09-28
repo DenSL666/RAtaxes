@@ -10,6 +10,9 @@ using YamlDotNet.RepresentationModel;
 
 namespace EveSdeModel.Models
 {
+    /// <summary>
+    /// Крупные категории объектов, вроде "корабль", "дрон", "станция", "орбитальное тело".
+    /// </summary>
     public class Category : IYamlEntity
     {
         public string Id { get; set; }

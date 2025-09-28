@@ -8,34 +8,67 @@ using System.Threading.Tasks;
 
 namespace EveDataStorage.Models
 {
+    /// <summary>
+    /// Сущность транзакции между персонажем и корпорацией.
+    /// </summary>
     [Table("WalletTransactions")]
     public class WalletTransaction
     {
+        /// <summary>
+        /// Id записи в БД.
+        /// </summary>
         [Key]
         public int Id { get; set; }
 
+        /// <summary>
+        /// Id корпорации получателя.
+        /// </summary>
         [Required]
         [Column("corporation_id")]
         public int CorporationId { get; set; }
 
+        /// <summary>
+        /// Тип транзакции.
+        /// </summary>
         [Required]
         public int WalletTransactionType { get; set; }
 
+        /// <summary>
+        /// Количество Isk.
+        /// </summary>
         [Required]
         public long Amount { get; set; }
+
+        /// <summary>
+        /// Дата и время транзакции.
+        /// </summary>
         [Required]
         public DateTime DateTime { get; set; }
+
+        /// <summary>
+        /// Id персонажа-плательщика.
+        /// </summary>
         [Required]
         public int CharacterId { get; set; }
 
+        /// <summary>
+        /// Сущность персонажа.
+        /// </summary>
         [NotMapped]
         public Character? Character { get; set; }
 
+        /// <summary>
+        /// Сущность корпорации.
+        /// </summary>
         [NotMapped]
         public Corporation? Corporation { get; set; }
 
         [NotMapped]
         private string _hash;
+
+        /// <summary>
+        /// Хэш строка, описывающая запись о транзакции.
+        /// </summary>
         [NotMapped]
         public string Hash
         {

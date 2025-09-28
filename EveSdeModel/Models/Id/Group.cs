@@ -10,6 +10,9 @@ using YamlDotNet.RepresentationModel;
 
 namespace EveSdeModel.Models
 {
+    /// <summary>
+    /// Группа сходных объектов, вроде "персонаж", "сектор", "созвездие", "минералы", "титан".
+    /// </summary>
     public class Group : IYamlEntity
     {
         public string Id { get; set; }
@@ -94,6 +97,10 @@ namespace EveSdeModel.Models
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Заполняет поле категории группы из списка категорий.
+        /// </summary>
+        /// <param name="items">Список всех категорий.</param>
         public void FillCategories(IEnumerable<Category> categories)
         {
             var found = categories.FirstOrDefault(x => x.Id == CategoryID);

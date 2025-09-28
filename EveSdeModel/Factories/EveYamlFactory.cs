@@ -52,6 +52,12 @@ namespace EveSdeModel.Factories
             return Properties[type];
         }
 
+        /// <summary>
+        /// Читает файл, содержащий данные с явным ID.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="pathToFile"></param>
+        /// <returns></returns>
         public static List<T> ParseFile<T>(string pathToFile) where T : IYamlEntity, new()
         {
             var result = new List<T>();
@@ -72,6 +78,12 @@ namespace EveSdeModel.Factories
             return result;
         }
 
+        /// <summary>
+        /// Читает файл, содержащий данные без явного ID.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="pathToFile"></param>
+        /// <returns></returns>
         public static List<T> ParseFileSequence<T>(string pathToFile) where T : IYamlEntity, new()
         {
             var result = new List<T>();

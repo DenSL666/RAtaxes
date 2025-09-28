@@ -15,6 +15,10 @@ using System.Web;
 
 namespace EveWebClient
 {
+    /// <summary>
+    /// Базовый класс обращения к EVE Esi.<br/>
+    /// Содержит базовые методы обращения к серверу и обработка полученного ответа.
+    /// </summary>
     public class APIBase
     {
         private const string TRANQUILITY_ESI_BASE = "https://esi.evetech.net";
@@ -27,6 +31,13 @@ namespace EveWebClient
         protected IConfig Config { get; }
         protected ILogger<APIBase> Logger { get; }
 
+        /// <summary>
+        /// Получает экземпляр Httpclient, конфиг программы и логгер.<br/>
+        /// Выбирает сервер EVE для обращения к Esi (tranquility или serenity).
+        /// </summary>
+        /// <param name="httpClient"></param>
+        /// <param name="config"></param>
+        /// <param name="logger"></param>
         internal APIBase(HttpClient httpClient, IConfig config, ILogger<APIBase> logger)
         {
             dataSource = dataSource ?? "tranquility";

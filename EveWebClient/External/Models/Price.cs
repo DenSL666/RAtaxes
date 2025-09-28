@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace EveWebClient.External.Models
 {
+    /// <summary>
+    /// Класс данных о текущих ценах для некоторого предмета.
+    /// </summary>
     public sealed class Price
     {
         internal Price()
@@ -37,10 +40,25 @@ namespace EveWebClient.External.Models
             }
         }
 
+        /// <summary>
+        /// Id предмета.
+        /// </summary>
         public string Id { get; internal set; }
+        /// <summary>
+        /// Цена наибольшего жита бай согласно Fuzzwork.
+        /// </summary>
         public double JitaBuy { get; internal set; }
+        /// <summary>
+        /// Цена наименьшего жита селл согласно Fuzzwork.
+        /// </summary>
         public double JitaSell { get; internal set; }
+        /// <summary>
+        /// Цена жита сплит (средняя между бай и селл согласно Fuzzwork).
+        /// </summary>
         public double JitaSplit { get; internal set; }
+        /// <summary>
+        /// Цена средняя по EVE согласно Esi.
+        /// </summary>
         public double EveAverage { get; internal set; }
     }
 }

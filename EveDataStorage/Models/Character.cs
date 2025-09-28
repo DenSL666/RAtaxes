@@ -8,13 +8,22 @@ using System.Threading.Tasks;
 
 namespace EveDataStorage.Models
 {
+    /// <summary>
+    /// Сущность персонажа.
+    /// </summary>
     [Table("Characters")]
     public class Character
     {
+        /// <summary>
+        /// Id персонажа.
+        /// </summary>
         [Key]
         [Column("character_id")]
         public int CharacterId { get; set; }
 
+        /// <summary>
+        /// Имя персонажа.
+        /// </summary>
         [Required]
         public string Name { get; set; }
 
