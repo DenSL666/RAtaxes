@@ -17572,9 +17572,6 @@
 2738:
   activities:
     copying:
-      materials: []
-      products: []
-      skills: []
       time: 48000
     manufacturing:
       materials:
@@ -17588,14 +17585,8 @@
         typeID: 3380
       time: 60000
     research_material:
-      materials: []
-      products: []
-      skills: []
       time: 21000
     research_time:
-      materials: []
-      products: []
-      skills: []
       time: 21000
   blueprintTypeID: 2738
   maxProductionLimit: 3
@@ -62679,7 +62670,7 @@
         typeID: 2876
       - quantity: 100
         typeID: 57457
-      - quantity: 118
+      - quantity: 188
         typeID: 40
       - quantity: 390
         typeID: 39
@@ -71589,49 +71580,49 @@
       time: 1600000
     manufacturing:
       materials:
-      - quantity: 5
-        typeID: 21009
-      - quantity: 7
-        typeID: 21013
-      - quantity: 10
-        typeID: 21017
-      - quantity: 3
-        typeID: 21019
-      - quantity: 3
-        typeID: 21021
-      - quantity: 4
-        typeID: 21023
-      - quantity: 4
-        typeID: 21025
-      - quantity: 30
-        typeID: 21029
-      - quantity: 5
-        typeID: 21035
-      - quantity: 5
-        typeID: 21037
-      - quantity: 10
-        typeID: 24558
-      - quantity: 4
-        typeID: 24560
-      - quantity: 32
-        typeID: 57470
-      - quantity: 2
+      - quantity: 1
         typeID: 57474
-      - quantity: 400
-        typeID: 57478
-      - quantity: 200
-        typeID: 57486
       - quantity: 1
         typeID: 57487
       - quantity: 1
         typeID: 57488
+      - quantity: 3
+        typeID: 21019
+      - quantity: 3
+        typeID: 21021
+      - quantity: 3
+        typeID: 21023
+      - quantity: 3
+        typeID: 21035
+      - quantity: 3
+        typeID: 24560
+      - quantity: 4
+        typeID: 21009
+      - quantity: 4
+        typeID: 21013
+      - quantity: 4
+        typeID: 21025
+      - quantity: 4
+        typeID: 21037
+      - quantity: 6
+        typeID: 21017
+      - quantity: 6
+        typeID: 24558
+      - quantity: 12
+        typeID: 21029
+      - quantity: 12
+        typeID: 57470
+      - quantity: 200
+        typeID: 57486
+      - quantity: 400
+        typeID: 57478
       products:
       - quantity: 1
         typeID: 23757
       skills:
       - level: 3
         typeID: 22242
-      time: 2000000
+      time: 1800000
     research_material:
       time: 28000
     research_time:
@@ -73353,49 +73344,49 @@
       time: 1600000
     manufacturing:
       materials:
-      - quantity: 5
-        typeID: 21009
-      - quantity: 7
-        typeID: 21013
-      - quantity: 10
-        typeID: 21017
-      - quantity: 3
-        typeID: 21019
-      - quantity: 3
-        typeID: 21021
-      - quantity: 4
-        typeID: 21023
-      - quantity: 4
-        typeID: 21025
-      - quantity: 30
-        typeID: 21029
-      - quantity: 5
-        typeID: 21035
-      - quantity: 5
-        typeID: 21037
-      - quantity: 10
-        typeID: 24558
-      - quantity: 4
-        typeID: 24560
-      - quantity: 32
-        typeID: 57472
-      - quantity: 2
+      - quantity: 1
         typeID: 57476
-      - quantity: 400
-        typeID: 57478
-      - quantity: 200
-        typeID: 57486
       - quantity: 1
         typeID: 57487
       - quantity: 1
         typeID: 57488
+      - quantity: 3
+        typeID: 21019
+      - quantity: 3
+        typeID: 21021
+      - quantity: 3
+        typeID: 21023
+      - quantity: 3
+        typeID: 21035
+      - quantity: 3
+        typeID: 24560
+      - quantity: 4
+        typeID: 21009
+      - quantity: 4
+        typeID: 21013
+      - quantity: 4
+        typeID: 21025
+      - quantity: 4
+        typeID: 21037
+      - quantity: 6
+        typeID: 21017
+      - quantity: 6
+        typeID: 24558
+      - quantity: 12
+        typeID: 21029
+      - quantity: 12
+        typeID: 57472
+      - quantity: 200
+        typeID: 57486
+      - quantity: 400
+        typeID: 57478
       products:
       - quantity: 1
         typeID: 23911
       skills:
       - level: 3
         typeID: 22242
-      time: 2000000
+      time: 1800000
     research_material:
       time: 28000
     research_time:
@@ -73463,49 +73454,49 @@
       time: 1600000
     manufacturing:
       materials:
-      - quantity: 5
-        typeID: 21009
-      - quantity: 5
+      - quantity: 1
+        typeID: 57475
+      - quantity: 1
+        typeID: 57487
+      - quantity: 1
+        typeID: 57488
+      - quantity: 3
         typeID: 21013
-      - quantity: 4
+      - quantity: 3
         typeID: 21017
       - quantity: 3
         typeID: 21019
       - quantity: 3
         typeID: 21021
-      - quantity: 10
-        typeID: 21023
+      - quantity: 3
+        typeID: 24560
+      - quantity: 4
+        typeID: 21009
       - quantity: 4
         typeID: 21025
-      - quantity: 30
-        typeID: 21029
-      - quantity: 7
-        typeID: 21035
-      - quantity: 5
-        typeID: 21037
-      - quantity: 10
-        typeID: 24558
       - quantity: 4
-        typeID: 24560
-      - quantity: 32
+        typeID: 21035
+      - quantity: 4
+        typeID: 21037
+      - quantity: 6
+        typeID: 21023
+      - quantity: 6
+        typeID: 24558
+      - quantity: 12
+        typeID: 21029
+      - quantity: 12
         typeID: 57471
-      - quantity: 2
-        typeID: 57475
-      - quantity: 400
-        typeID: 57478
       - quantity: 200
         typeID: 57486
-      - quantity: 1
-        typeID: 57487
-      - quantity: 1
-        typeID: 57488
+      - quantity: 400
+        typeID: 57478
       products:
       - quantity: 1
         typeID: 23915
       skills:
       - level: 3
         typeID: 22242
-      time: 2000000
+      time: 1800000
     research_material:
       time: 28000
     research_time:
@@ -74431,49 +74422,49 @@
       time: 1600000
     manufacturing:
       materials:
-      - quantity: 5
-        typeID: 21009
-      - quantity: 5
+      - quantity: 1
+        typeID: 57477
+      - quantity: 1
+        typeID: 57487
+      - quantity: 1
+        typeID: 57488
+      - quantity: 3
         typeID: 21013
-      - quantity: 4
+      - quantity: 3
         typeID: 21017
       - quantity: 3
         typeID: 21019
       - quantity: 3
         typeID: 21021
-      - quantity: 10
-        typeID: 21023
+      - quantity: 3
+        typeID: 24560
+      - quantity: 4
+        typeID: 21009
       - quantity: 4
         typeID: 21025
-      - quantity: 30
-        typeID: 21029
-      - quantity: 7
-        typeID: 21035
-      - quantity: 5
-        typeID: 21037
-      - quantity: 10
-        typeID: 24558
       - quantity: 4
-        typeID: 24560
-      - quantity: 32
+        typeID: 21035
+      - quantity: 4
+        typeID: 21037
+      - quantity: 6
+        typeID: 21023
+      - quantity: 6
+        typeID: 24558
+      - quantity: 12
+        typeID: 21029
+      - quantity: 12
         typeID: 57473
-      - quantity: 2
-        typeID: 57477
-      - quantity: 400
-        typeID: 57478
       - quantity: 200
         typeID: 57486
-      - quantity: 1
-        typeID: 57487
-      - quantity: 1
-        typeID: 57488
+      - quantity: 400
+        typeID: 57478
       products:
       - quantity: 1
         typeID: 24483
       skills:
       - level: 3
         typeID: 22242
-      time: 2000000
+      time: 1800000
     research_material:
       time: 28000
     research_time:
@@ -135971,14 +135962,12 @@
       time: 63900
     manufacturing:
       materials:
-      - quantity: 22400
-        typeID: 34
-      - quantity: 4200
-        typeID: 35
       - quantity: 1750
         typeID: 36
-      - quantity: 350
-        typeID: 37
+      - quantity: 4200
+        typeID: 35
+      - quantity: 22400
+        typeID: 34
       products:
       - quantity: 1
         typeID: 32880
@@ -145426,9 +145415,6 @@
 35684:
   activities:
     copying:
-      materials: []
-      products: []
-      skills: []
       time: 144000
     manufacturing:
       materials:
@@ -145464,23 +145450,14 @@
         typeID: 11450
       time: 180000
     research_material:
-      materials: []
-      products: []
-      skills: []
       time: 63000
     research_time:
-      materials: []
-      products: []
-      skills: []
       time: 63000
   blueprintTypeID: 35684
   maxProductionLimit: 1
 35772:
   activities:
     copying:
-      materials: []
-      products: []
-      skills: []
       time: 720
     invention:
       materials:
@@ -145520,14 +145497,8 @@
         typeID: 3380
       time: 900
     research_material:
-      materials: []
-      products: []
-      skills: []
       time: 315
     research_time:
-      materials: []
-      products: []
-      skills: []
       time: 315
   blueprintTypeID: 35772
   maxProductionLimit: 200
@@ -145539,7 +145510,6 @@
         typeID: 11464
       - quantity: 10
         typeID: 3812
-      products: []
       skills:
       - level: 1
         typeID: 11452
@@ -145579,7 +145549,6 @@
         typeID: 9836
       - quantity: 5
         typeID: 3814
-      products: []
       skills:
       - level: 1
         typeID: 11452
@@ -145596,7 +145565,6 @@
         typeID: 9836
       - quantity: 4
         typeID: 3814
-      products: []
       skills:
       - level: 1
         typeID: 11452
@@ -145610,9 +145578,6 @@
 35780:
   activities:
     copying:
-      materials: []
-      products: []
-      skills: []
       time: 4800
     manufacturing:
       materials:
@@ -145653,26 +145618,16 @@
       products:
       - quantity: 1
         typeID: 35779
-      skills: []
       time: 120000
     research_material:
-      materials: []
-      products: []
-      skills: []
       time: 2100
     research_time:
-      materials: []
-      products: []
-      skills: []
       time: 2100
   blueprintTypeID: 35780
   maxProductionLimit: 1
 35782:
   activities:
     copying:
-      materials: []
-      products: []
-      skills: []
       time: 9600
     manufacturing:
       materials:
@@ -145719,26 +145674,16 @@
       products:
       - quantity: 1
         typeID: 35781
-      skills: []
       time: 240000
     research_material:
-      materials: []
-      products: []
-      skills: []
       time: 4200
     research_time:
-      materials: []
-      products: []
-      skills: []
       time: 4200
   blueprintTypeID: 35782
   maxProductionLimit: 1
 35791:
   activities:
     copying:
-      materials: []
-      products: []
-      skills: []
       time: 1440
     invention:
       materials:
@@ -145772,14 +145717,8 @@
         typeID: 3380
       time: 1800
     research_material:
-      materials: []
-      products: []
-      skills: []
       time: 630
     research_time:
-      materials: []
-      products: []
-      skills: []
       time: 630
   blueprintTypeID: 35791
   maxProductionLimit: 100
@@ -145791,7 +145730,6 @@
         typeID: 11464
       - quantity: 15
         typeID: 3812
-      products: []
       skills:
       - level: 1
         typeID: 11452
@@ -145831,7 +145769,6 @@
         typeID: 9836
       - quantity: 5
         typeID: 3814
-      products: []
       skills:
       - level: 1
         typeID: 11452
@@ -145848,7 +145785,6 @@
         typeID: 9836
       - quantity: 4
         typeID: 3814
-      products: []
       skills:
       - level: 1
         typeID: 11452
@@ -145862,9 +145798,6 @@
 35796:
   activities:
     copying:
-      materials: []
-      products: []
-      skills: []
       time: 240
     manufacturing:
       materials:
@@ -145886,23 +145819,14 @@
         typeID: 3380
       time: 300
     research_material:
-      materials: []
-      products: []
-      skills: []
       time: 105
     research_time:
-      materials: []
-      products: []
-      skills: []
       time: 105
   blueprintTypeID: 35796
   maxProductionLimit: 600
 35797:
   activities:
     copying:
-      materials: []
-      products: []
-      skills: []
       time: 240
     manufacturing:
       materials:
@@ -145924,14 +145848,8 @@
         typeID: 3380
       time: 300
     research_material:
-      materials: []
-      products: []
-      skills: []
       time: 105
     research_time:
-      materials: []
-      products: []
-      skills: []
       time: 105
   blueprintTypeID: 35797
   maxProductionLimit: 600
@@ -177175,7 +177093,6 @@
       products:
       - quantity: 1
         typeID: 43876
-      skills: []
       time: 3000
     research_material:
       time: 1050
@@ -190225,32 +190142,50 @@
   activities:
     copying:
       time: 14400
+    invention:
+      materials:
+      - quantity: 32
+        typeID: 20411
+      - quantity: 32
+        typeID: 52309
+      products:
+      - probability: 0.22
+        quantity: 1
+        typeID: 88003
+      skills:
+      - level: 1
+        typeID: 11433
+      - level: 1
+        typeID: 52307
+      - level: 1
+        typeID: 52308
+      time: 192000
     manufacturing:
       materials:
-      - quantity: 8800000
-        typeID: 34
-      - quantity: 4400000
-        typeID: 35
-      - quantity: 660000
-        typeID: 36
-      - quantity: 440000
-        typeID: 37
-      - quantity: 46200
-        typeID: 38
-      - quantity: 15400
-        typeID: 39
-      - quantity: 7700
-        typeID: 40
-      - quantity: 845
-        typeID: 47975
-      - quantity: 850
-        typeID: 48112
-      - quantity: 220
-        typeID: 57478
       - quantity: 2
         typeID: 57479
       - quantity: 110
         typeID: 57486
+      - quantity: 220
+        typeID: 57478
+      - quantity: 845
+        typeID: 47975
+      - quantity: 850
+        typeID: 48112
+      - quantity: 7700
+        typeID: 40
+      - quantity: 15400
+        typeID: 39
+      - quantity: 46200
+        typeID: 38
+      - quantity: 440000
+        typeID: 37
+      - quantity: 660000
+        typeID: 36
+      - quantity: 4400000
+        typeID: 35
+      - quantity: 8800000
+        typeID: 34
       products:
       - quantity: 1
         typeID: 47271
@@ -205079,7 +205014,7 @@
         typeID: 40
       - quantity: 24
         typeID: 57478
-      - quantity: 40
+      - quantity: 30
         typeID: 83467
       - quantity: 48
         typeID: 39
@@ -205190,7 +205125,7 @@
         typeID: 40
       - quantity: 24
         typeID: 57478
-      - quantity: 40
+      - quantity: 30
         typeID: 83469
       - quantity: 48
         typeID: 39
@@ -206185,6 +206120,8 @@
         typeID: 2872
       - quantity: 11
         typeID: 2869
+      - quantity: 11
+        typeID: 2870
       - quantity: 11
         typeID: 2875
       products:
@@ -211619,6 +211556,61 @@
       time: 630
   blueprintTypeID: 87328
   maxProductionLimit: 100
+87383:
+  activities:
+    manufacturing:
+      materials:
+      - quantity: 1
+        typeID: 57487
+      - quantity: 1
+        typeID: 57488
+      - quantity: 2
+        typeID: 21019
+      - quantity: 2
+        typeID: 21021
+      - quantity: 2
+        typeID: 24560
+      - quantity: 2
+        typeID: 57476
+      - quantity: 2
+        typeID: 57477
+      - quantity: 4
+        typeID: 21013
+      - quantity: 4
+        typeID: 21035
+      - quantity: 4
+        typeID: 21037
+      - quantity: 5
+        typeID: 21017
+      - quantity: 5
+        typeID: 21023
+      - quantity: 5
+        typeID: 24558
+      - quantity: 8
+        typeID: 57472
+      - quantity: 8
+        typeID: 57473
+      - quantity: 10
+        typeID: 21009
+      - quantity: 10
+        typeID: 21011
+      - quantity: 10
+        typeID: 21025
+      - quantity: 10
+        typeID: 21039
+      - quantity: 200
+        typeID: 57486
+      - quantity: 400
+        typeID: 57478
+      products:
+      - quantity: 1
+        typeID: 87381
+      skills:
+      - level: 3
+        typeID: 22242
+      time: 2600000
+  blueprintTypeID: 87383
+  maxProductionLimit: 1
 87735:
   activities:
     copying:
@@ -211878,3 +211870,2453 @@
       time: 21000
   blueprintTypeID: 87741
   maxProductionLimit: 3
+88003:
+  activities:
+    copying:
+      materials:
+      - quantity: 20
+        typeID: 30386
+      - quantity: 300
+        typeID: 3812
+      skills:
+      - level: 1
+        typeID: 11452
+      - level: 1
+        typeID: 52307
+      time: 288000
+    manufacturing:
+      materials:
+      - quantity: 1
+        typeID: 47271
+      - quantity: 33
+        typeID: 11478
+      - quantity: 333
+        typeID: 3828
+      - quantity: 666
+        typeID: 52310
+      - quantity: 666
+        typeID: 52311
+      - quantity: 666
+        typeID: 52314
+      - quantity: 999
+        typeID: 11399
+      - quantity: 999
+        typeID: 11537
+      - quantity: 6666
+        typeID: 52312
+      - quantity: 6666
+        typeID: 52313
+      - quantity: 6666
+        typeID: 81067
+      - quantity: 66666
+        typeID: 81066
+      products:
+      - quantity: 1
+        typeID: 88001
+      skills:
+      - level: 1
+        typeID: 3398
+      - level: 1
+        typeID: 11452
+      - level: 1
+        typeID: 52307
+      - level: 5
+        typeID: 3380
+      time: 360000
+    research_material:
+      materials:
+      - quantity: 15
+        typeID: 30386
+      - quantity: 50
+        typeID: 9836
+      - quantity: 70
+        typeID: 3814
+      skills:
+      - level: 1
+        typeID: 11452
+      - level: 1
+        typeID: 52307
+      - level: 5
+        typeID: 3409
+      time: 126000
+    research_time:
+      materials:
+      - quantity: 15
+        typeID: 30386
+      - quantity: 50
+        typeID: 9836
+      - quantity: 60
+        typeID: 3814
+      skills:
+      - level: 1
+        typeID: 11452
+      - level: 1
+        typeID: 52307
+      - level: 5
+        typeID: 3403
+      time: 126000
+  blueprintTypeID: 88003
+  maxProductionLimit: 1
+88012:
+  activities:
+    copying:
+      time: 48000
+    manufacturing:
+      materials:
+      - quantity: 1
+        typeID: 21037
+      - quantity: 5
+        typeID: 2867
+      - quantity: 5
+        typeID: 2868
+      - quantity: 5
+        typeID: 2872
+      - quantity: 5
+        typeID: 2876
+      - quantity: 8
+        typeID: 2869
+      - quantity: 8
+        typeID: 2871
+      - quantity: 9
+        typeID: 2870
+      - quantity: 10
+        typeID: 2875
+      - quantity: 500
+        typeID: 81144
+      products:
+      - quantity: 1
+        typeID: 87703
+      skills:
+      - level: 5
+        typeID: 3380
+      time: 60000
+    research_material:
+      time: 21000
+    research_time:
+      time: 21000
+  blueprintTypeID: 88012
+  maxProductionLimit: 3
+88014:
+  activities:
+    copying:
+      time: 48000
+    manufacturing:
+      materials:
+      - quantity: 1
+        typeID: 21037
+      - quantity: 5
+        typeID: 2867
+      - quantity: 5
+        typeID: 2868
+      - quantity: 5
+        typeID: 2872
+      - quantity: 5
+        typeID: 2876
+      - quantity: 8
+        typeID: 2869
+      - quantity: 8
+        typeID: 2871
+      - quantity: 9
+        typeID: 2870
+      - quantity: 10
+        typeID: 2875
+      - quantity: 500
+        typeID: 81144
+      products:
+      - quantity: 1
+        typeID: 87710
+      skills:
+      - level: 5
+        typeID: 3380
+      time: 60000
+    research_material:
+      time: 21000
+    research_time:
+      time: 21000
+  blueprintTypeID: 88014
+  maxProductionLimit: 3
+88020:
+  activities:
+    copying:
+      time: 48000
+    manufacturing:
+      materials:
+      - quantity: 1
+        typeID: 21037
+      - quantity: 3
+        typeID: 2868
+      - quantity: 3
+        typeID: 2876
+      - quantity: 4
+        typeID: 2867
+      - quantity: 4
+        typeID: 2871
+      - quantity: 4
+        typeID: 2872
+      - quantity: 6
+        typeID: 2869
+      - quantity: 6
+        typeID: 2870
+      - quantity: 6
+        typeID: 2875
+      products:
+      - quantity: 1
+        typeID: 87948
+      skills:
+      - level: 5
+        typeID: 3380
+      time: 60000
+    research_material:
+      time: 21000
+    research_time:
+      time: 21000
+  blueprintTypeID: 88020
+  maxProductionLimit: 3
+88029:
+  activities:
+    copying:
+      time: 48000
+    manufacturing:
+      materials:
+      - quantity: 3
+        typeID: 21037
+      - quantity: 5
+        typeID: 2868
+      - quantity: 5
+        typeID: 2876
+      - quantity: 7
+        typeID: 2867
+      - quantity: 7
+        typeID: 2871
+      - quantity: 7
+        typeID: 2872
+      - quantity: 11
+        typeID: 2869
+      - quantity: 11
+        typeID: 2870
+      - quantity: 11
+        typeID: 2875
+      products:
+      - quantity: 1
+        typeID: 87953
+      skills:
+      - level: 5
+        typeID: 3380
+      time: 60000
+    research_material:
+      time: 21000
+    research_time:
+      time: 21000
+  blueprintTypeID: 88029
+  maxProductionLimit: 3
+88036:
+  activities:
+    copying:
+      time: 48000
+    manufacturing:
+      materials:
+      - quantity: 4
+        typeID: 21037
+      - quantity: 8
+        typeID: 2868
+      - quantity: 8
+        typeID: 2876
+      - quantity: 11
+        typeID: 2867
+      - quantity: 11
+        typeID: 2871
+      - quantity: 11
+        typeID: 2872
+      - quantity: 17
+        typeID: 2869
+      - quantity: 17
+        typeID: 2870
+      - quantity: 17
+        typeID: 2875
+      products:
+      - quantity: 1
+        typeID: 87954
+      skills:
+      - level: 5
+        typeID: 3380
+      time: 60000
+    research_material:
+      time: 21000
+    research_time:
+      time: 21000
+  blueprintTypeID: 88036
+  maxProductionLimit: 3
+88075:
+  activities:
+    copying:
+      time: 48000
+    manufacturing:
+      materials:
+      - quantity: 8
+        typeID: 21037
+      - quantity: 13
+        typeID: 2868
+      - quantity: 13
+        typeID: 2876
+      - quantity: 18
+        typeID: 2867
+      - quantity: 18
+        typeID: 2871
+      - quantity: 18
+        typeID: 2872
+      - quantity: 27
+        typeID: 2869
+      - quantity: 27
+        typeID: 2870
+      - quantity: 27
+        typeID: 2875
+      - quantity: 500
+        typeID: 47975
+      - quantity: 750
+        typeID: 48112
+      products:
+      - quantity: 1
+        typeID: 87815
+      skills:
+      - level: 5
+        typeID: 3380
+      time: 60000
+    research_material:
+      time: 21000
+    research_time:
+      time: 21000
+  blueprintTypeID: 88075
+  maxProductionLimit: 3
+88076:
+  activities:
+    copying:
+      time: 48000
+    manufacturing:
+      materials:
+      - quantity: 8
+        typeID: 21037
+      - quantity: 13
+        typeID: 2868
+      - quantity: 13
+        typeID: 2876
+      - quantity: 18
+        typeID: 2867
+      - quantity: 18
+        typeID: 2871
+      - quantity: 18
+        typeID: 2872
+      - quantity: 27
+        typeID: 2869
+      - quantity: 27
+        typeID: 2870
+      - quantity: 27
+        typeID: 2875
+      - quantity: 500
+        typeID: 47975
+      - quantity: 750
+        typeID: 48112
+      products:
+      - quantity: 1
+        typeID: 87949
+      skills:
+      - level: 5
+        typeID: 3380
+      time: 60000
+    research_material:
+      time: 21000
+    research_time:
+      time: 21000
+  blueprintTypeID: 88076
+  maxProductionLimit: 3
+88077:
+  activities:
+    copying:
+      time: 48000
+    manufacturing:
+      materials:
+      - quantity: 8
+        typeID: 21037
+      - quantity: 13
+        typeID: 2868
+      - quantity: 13
+        typeID: 2876
+      - quantity: 18
+        typeID: 2867
+      - quantity: 18
+        typeID: 2871
+      - quantity: 18
+        typeID: 2872
+      - quantity: 27
+        typeID: 2869
+      - quantity: 27
+        typeID: 2870
+      - quantity: 27
+        typeID: 2875
+      - quantity: 500
+        typeID: 47975
+      - quantity: 750
+        typeID: 48112
+      products:
+      - quantity: 1
+        typeID: 87950
+      skills:
+      - level: 5
+        typeID: 3380
+      time: 60000
+    research_material:
+      time: 21000
+    research_time:
+      time: 21000
+  blueprintTypeID: 88077
+  maxProductionLimit: 3
+88078:
+  activities:
+    copying:
+      time: 48000
+    manufacturing:
+      materials:
+      - quantity: 8
+        typeID: 21037
+      - quantity: 13
+        typeID: 2868
+      - quantity: 13
+        typeID: 2876
+      - quantity: 18
+        typeID: 2867
+      - quantity: 18
+        typeID: 2871
+      - quantity: 18
+        typeID: 2872
+      - quantity: 27
+        typeID: 2869
+      - quantity: 27
+        typeID: 2870
+      - quantity: 27
+        typeID: 2875
+      - quantity: 500
+        typeID: 47975
+      - quantity: 750
+        typeID: 48112
+      products:
+      - quantity: 1
+        typeID: 87951
+      skills:
+      - level: 5
+        typeID: 3380
+      time: 60000
+    research_material:
+      time: 21000
+    research_time:
+      time: 21000
+  blueprintTypeID: 88078
+  maxProductionLimit: 3
+88135:
+  activities:
+    copying:
+      time: 4800
+    manufacturing:
+      materials:
+      - quantity: 1
+        typeID: 2869
+      - quantity: 29
+        typeID: 11399
+      - quantity: 154
+        typeID: 17136
+      - quantity: 196
+        typeID: 2346
+      - quantity: 214
+        typeID: 2367
+      products:
+      - quantity: 1
+        typeID: 88119
+      skills:
+      - level: 4
+        typeID: 3380
+      time: 6000
+    research_material:
+      time: 2100
+    research_time:
+      time: 2100
+  blueprintTypeID: 88135
+  maxProductionLimit: 30
+88136:
+  activities:
+    copying:
+      time: 4800
+    manufacturing:
+      materials:
+      - quantity: 1
+        typeID: 2869
+      - quantity: 41
+        typeID: 11399
+      - quantity: 151
+        typeID: 17136
+      - quantity: 196
+        typeID: 2367
+      - quantity: 223
+        typeID: 2348
+      products:
+      - quantity: 1
+        typeID: 88120
+      skills:
+      - level: 4
+        typeID: 3380
+      time: 6000
+    research_material:
+      time: 2100
+    research_time:
+      time: 2100
+  blueprintTypeID: 88136
+  maxProductionLimit: 30
+88137:
+  activities:
+    copying:
+      time: 4800
+    manufacturing:
+      materials:
+      - quantity: 1
+        typeID: 2869
+      - quantity: 53
+        typeID: 11399
+      - quantity: 157
+        typeID: 17136
+      - quantity: 248
+        typeID: 12836
+      - quantity: 319
+        typeID: 2348
+      products:
+      - quantity: 1
+        typeID: 88121
+      skills:
+      - level: 4
+        typeID: 3380
+      time: 6000
+    research_material:
+      time: 2100
+    research_time:
+      time: 2100
+  blueprintTypeID: 88137
+  maxProductionLimit: 30
+88138:
+  activities:
+    copying:
+      time: 4800
+    manufacturing:
+      materials:
+      - quantity: 1
+        typeID: 2869
+      - quantity: 56
+        typeID: 11399
+      - quantity: 152
+        typeID: 17136
+      - quantity: 319
+        typeID: 2367
+      - quantity: 326
+        typeID: 12836
+      products:
+      - quantity: 1
+        typeID: 88122
+      skills:
+      - level: 4
+        typeID: 3380
+      time: 6000
+    research_material:
+      time: 2100
+    research_time:
+      time: 2100
+  blueprintTypeID: 88138
+  maxProductionLimit: 30
+88139:
+  activities:
+    copying:
+      time: 4800
+    manufacturing:
+      materials:
+      - quantity: 1
+        typeID: 2869
+      - quantity: 62
+        typeID: 11399
+      - quantity: 155
+        typeID: 17136
+      - quantity: 385
+        typeID: 2346
+      - quantity: 454
+        typeID: 12836
+      products:
+      - quantity: 1
+        typeID: 88123
+      skills:
+      - level: 4
+        typeID: 3380
+      time: 6000
+    research_material:
+      time: 2100
+    research_time:
+      time: 2100
+  blueprintTypeID: 88139
+  maxProductionLimit: 30
+88140:
+  activities:
+    copying:
+      time: 4800
+    manufacturing:
+      materials:
+      - quantity: 1
+        typeID: 2869
+      - quantity: 66
+        typeID: 11399
+      - quantity: 153
+        typeID: 17136
+      - quantity: 220
+        typeID: 2348
+      - quantity: 235
+        typeID: 2367
+      - quantity: 247
+        typeID: 2346
+      products:
+      - quantity: 1
+        typeID: 88124
+      skills:
+      - level: 4
+        typeID: 3380
+      time: 6000
+    research_material:
+      time: 2100
+    research_time:
+      time: 2100
+  blueprintTypeID: 88140
+  maxProductionLimit: 30
+88141:
+  activities:
+    copying:
+      time: 4800
+    manufacturing:
+      materials:
+      - quantity: 1
+        typeID: 2869
+      - quantity: 48
+        typeID: 11399
+      - quantity: 257
+        typeID: 17136
+      - quantity: 326
+        typeID: 2346
+      - quantity: 357
+        typeID: 2367
+      products:
+      - quantity: 1
+        typeID: 88125
+      skills:
+      - level: 4
+        typeID: 3380
+      time: 6000
+    research_material:
+      time: 2100
+    research_time:
+      time: 2100
+  blueprintTypeID: 88141
+  maxProductionLimit: 30
+88142:
+  activities:
+    copying:
+      time: 4800
+    manufacturing:
+      materials:
+      - quantity: 1
+        typeID: 2869
+      - quantity: 69
+        typeID: 11399
+      - quantity: 251
+        typeID: 17136
+      - quantity: 326
+        typeID: 2367
+      - quantity: 372
+        typeID: 2348
+      products:
+      - quantity: 1
+        typeID: 88126
+      skills:
+      - level: 4
+        typeID: 3380
+      time: 6000
+    research_material:
+      time: 2100
+    research_time:
+      time: 2100
+  blueprintTypeID: 88142
+  maxProductionLimit: 30
+88143:
+  activities:
+    copying:
+      time: 4800
+    manufacturing:
+      materials:
+      - quantity: 1
+        typeID: 2869
+      - quantity: 88
+        typeID: 11399
+      - quantity: 261
+        typeID: 17136
+      - quantity: 414
+        typeID: 12836
+      - quantity: 532
+        typeID: 2348
+      products:
+      - quantity: 1
+        typeID: 88127
+      skills:
+      - level: 4
+        typeID: 3380
+      time: 6000
+    research_material:
+      time: 2100
+    research_time:
+      time: 2100
+  blueprintTypeID: 88143
+  maxProductionLimit: 30
+88144:
+  activities:
+    copying:
+      time: 4800
+    manufacturing:
+      materials:
+      - quantity: 1
+        typeID: 2869
+      - quantity: 94
+        typeID: 11399
+      - quantity: 253
+        typeID: 17136
+      - quantity: 532
+        typeID: 2367
+      - quantity: 543
+        typeID: 12836
+      products:
+      - quantity: 1
+        typeID: 88128
+      skills:
+      - level: 4
+        typeID: 3380
+      time: 6000
+    research_material:
+      time: 2100
+    research_time:
+      time: 2100
+  blueprintTypeID: 88144
+  maxProductionLimit: 30
+88145:
+  activities:
+    copying:
+      time: 4800
+    manufacturing:
+      materials:
+      - quantity: 1
+        typeID: 2869
+      - quantity: 103
+        typeID: 11399
+      - quantity: 259
+        typeID: 17136
+      - quantity: 642
+        typeID: 2346
+      - quantity: 757
+        typeID: 12836
+      products:
+      - quantity: 1
+        typeID: 88129
+      skills:
+      - level: 4
+        typeID: 3380
+      time: 6000
+    research_material:
+      time: 2100
+    research_time:
+      time: 2100
+  blueprintTypeID: 88145
+  maxProductionLimit: 30
+88146:
+  activities:
+    copying:
+      time: 4800
+    manufacturing:
+      materials:
+      - quantity: 1
+        typeID: 2869
+      - quantity: 110
+        typeID: 11399
+      - quantity: 255
+        typeID: 17136
+      - quantity: 366
+        typeID: 2348
+      - quantity: 392
+        typeID: 2367
+      - quantity: 412
+        typeID: 2346
+      products:
+      - quantity: 1
+        typeID: 88130
+      skills:
+      - level: 4
+        typeID: 3380
+      time: 6000
+    research_material:
+      time: 2100
+    research_time:
+      time: 2100
+  blueprintTypeID: 88146
+  maxProductionLimit: 30
+88148:
+  activities:
+    copying:
+      time: 1440
+    manufacturing:
+      materials:
+      - quantity: 1
+        typeID: 33176
+      - quantity: 1
+        typeID: 33178
+      - quantity: 1
+        typeID: 33180
+      products:
+      - quantity: 1
+        typeID: 88147
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 1800
+    research_material:
+      time: 630
+    research_time:
+      time: 630
+  blueprintTypeID: 88148
+  maxProductionLimit: 100
+88214:
+  activities:
+    manufacturing:
+      materials:
+      - quantity: 50000
+        typeID: 88087
+      products:
+      - quantity: 1
+        typeID: 88205
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 9000
+  blueprintTypeID: 88214
+  maxProductionLimit: 1
+88215:
+  activities:
+    manufacturing:
+      materials:
+      - quantity: 50000
+        typeID: 88087
+      products:
+      - quantity: 1
+        typeID: 88206
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 9000
+  blueprintTypeID: 88215
+  maxProductionLimit: 1
+88216:
+  activities:
+    manufacturing:
+      materials:
+      - quantity: 50000
+        typeID: 88087
+      products:
+      - quantity: 1
+        typeID: 88202
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 9000
+  blueprintTypeID: 88216
+  maxProductionLimit: 1
+88217:
+  activities:
+    manufacturing:
+      materials:
+      - quantity: 50000
+        typeID: 88087
+      products:
+      - quantity: 1
+        typeID: 88203
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 9000
+  blueprintTypeID: 88217
+  maxProductionLimit: 1
+88218:
+  activities:
+    manufacturing:
+      materials:
+      - quantity: 50000
+        typeID: 88087
+      products:
+      - quantity: 1
+        typeID: 88204
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 9000
+  blueprintTypeID: 88218
+  maxProductionLimit: 1
+88230:
+  activities:
+    copying:
+      time: 48000
+    manufacturing:
+      materials:
+      - quantity: 2
+        typeID: 21037
+      - quantity: 10
+        typeID: 2867
+      - quantity: 10
+        typeID: 2868
+      - quantity: 10
+        typeID: 2872
+      - quantity: 10
+        typeID: 2876
+      - quantity: 20
+        typeID: 2869
+      - quantity: 20
+        typeID: 2870
+      - quantity: 20
+        typeID: 2871
+      - quantity: 20
+        typeID: 2875
+      - quantity: 1000
+        typeID: 81144
+      products:
+      - quantity: 1
+        typeID: 88221
+      skills:
+      - level: 5
+        typeID: 3380
+      time: 60000
+    research_material:
+      time: 21000
+    research_time:
+      time: 21000
+  blueprintTypeID: 88230
+  maxProductionLimit: 3
+88231:
+  activities:
+    copying:
+      time: 48000
+    manufacturing:
+      materials:
+      - quantity: 4
+        typeID: 21037
+      - quantity: 20
+        typeID: 2867
+      - quantity: 20
+        typeID: 2868
+      - quantity: 20
+        typeID: 2872
+      - quantity: 20
+        typeID: 2876
+      - quantity: 40
+        typeID: 2869
+      - quantity: 40
+        typeID: 2870
+      - quantity: 40
+        typeID: 2871
+      - quantity: 40
+        typeID: 2875
+      - quantity: 1500
+        typeID: 81144
+      products:
+      - quantity: 1
+        typeID: 88227
+      skills:
+      - level: 5
+        typeID: 3380
+      time: 60000
+    research_material:
+      time: 21000
+    research_time:
+      time: 21000
+  blueprintTypeID: 88231
+  maxProductionLimit: 3
+88232:
+  activities:
+    copying:
+      time: 48000
+    manufacturing:
+      materials:
+      - quantity: 2
+        typeID: 21037
+      - quantity: 10
+        typeID: 2867
+      - quantity: 10
+        typeID: 2868
+      - quantity: 10
+        typeID: 2872
+      - quantity: 10
+        typeID: 2876
+      - quantity: 20
+        typeID: 2869
+      - quantity: 20
+        typeID: 2870
+      - quantity: 20
+        typeID: 2871
+      - quantity: 20
+        typeID: 2875
+      - quantity: 1000
+        typeID: 81144
+      products:
+      - quantity: 1
+        typeID: 88228
+      skills:
+      - level: 5
+        typeID: 3380
+      time: 60000
+    research_material:
+      time: 21000
+    research_time:
+      time: 21000
+  blueprintTypeID: 88232
+  maxProductionLimit: 3
+88233:
+  activities:
+    copying:
+      time: 48000
+    manufacturing:
+      materials:
+      - quantity: 4
+        typeID: 21037
+      - quantity: 20
+        typeID: 2867
+      - quantity: 20
+        typeID: 2868
+      - quantity: 20
+        typeID: 2872
+      - quantity: 20
+        typeID: 2876
+      - quantity: 40
+        typeID: 2869
+      - quantity: 40
+        typeID: 2870
+      - quantity: 40
+        typeID: 2871
+      - quantity: 40
+        typeID: 2875
+      - quantity: 1500
+        typeID: 81144
+      products:
+      - quantity: 1
+        typeID: 88229
+      skills:
+      - level: 5
+        typeID: 3380
+      time: 60000
+    research_material:
+      time: 21000
+    research_time:
+      time: 21000
+  blueprintTypeID: 88233
+  maxProductionLimit: 3
+88267:
+  activities:
+    manufacturing:
+      materials:
+      - quantity: 1
+        typeID: 20280
+      - quantity: 150000
+        typeID: 88087
+      products:
+      - quantity: 1
+        typeID: 88266
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 7200
+  blueprintTypeID: 88267
+  maxProductionLimit: 1
+88268:
+  activities:
+    manufacturing:
+      materials:
+      - quantity: 50000
+        typeID: 88087
+      products:
+      - quantity: 1
+        typeID: 88172
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 1200
+  blueprintTypeID: 88268
+  maxProductionLimit: 1
+88269:
+  activities:
+    manufacturing:
+      materials:
+      - quantity: 50000
+        typeID: 88087
+      products:
+      - quantity: 1
+        typeID: 88173
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 1200
+  blueprintTypeID: 88269
+  maxProductionLimit: 1
+88270:
+  activities:
+    manufacturing:
+      materials:
+      - quantity: 50000
+        typeID: 88087
+      products:
+      - quantity: 1
+        typeID: 88174
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 1200
+  blueprintTypeID: 88270
+  maxProductionLimit: 1
+88271:
+  activities:
+    manufacturing:
+      materials:
+      - quantity: 50000
+        typeID: 88087
+      products:
+      - quantity: 1
+        typeID: 88175
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 1200
+  blueprintTypeID: 88271
+  maxProductionLimit: 1
+88272:
+  activities:
+    manufacturing:
+      materials:
+      - quantity: 50000
+        typeID: 88087
+      products:
+      - quantity: 1
+        typeID: 88176
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 1200
+  blueprintTypeID: 88272
+  maxProductionLimit: 1
+88273:
+  activities:
+    manufacturing:
+      materials:
+      - quantity: 50000
+        typeID: 88087
+      products:
+      - quantity: 1
+        typeID: 88177
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 1200
+  blueprintTypeID: 88273
+  maxProductionLimit: 1
+88722:
+  activities:
+    copying:
+      time: 2160
+    manufacturing:
+      materials:
+      - quantity: 8
+        typeID: 21590
+      - quantity: 8
+        typeID: 21596
+      - quantity: 16
+        typeID: 21587
+      - quantity: 16
+        typeID: 21594
+      - quantity: 24
+        typeID: 21593
+      - quantity: 32
+        typeID: 40
+      - quantity: 174
+        typeID: 39
+      - quantity: 360
+        typeID: 38
+      - quantity: 1440
+        typeID: 37
+      - quantity: 5734
+        typeID: 36
+      - quantity: 22826
+        typeID: 35
+      - quantity: 91534
+        typeID: 34
+      products:
+      - quantity: 1
+        typeID: 88710
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 2700
+    research_material:
+      time: 945
+    research_time:
+      time: 945
+  blueprintTypeID: 88722
+  maxProductionLimit: 60
+88723:
+  activities:
+    copying:
+      time: 1440
+    manufacturing:
+      materials:
+      - quantity: 4
+        typeID: 21591
+      - quantity: 4
+        typeID: 21595
+      - quantity: 8
+        typeID: 21588
+      - quantity: 8
+        typeID: 21592
+      - quantity: 12
+        typeID: 21589
+      - quantity: 113
+        typeID: 38
+      - quantity: 481
+        typeID: 37
+      - quantity: 1327
+        typeID: 36
+      products:
+      - quantity: 1
+        typeID: 88715
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 1800
+    research_material:
+      time: 630
+    research_time:
+      time: 630
+  blueprintTypeID: 88723
+  maxProductionLimit: 100
+88724:
+  activities:
+    copying:
+      time: 720
+    manufacturing:
+      materials:
+      - quantity: 3
+        typeID: 38
+      - quantity: 4
+        typeID: 39
+      - quantity: 6
+        typeID: 23161
+      - quantity: 6
+        typeID: 23167
+      - quantity: 12
+        typeID: 23159
+      - quantity: 12
+        typeID: 23165
+      - quantity: 18
+        typeID: 23163
+      - quantity: 20583
+        typeID: 35
+      - quantity: 25649
+        typeID: 34
+      products:
+      - quantity: 1
+        typeID: 88709
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 900
+    research_material:
+      time: 315
+    research_time:
+      time: 315
+  blueprintTypeID: 88724
+  maxProductionLimit: 200
+88725:
+  activities:
+    copying:
+      time: 720
+    manufacturing:
+      materials:
+      - quantity: 2
+        typeID: 21591
+      - quantity: 2
+        typeID: 21595
+      - quantity: 4
+        typeID: 21588
+      - quantity: 4
+        typeID: 21592
+      - quantity: 6
+        typeID: 21589
+      - quantity: 113
+        typeID: 37
+      - quantity: 481
+        typeID: 36
+      - quantity: 1327
+        typeID: 35
+      products:
+      - quantity: 1
+        typeID: 88716
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 900
+    research_material:
+      time: 315
+    research_time:
+      time: 315
+  blueprintTypeID: 88725
+  maxProductionLimit: 200
+88726:
+  activities:
+    copying:
+      time: 720
+    manufacturing:
+      materials:
+      - quantity: 1
+        typeID: 21591
+      - quantity: 1
+        typeID: 21595
+      - quantity: 2
+        typeID: 21588
+      - quantity: 2
+        typeID: 21592
+      - quantity: 3
+        typeID: 21589
+      - quantity: 113
+        typeID: 36
+      - quantity: 481
+        typeID: 35
+      - quantity: 1327
+        typeID: 34
+      products:
+      - quantity: 1
+        typeID: 88717
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 900
+    research_material:
+      time: 315
+    research_time:
+      time: 315
+  blueprintTypeID: 88726
+  maxProductionLimit: 200
+88727:
+  activities:
+    copying:
+      time: 2160
+    manufacturing:
+      materials:
+      - quantity: 6
+        typeID: 21591
+      - quantity: 6
+        typeID: 21595
+      - quantity: 12
+        typeID: 21588
+      - quantity: 12
+        typeID: 21592
+      - quantity: 18
+        typeID: 21589
+      - quantity: 228
+        typeID: 39
+      - quantity: 481
+        typeID: 38
+      - quantity: 1327
+        typeID: 37
+      products:
+      - quantity: 1
+        typeID: 88714
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 2700
+    research_material:
+      time: 945
+    research_time:
+      time: 945
+  blueprintTypeID: 88727
+  maxProductionLimit: 60
+88728:
+  activities:
+    copying:
+      time: 720
+    manufacturing:
+      materials:
+      - quantity: 1
+        typeID: 23162
+      - quantity: 1
+        typeID: 23166
+      - quantity: 2
+        typeID: 23160
+      - quantity: 2
+        typeID: 23164
+      - quantity: 3
+        typeID: 23158
+      - quantity: 4
+        typeID: 40
+      - quantity: 288
+        typeID: 35
+      - quantity: 858
+        typeID: 34
+      products:
+      - quantity: 1
+        typeID: 88721
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 900
+    research_material:
+      time: 315
+    research_time:
+      time: 315
+  blueprintTypeID: 88728
+  maxProductionLimit: 200
+88729:
+  activities:
+    copying:
+      time: 1440
+    manufacturing:
+      materials:
+      - quantity: 1
+        typeID: 37
+      - quantity: 2
+        typeID: 23162
+      - quantity: 2
+        typeID: 23166
+      - quantity: 4
+        typeID: 38
+      - quantity: 4
+        typeID: 23160
+      - quantity: 4
+        typeID: 23164
+      - quantity: 6
+        typeID: 23158
+      - quantity: 906
+        typeID: 36
+      - quantity: 1063
+        typeID: 35
+      - quantity: 2271
+        typeID: 34
+      products:
+      - quantity: 1
+        typeID: 88720
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 1800
+    research_material:
+      time: 630
+    research_time:
+      time: 630
+  blueprintTypeID: 88729
+  maxProductionLimit: 100
+88730:
+  activities:
+    copying:
+      time: 2160
+    manufacturing:
+      materials:
+      - quantity: 4
+        typeID: 23162
+      - quantity: 4
+        typeID: 23166
+      - quantity: 8
+        typeID: 23160
+      - quantity: 8
+        typeID: 23164
+      - quantity: 12
+        typeID: 23158
+      - quantity: 44
+        typeID: 37
+      - quantity: 51
+        typeID: 38
+      - quantity: 1027
+        typeID: 36
+      - quantity: 1857
+        typeID: 35
+      - quantity: 4662
+        typeID: 34
+      products:
+      - quantity: 1
+        typeID: 88719
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 2700
+    research_material:
+      time: 945
+    research_time:
+      time: 945
+  blueprintTypeID: 88730
+  maxProductionLimit: 60
+88731:
+  activities:
+    copying:
+      time: 1440
+    manufacturing:
+      materials:
+      - quantity: 2
+        typeID: 38
+      - quantity: 4
+        typeID: 21590
+      - quantity: 4
+        typeID: 21596
+      - quantity: 8
+        typeID: 21587
+      - quantity: 8
+        typeID: 21594
+      - quantity: 12
+        typeID: 21593
+      - quantity: 22
+        typeID: 40
+      - quantity: 33
+        typeID: 37
+      - quantity: 44
+        typeID: 39
+      - quantity: 89
+        typeID: 36
+      - quantity: 20000
+        typeID: 35
+      - quantity: 24444
+        typeID: 34
+      products:
+      - quantity: 1
+        typeID: 88711
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 1800
+    research_material:
+      time: 630
+    research_time:
+      time: 630
+  blueprintTypeID: 88731
+  maxProductionLimit: 100
+88732:
+  activities:
+    copying:
+      time: 28800
+    manufacturing:
+      materials:
+      - quantity: 20
+        typeID: 23162
+      - quantity: 20
+        typeID: 23166
+      - quantity: 40
+        typeID: 23160
+      - quantity: 40
+        typeID: 23164
+      - quantity: 60
+        typeID: 23158
+      - quantity: 4731
+        typeID: 39
+      - quantity: 5001
+        typeID: 40
+      - quantity: 15573
+        typeID: 38
+      - quantity: 63985
+        typeID: 37
+      - quantity: 90903
+        typeID: 36
+      - quantity: 477063
+        typeID: 35
+      - quantity: 1057824
+        typeID: 34
+      products:
+      - quantity: 1
+        typeID: 88718
+      skills:
+      - level: 1
+        typeID: 3380
+      - level: 1
+        typeID: 22242
+      time: 36000
+    research_material:
+      time: 12600
+    research_time:
+      time: 12600
+  blueprintTypeID: 88732
+  maxProductionLimit: 5
+88733:
+  activities:
+    copying:
+      time: 28800
+    manufacturing:
+      materials:
+      - quantity: 20
+        typeID: 21591
+      - quantity: 20
+        typeID: 21595
+      - quantity: 40
+        typeID: 21588
+      - quantity: 40
+        typeID: 21592
+      - quantity: 60
+        typeID: 21589
+      - quantity: 4977
+        typeID: 39
+      - quantity: 6341
+        typeID: 40
+      - quantity: 12230
+        typeID: 38
+      - quantity: 72656
+        typeID: 37
+      - quantity: 116778
+        typeID: 36
+      - quantity: 611423
+        typeID: 35
+      - quantity: 834277
+        typeID: 34
+      products:
+      - quantity: 1
+        typeID: 88713
+      skills:
+      - level: 1
+        typeID: 3380
+      - level: 1
+        typeID: 22242
+      time: 36000
+    research_material:
+      time: 12600
+    research_time:
+      time: 12600
+  blueprintTypeID: 88733
+  maxProductionLimit: 5
+88734:
+  activities:
+    copying:
+      time: 28800
+    manufacturing:
+      materials:
+      - quantity: 20
+        typeID: 21590
+      - quantity: 20
+        typeID: 21596
+      - quantity: 40
+        typeID: 21587
+      - quantity: 40
+        typeID: 21594
+      - quantity: 60
+        typeID: 21593
+      - quantity: 5000
+        typeID: 40
+      - quantity: 10000
+        typeID: 39
+      - quantity: 20000
+        typeID: 38
+      - quantity: 50000
+        typeID: 37
+      - quantity: 200000
+        typeID: 36
+      - quantity: 850000
+        typeID: 35
+      - quantity: 1750000
+        typeID: 34
+      products:
+      - quantity: 1
+        typeID: 88712
+      skills:
+      - level: 1
+        typeID: 3380
+      - level: 1
+        typeID: 22242
+      time: 36000
+    research_material:
+      time: 12600
+    research_time:
+      time: 12600
+  blueprintTypeID: 88734
+  maxProductionLimit: 5
+89485:
+  activities:
+    copying:
+      time: 7200
+    invention:
+      materials:
+      - quantity: 4
+        typeID: 20410
+      - quantity: 4
+        typeID: 20411
+      products:
+      - probability: 0.3
+        quantity: 1
+        typeID: 89652
+      skills:
+      - level: 1
+        typeID: 11433
+      - level: 1
+        typeID: 11450
+      - level: 1
+        typeID: 23121
+      time: 96000
+    manufacturing:
+      materials:
+      - quantity: 4000
+        typeID: 37
+      - quantity: 20000
+        typeID: 36
+      - quantity: 60000
+        typeID: 35
+      - quantity: 320000
+        typeID: 34
+      products:
+      - quantity: 1
+        typeID: 89240
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 9000
+    research_material:
+      time: 3150
+    research_time:
+      time: 3150
+  blueprintTypeID: 89485
+  maxProductionLimit: 20
+89632:
+  activities:
+    copying:
+      time: 2880
+    invention:
+      materials:
+      - quantity: 2
+        typeID: 20415
+      - quantity: 2
+        typeID: 20423
+      products:
+      - probability: 0.34
+        quantity: 10
+        typeID: 89633
+      skills:
+      - level: 1
+        typeID: 11451
+      - level: 1
+        typeID: 11529
+      - level: 1
+        typeID: 23121
+      time: 68100
+    manufacturing:
+      materials:
+      - quantity: 3
+        typeID: 2346
+      - quantity: 22
+        typeID: 40
+      - quantity: 56
+        typeID: 38
+      - quantity: 111
+        typeID: 37
+      - quantity: 949
+        typeID: 34
+      products:
+      - quantity: 1
+        typeID: 89608
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 3600
+    research_material:
+      time: 1260
+    research_time:
+      time: 1260
+  blueprintTypeID: 89632
+  maxProductionLimit: 50
+89633:
+  activities:
+    manufacturing:
+      materials:
+      - quantity: 1
+        typeID: 11483
+      - quantity: 1
+        typeID: 89608
+      - quantity: 4
+        typeID: 11541
+      - quantity: 5
+        typeID: 11399
+      - quantity: 8
+        typeID: 11539
+      - quantity: 12
+        typeID: 9840
+      - quantity: 17
+        typeID: 16682
+      - quantity: 33
+        typeID: 16681
+      products:
+      - quantity: 1
+        typeID: 89615
+      skills:
+      - level: 1
+        typeID: 11451
+      - level: 1
+        typeID: 11529
+      - level: 5
+        typeID: 3380
+      time: 9360
+  blueprintTypeID: 89633
+  maxProductionLimit: 10
+89634:
+  activities:
+    copying:
+      time: 720
+    manufacturing:
+      materials:
+      - quantity: 500
+        typeID: 34
+      - quantity: 500
+        typeID: 37
+      - quantity: 500
+        typeID: 16272
+      products:
+      - quantity: 500
+        typeID: 89612
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 5000
+    research_material:
+      time: 315
+    research_time:
+      time: 315
+  blueprintTypeID: 89634
+  maxProductionLimit: 200
+89635:
+  activities:
+    copying:
+      time: 720
+    manufacturing:
+      materials:
+      - quantity: 500
+        typeID: 34
+      - quantity: 500
+        typeID: 37
+      - quantity: 500
+        typeID: 16272
+      products:
+      - quantity: 500
+        typeID: 89613
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 5000
+    research_material:
+      time: 315
+    research_time:
+      time: 315
+  blueprintTypeID: 89635
+  maxProductionLimit: 200
+89636:
+  activities:
+    copying:
+      time: 720
+    manufacturing:
+      materials:
+      - quantity: 500
+        typeID: 34
+      - quantity: 500
+        typeID: 37
+      - quantity: 500
+        typeID: 16272
+      products:
+      - quantity: 500
+        typeID: 89614
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 5000
+    research_material:
+      time: 315
+    research_time:
+      time: 315
+  blueprintTypeID: 89636
+  maxProductionLimit: 200
+89637:
+  activities:
+    manufacturing:
+      materials:
+      - quantity: 1
+        typeID: 57479
+      - quantity: 250
+        typeID: 57486
+      - quantity: 250
+        typeID: 83473
+      - quantity: 500
+        typeID: 57478
+      - quantity: 8000
+        typeID: 40
+      - quantity: 16000
+        typeID: 39
+      - quantity: 60000
+        typeID: 38
+      - quantity: 600000
+        typeID: 37
+      - quantity: 1200000
+        typeID: 36
+      - quantity: 6000000
+        typeID: 35
+      - quantity: 16000000
+        typeID: 34
+      products:
+      - quantity: 1
+        typeID: 89607
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 300000
+  blueprintTypeID: 89637
+  maxProductionLimit: 10
+89652:
+  activities:
+    copying:
+      materials:
+      - quantity: 6
+        typeID: 11465
+      - quantity: 90
+        typeID: 3812
+      skills:
+      - level: 1
+        typeID: 11446
+      - level: 1
+        typeID: 11450
+      time: 144000
+    manufacturing:
+      materials:
+      - quantity: 1
+        typeID: 89240
+      - quantity: 10
+        typeID: 11478
+      - quantity: 16
+        typeID: 11399
+      - quantity: 17
+        typeID: 11547
+      - quantity: 25
+        typeID: 3828
+      - quantity: 43
+        typeID: 11556
+      - quantity: 62
+        typeID: 11531
+      - quantity: 75
+        typeID: 11535
+      - quantity: 160
+        typeID: 11553
+      - quantity: 360
+        typeID: 11541
+      - quantity: 1640
+        typeID: 11545
+      products:
+      - quantity: 1
+        typeID: 89649
+      skills:
+      - level: 1
+        typeID: 3395
+      - level: 1
+        typeID: 11446
+      - level: 1
+        typeID: 11450
+      - level: 5
+        typeID: 3380
+      time: 180000
+    research_material:
+      materials:
+      - quantity: 3
+        typeID: 11465
+      - quantity: 11
+        typeID: 9836
+      - quantity: 22
+        typeID: 3814
+      skills:
+      - level: 1
+        typeID: 11446
+      - level: 1
+        typeID: 11450
+      - level: 5
+        typeID: 3409
+      time: 63000
+    research_time:
+      materials:
+      - quantity: 3
+        typeID: 11465
+      - quantity: 11
+        typeID: 9836
+      - quantity: 22
+        typeID: 3814
+      skills:
+      - level: 1
+        typeID: 11446
+      - level: 1
+        typeID: 11450
+      - level: 5
+        typeID: 3403
+      time: 63000
+  blueprintTypeID: 89652
+  maxProductionLimit: 1
+89675:
+  activities:
+    manufacturing:
+      materials:
+      - quantity: 5
+        typeID: 57486
+      - quantity: 10
+        typeID: 40
+      - quantity: 10
+        typeID: 57478
+      - quantity: 20
+        typeID: 39
+      - quantity: 30
+        typeID: 38
+      - quantity: 4000
+        typeID: 37
+      - quantity: 20000
+        typeID: 36
+      - quantity: 60000
+        typeID: 35
+      - quantity: 320000
+        typeID: 34
+      products:
+      - quantity: 1
+        typeID: 89647
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 9000
+  blueprintTypeID: 89675
+  maxProductionLimit: 20
+89676:
+  activities:
+    manufacturing:
+      materials:
+      - quantity: 5
+        typeID: 57486
+      - quantity: 10
+        typeID: 40
+      - quantity: 10
+        typeID: 57478
+      - quantity: 20
+        typeID: 39
+      - quantity: 30
+        typeID: 38
+      - quantity: 350
+        typeID: 37
+      - quantity: 1750
+        typeID: 36
+      - quantity: 4200
+        typeID: 35
+      - quantity: 22400
+        typeID: 34
+      products:
+      - quantity: 1
+        typeID: 89648
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 6000
+  blueprintTypeID: 89676
+  maxProductionLimit: 30
+90039:
+  activities:
+    copying:
+      time: 9600
+    manufacturing:
+      materials:
+      - quantity: 1
+        typeID: 2870
+      - quantity: 1
+        typeID: 2872
+      - quantity: 1
+        typeID: 85316
+      - quantity: 11
+        typeID: 9834
+      - quantity: 13
+        typeID: 40
+      - quantity: 17
+        typeID: 39
+      - quantity: 19
+        typeID: 38
+      - quantity: 307
+        typeID: 37
+      - quantity: 743
+        typeID: 36
+      - quantity: 4241
+        typeID: 35
+      - quantity: 19993
+        typeID: 34
+      products:
+      - quantity: 1
+        typeID: 90037
+      skills:
+      - level: 1
+        typeID: 3380
+      - level: 4
+        typeID: 11446
+      - level: 4
+        typeID: 11448
+      time: 12000
+    research_material:
+      time: 4200
+    research_time:
+      time: 4200
+  blueprintTypeID: 90039
+  maxProductionLimit: 10
+90054:
+  activities:
+    copying:
+      time: 240
+    invention:
+      materials:
+      - quantity: 2
+        typeID: 20411
+      - quantity: 2
+        typeID: 20413
+      products:
+      - probability: 0.34
+        quantity: 10
+        typeID: 90057
+      skills:
+      - level: 1
+        typeID: 11433
+      - level: 1
+        typeID: 11447
+      - level: 1
+        typeID: 23087
+      time: 3300
+    manufacturing:
+      materials:
+      - quantity: 500
+        typeID: 38
+      products:
+      - quantity: 1
+        typeID: 90045
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 300
+    research_material:
+      time: 105
+    research_time:
+      time: 105
+  blueprintTypeID: 90054
+  maxProductionLimit: 600
+90055:
+  activities:
+    copying:
+      time: 240
+    invention:
+      materials:
+      - quantity: 2
+        typeID: 20411
+      - quantity: 2
+        typeID: 20413
+      products:
+      - probability: 0.34
+        quantity: 10
+        typeID: 90058
+      skills:
+      - level: 1
+        typeID: 11433
+      - level: 1
+        typeID: 11447
+      - level: 1
+        typeID: 23087
+      time: 3300
+    manufacturing:
+      materials:
+      - quantity: 625
+        typeID: 38
+      products:
+      - quantity: 1
+        typeID: 90046
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 300
+    research_material:
+      time: 105
+    research_time:
+      time: 105
+  blueprintTypeID: 90055
+  maxProductionLimit: 600
+90056:
+  activities:
+    copying:
+      time: 240
+    invention:
+      materials:
+      - quantity: 2
+        typeID: 20411
+      - quantity: 2
+        typeID: 20413
+      products:
+      - probability: 0.34
+        quantity: 10
+        typeID: 90059
+      skills:
+      - level: 1
+        typeID: 11433
+      - level: 1
+        typeID: 11447
+      - level: 1
+        typeID: 23087
+      time: 3300
+    manufacturing:
+      materials:
+      - quantity: 750
+        typeID: 38
+      products:
+      - quantity: 1
+        typeID: 90048
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 300
+    research_material:
+      time: 105
+    research_time:
+      time: 105
+  blueprintTypeID: 90056
+  maxProductionLimit: 600
+90057:
+  activities:
+    manufacturing:
+      materials:
+      - quantity: 1
+        typeID: 11483
+      - quantity: 1
+        typeID: 90045
+      - quantity: 30
+        typeID: 16682
+      products:
+      - quantity: 1
+        typeID: 90047
+      skills:
+      - level: 1
+        typeID: 3380
+      - level: 1
+        typeID: 11433
+      - level: 1
+        typeID: 11447
+      time: 480
+  blueprintTypeID: 90057
+  maxProductionLimit: 10
+90058:
+  activities:
+    manufacturing:
+      materials:
+      - quantity: 1
+        typeID: 11483
+      - quantity: 1
+        typeID: 90046
+      - quantity: 38
+        typeID: 16682
+      products:
+      - quantity: 1
+        typeID: 90050
+      skills:
+      - level: 1
+        typeID: 3380
+      - level: 1
+        typeID: 11433
+      - level: 1
+        typeID: 11447
+      time: 480
+  blueprintTypeID: 90058
+  maxProductionLimit: 10
+90059:
+  activities:
+    manufacturing:
+      materials:
+      - quantity: 1
+        typeID: 11483
+      - quantity: 1
+        typeID: 90048
+      - quantity: 45
+        typeID: 16682
+      products:
+      - quantity: 1
+        typeID: 90049
+      skills:
+      - level: 1
+        typeID: 3380
+      - level: 1
+        typeID: 11433
+      - level: 1
+        typeID: 11447
+      time: 480
+  blueprintTypeID: 90059
+  maxProductionLimit: 10
+90274:
+  activities:
+    reaction:
+      materials:
+      - quantity: 100
+        typeID: 16634
+      - quantity: 100
+        typeID: 90307
+      products:
+      - quantity: 100
+        typeID: 90283
+      skills:
+      - level: 2
+        typeID: 45746
+      time: 3600
+  blueprintTypeID: 90274
+  maxProductionLimit: 1000
+90275:
+  activities:
+    reaction:
+      materials:
+      - quantity: 100
+        typeID: 90307
+      - quantity: 250
+        typeID: 16634
+      products:
+      - quantity: 100
+        typeID: 90284
+      skills:
+      - level: 2
+        typeID: 45746
+      time: 3600
+  blueprintTypeID: 90275
+  maxProductionLimit: 1000
+90276:
+  activities:
+    reaction:
+      materials:
+      - quantity: 100
+        typeID: 90307
+      - quantity: 300
+        typeID: 16634
+      products:
+      - quantity: 100
+        typeID: 90286
+      skills:
+      - level: 2
+        typeID: 45746
+      time: 3600
+  blueprintTypeID: 90276
+  maxProductionLimit: 1000
+90277:
+  activities:
+    reaction:
+      materials:
+      - quantity: 100
+        typeID: 90307
+      - quantity: 1000
+        typeID: 16634
+      products:
+      - quantity: 100
+        typeID: 90289
+      skills:
+      - level: 2
+        typeID: 45746
+      time: 3600
+  blueprintTypeID: 90277
+  maxProductionLimit: 1000
+90278:
+  activities:
+    reaction:
+      materials:
+      - quantity: 100
+        typeID: 90307
+      - quantity: 600
+        typeID: 16634
+      products:
+      - quantity: 100
+        typeID: 90292
+      skills:
+      - level: 2
+        typeID: 45746
+      time: 3600
+  blueprintTypeID: 90278
+  maxProductionLimit: 1000
+90279:
+  activities:
+    reaction:
+      materials:
+      - quantity: 100
+        typeID: 90307
+      - quantity: 1000
+        typeID: 16634
+      products:
+      - quantity: 100
+        typeID: 90294
+      skills:
+      - level: 2
+        typeID: 45746
+      time: 3600
+  blueprintTypeID: 90279
+  maxProductionLimit: 1000
+90281:
+  activities:
+    reaction:
+      materials:
+      - quantity: 100
+        typeID: 90307
+      - quantity: 1000
+        typeID: 16634
+      products:
+      - quantity: 100
+        typeID: 90296
+      skills:
+      - level: 2
+        typeID: 45746
+      time: 3600
+  blueprintTypeID: 90281
+  maxProductionLimit: 1000
+90282:
+  activities:
+    reaction:
+      materials:
+      - quantity: 100
+        typeID: 90307
+      - quantity: 3000
+        typeID: 16634
+      products:
+      - quantity: 100
+        typeID: 90298
+      skills:
+      - level: 2
+        typeID: 45746
+      time: 3600
+  blueprintTypeID: 90282
+  maxProductionLimit: 1000
+90476:
+  activities:
+    copying:
+      time: 43200
+    manufacturing:
+      materials:
+      - quantity: 1166
+        typeID: 40
+      - quantity: 2334
+        typeID: 39
+      - quantity: 7823
+        typeID: 38
+      - quantity: 26033
+        typeID: 37
+      - quantity: 154957
+        typeID: 36
+      - quantity: 418117
+        typeID: 35
+      - quantity: 1717883
+        typeID: 34
+      products:
+      - quantity: 1
+        typeID: 90475
+      skills:
+      - level: 1
+        typeID: 3380
+      - level: 1
+        typeID: 22242
+      time: 54000
+    research_material:
+      time: 18900
+    research_time:
+      time: 18900
+  blueprintTypeID: 90476
+  maxProductionLimit: 5

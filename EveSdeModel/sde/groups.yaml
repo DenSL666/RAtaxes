@@ -648,14 +648,14 @@
   fittableNonSingleton: false
   iconID: 107
   name:
-    de: Vermessungsscanner
-    en: Survey Scanner
-    es: Escáner de prospección
-    fr: Scanner d'inspection
-    ja: サーベイスキャナー
-    ko: 조사 스캐너
-    ru: Комплекс для оценки размеров залежей
-    zh: 测量扫描器
+    de: Bergbauvermessungs-Chipsatz
+    en: Mining Survey Chipset
+    es: Chipset de prospección de minería
+    fr: Puce d'arpentage d'extraction minière
+    ja: 採掘調査用チップセット
+    ko: 채굴 조사 칩셋
+    ru: Считывающий буровой чип
+    zh: 采矿调查芯片组
   published: true
   useBasePrice: false
 52:
@@ -1576,14 +1576,14 @@
   fittableNonSingleton: false
   iconID: 107
   name:
-    de: Vermessungsscanner-Blueprint
-    en: Survey Scanner Blueprint
-    es: Plano de escáner de prospección
-    fr: Plan de construction Scanner d'inspection
-    ja: サーベイスキャナーブループリント
-    ko: 조사 스캐너 블루프린트
-    ru: Чертежи комплекса для оценки размеров залежей
-    zh: 测量扫描器蓝图
+    de: Bauplan für Bergbauvermessungs-Chipsatz
+    en: Mining Survey Chipset Blueprint
+    es: Plano de chipset de prospección de minería
+    fr: Plan de construction Puce d'arpentage d'extraction minière
+    ja: 採掘調査用チップセット設計図
+    ko: 채굴 조사 칩셋 블루프린트
+    ru: Чертёж считывающего бурового чипа
+    zh: 采矿调查芯片组蓝图
   published: true
   useBasePrice: true
 130:
@@ -4290,13 +4290,13 @@
   fittableNonSingleton: false
   iconID: 0
   name:
-    de: Ballistisches Kontrollsystem
-    en: Ballistic Control system
+    de: Ballistikkontrollsystem
+    en: Ballistic Control System
     es: Sistema de control balístico
     fr: Système de contrôle balistique
     ja: 弾道制御装置
     ko: 탄도 제어시스템
-    ru: Баллистические вычислители
+    ru: Система управления баллистикой
     zh: 弹道控制系统
   published: true
   useBasePrice: false
@@ -12611,7 +12611,6 @@
     en: FW Infrastructure Hub
     es: FW Infrastructure Hub
     fr: Centre d'infrastructure GF
-    it: FW Infrastructure Hub
     ja: FW領域管理用拠点
     ko: 팩션 전쟁 인프라 허브
     ru: FW Infrastructure Hub
@@ -24985,14 +24984,14 @@
   categoryID: 39
   fittableNonSingleton: false
   name:
-    de: Anomalie-Erkennungs-Upgrade für Souveränitätshub
-    en: Sovereignty Hub Anomaly Detection Upgrades
-    es: Mejoras de detección de anomalías del centro de soberanía
-    fr: Améliorations de détection d'anomalie du pôle de souveraineté
-    ja: 領有権ハブの特異点探知アップグレード
-    ko: 소버린티 허브 어노말리 탐지 업그레이드
-    ru: Улучшения поиска аномалий для штаба владений
-    zh: 主权中心异常空间探测升级件
+    de: Sovereignty Hub Site Detection Upgrades
+    en: Sovereignty Hub Site Detection Upgrades
+    es: Mejoras de detección de zonas del centro de soberanía
+    fr: Améliorations de détection de site du pôle de souveraineté
+    ja: 領有権ハブのサイト探知アップグレード
+    ko: 소버린티 허브 사이트 탐지 업그레이드
+    ru: Улучшения поиска районов для штаба владений
+    zh: 主权中心地点探测升级件
   published: true
   useBasePrice: true
 4769:
@@ -25359,7 +25358,7 @@
     fr: Atavum
     ja: アタヴァム
     ko: 아타붐
-    ru: Атавум
+    ru: Atavum
     zh: 阿塔文
   published: true
   useBasePrice: true
@@ -25369,14 +25368,14 @@
   categoryID: 17
   fittableNonSingleton: false
   name:
-    de: Infomorphs
+    de: Infomorph-Systeme
     en: Infomorph Systems
-    es: Infomorfos
-    fr: Infomorphes
-    ja: インフォモーフ
-    ko: 정신체
-    ru: Инфоморфы
-    zh: 电子意识
+    es: Sistemas de infomorfos
+    fr: Systèmes d'infomorphes
+    ja: インフォモーフのシステム
+    ko: 정신체 시스템
+    ru: Системы для инфоморфов
+    zh: 电子意识星系
   published: true
   useBasePrice: true
 4825:
@@ -25385,7 +25384,14 @@
   categoryID: 2
   fittableNonSingleton: false
   name:
+    de: Lokales Signalfeuer
     en: Local Beacon
+    es: Baliza local
+    fr: Balise locale
+    ja: ローカルビーコン
+    ko: 지역 비컨
+    ru: Местный маяк
+    zh: 本地信标
   published: false
   useBasePrice: false
 4827:
@@ -25394,7 +25400,14 @@
   categoryID: 17
   fittableNonSingleton: false
   name:
+    de: EDENCOM-Daten
     en: EDENCOM Data
+    es: Datos de EDENCOM
+    fr: Données EDENCOM
+    ja: EDENCOMのデータ
+    ko: EDENCOM 데이터
+    ru: Данные ЭДЕНКОМа
+    zh: 伊甸联合防御阵线数据
   published: true
   useBasePrice: true
 4828:
@@ -25403,7 +25416,401 @@
   categoryID: 2
   fittableNonSingleton: false
   name:
+    de: Piraten-Spawner
     en: Pirate Spawners
+    es: Generadores piratas
+    fr: Spawners de pirates
+    ja: 海賊スポーナー
+    ko: 패적 생성기
+    ru: Источники пиратов
+    zh: 海盗生成器
+  published: false
+  useBasePrice: false
+4838:
+  anchorable: false
+  anchored: false
+  categoryID: 39
+  fittableNonSingleton: false
+  name:
+    de: Sovereignty Hub Colony Resources Management Upgrades
+    en: Sovereignty Hub Colony Resources Management Upgrades
+    es: Mejoras de gestión de recursos de la colonia del centro de soberanía
+    fr: Améliorations de gestion des ressources de colonie du pôle de souveraineté
+    ja: 領有権ハブのコロニーリソース管理アップグレード
+    ko: 소버린티 허브 콜로니 자원 관리 업그레이드
+    ru: Улучшения управления ресурсами колоний для штаба владений
+    zh: 主权中心殖民地资源管理升级件
+  published: true
+  useBasePrice: true
+4839:
+  anchorable: false
+  anchored: false
+  categoryID: 39
+  fittableNonSingleton: false
+  name:
+    de: Sovereignty Hub System Effect Generator Upgrades
+    en: Sovereignty Hub System Effect Generator Upgrades
+    es: Mejoras del generador de efectos de sistema del centro de soberanía
+    fr: Améliorations de générateur d'effet de système du pôle de souveraineté
+    ja: 領有権ハブのシステム効果ジェネレーターアップグレード
+    ko: 소버린티 허브 성계 영향 발생기 업그레이드
+    ru: Улучшения генератора эффектов системы для штаба владений
+    zh: 主权中心星系影响生成器升级件
+  published: true
+  useBasePrice: true
+4843:
+  anchorable: false
+  anchored: false
+  categoryID: 17
+  fittableNonSingleton: false
+  name:
+    de: Begrenzte Seltenheitsgrade
+    en: Limited Rarities
+    es: Rarezas limitadas
+    fr: Raretés limitées
+    ja: 限定アイテム
+    ko: 희귀도 제한
+    ru: Эксклюзивные редкости
+    zh: 限量珍品
+  published: true
+  useBasePrice: true
+4857:
+  anchorable: false
+  anchored: true
+  categoryID: 25
+  fittableNonSingleton: false
+  iconID: 15
+  name:
+    de: Tyranite
+    en: Tyranite
+    es: Tiranita
+    fr: Tyranite
+    ja: ティラナイト
+    ko: 타이라나이트
+    ru: Tyranite
+    zh: 泰拉石
+  published: true
+  useBasePrice: false
+4900:
+  anchorable: false
+  anchored: false
+  categoryID: 17
+  fittableNonSingleton: false
+  name:
+    de: Stability Telemetry
+    en: Stability Telemetry
+    es: Telemetría de estabilidad
+    fr: Télémétrie de stabilité
+    ja: 安定性テレメトリデータ
+    ko: 안정화 텔레미터
+    ru: Stability Telemetry
+    zh: 稳定性遥测
+  published: true
+  useBasePrice: true
+4902:
+  anchorable: false
+  anchored: false
+  categoryID: 6
+  fittableNonSingleton: false
+  name:
+    de: Expeditionskommandoschiff
+    en: Expedition Command Ship
+    es: Nave de mando de expedición
+    fr: Vaisseau de commandement d'expédition
+    ja: 指揮型探査船
+    ko: 탐사 커맨드쉽
+    ru: Экспедиционный флагман
+    zh: 远征指挥舰
+  published: true
+  useBasePrice: false
+4905:
+  anchorable: false
+  anchored: false
+  categoryID: 8
+  fittableNonSingleton: true
+  name:
+    de: Expeditionskommandostrahlenladungen
+    en: Expedition Command Burst Charges
+    es: Cargas de estallido de mando de expedición
+    fr: Charges de salve de commandement d'expédition
+    ja: 探査コマンドバーストチャージ
+    ko: 탐사 커맨드 버스트 차지
+    ru: Заряды экспедиционного импульсного оптимизатора
+    zh: 远征指挥脉冲波弹药
+  published: true
+  useBasePrice: false
+4906:
+  anchorable: false
+  anchored: false
+  categoryID: 9
+  fittableNonSingleton: false
+  name:
+    de: Bauplan für Expeditionskommandoschiff
+    en: Expedition Command Ship Blueprint
+    es: Plano de nave de mando de expedición
+    fr: Plan de construction Vaisseau de commandement d'expédition
+    ja: 指揮型探査船設計図
+    ko: 탐사 커맨드쉽 블루프린트
+    ru: Чертёж экспедиционного флагмана
+    zh: 远征指挥舰蓝图
+  published: true
+  useBasePrice: true
+4909:
+  anchorable: false
+  anchored: false
+  categoryID: 11
+  fittableNonSingleton: false
+  name:
+    de: Vorhuteinheiten
+    en: Vanguard Entities
+    es: Entidades de vanguardia
+    fr: Entités Vanguard
+    ja: ヴァンガードエンティティ
+    ko: Vanguard 개체
+    ru: Боевые единицы авангарда
+    zh: 先锋实体
+  published: false
+  useBasePrice: false
+4913:
+  anchorable: false
+  anchored: false
+  categoryID: 22
+  fittableNonSingleton: false
+  name:
+    de: Mobiler Phasenanker
+    en: Mobile Phase Anchor
+    es: Anclaje de fase móvil
+    fr: Ancrage de phase mobile
+    ja: 移動式位相アンカー
+    ko: 이동식 위상 고정기
+    ru: Мобильный фазовый якорь
+    zh: 移动相位锚标
+  published: true
+  useBasePrice: false
+4914:
+  anchorable: false
+  anchored: false
+  categoryID: 9
+  fittableNonSingleton: false
+  name:
+    de: Bauplan für mobilen Phasenanker
+    en: Mobile Phase Anchor Blueprint
+    es: Plano de anclaje de fase móvil
+    fr: Plan de construction Ancrage de phase mobile
+    ja: 移動式位相アンカー設計図
+    ko: 이동식 위상 고정기 블루프린트
+    ru: Чертёж мобильного фазового якоря
+    zh: 移动相位锚标蓝图
+  published: true
+  useBasePrice: true
+4915:
+  anchorable: false
+  anchored: true
+  categoryID: 4
+  fittableNonSingleton: false
+  iconID: 15
+  name:
+    de: Prismatizit
+    en: Prismaticite
+    es: Prismaticita
+    fr: Prismaticite
+    ja: プリズマティサイト
+    ko: 프리즈마티사이트
+    ru: Призматицит
+    zh: 棱柱岩
+  published: true
+  useBasePrice: false
+4916:
+  anchorable: false
+  anchored: true
+  categoryID: 2152
+  fittableNonSingleton: false
+  iconID: 15
+  name:
+    de: Phasenasteroid
+    en: Phased Asteroid
+    es: Asteroide fásico
+    fr: Astéroïde phasique
+    ja: 位相偏移アステロイド
+    ko: 위상 소행성
+    ru: Фазовый астероид
+    zh: 相位小行星
+  published: false
+  useBasePrice: false
+4917:
+  anchorable: false
+  anchored: false
+  categoryID: 11
+  fittableNonSingleton: false
+  name:
+    de: ♦ Industrie-Kommandoschiffe
+    en: ♦ Industrial Command Ship
+    es: ♦ Nave de mando industrial
+    fr: ♦ Vaisseau de commandement industriel
+    ja: ♦ 指揮型輸送艦
+    ko: ♦ 인더스트리얼 커맨드쉽
+    ru: ♦ Флагман бурового флота
+    zh: ♦ 工业指挥舰
+  published: false
+  useBasePrice: false
+4918:
+  anchorable: false
+  anchored: false
+  categoryID: 2
+  fittableNonSingleton: false
+  name:
+    de: Phasenasteroiden
+    en: Phased Asteroids
+    es: Asteroides fásicos
+    fr: Astéroïdes phasiques
+    ja: 位相偏移アステロイド
+    ko: 위상 소행성
+    ru: Фазовые астероиды
+    zh: 相位小行星
+  published: false
+  useBasePrice: false
+4924:
+  anchorable: false
+  anchored: false
+  categoryID: 9
+  fittableNonSingleton: false
+  name:
+    de: Erratische Erzformel
+    en: Erratic Ore Formula
+    es: Fórmula de mena errática
+    fr: Formule de minerai erratique
+    ja: 不安定鉱石のフォーミュラ
+    ko: 불안정한 광물 계산식
+    ru: Формула неустойчивой руды
+    zh: 不稳定矿石配方
+  published: true
+  useBasePrice: true
+4930:
+  anchorable: false
+  anchored: true
+  categoryID: 2
+  fittableNonSingleton: false
+  name:
+    de: Managed Asteroid Belt
+    en: Managed Asteroid Belt
+    es: Cinturón de asteroides controlado
+    fr: Ceinture d'astéroïdes gérée
+    ja: 管理アステロイドベルト
+    ko: 소속 소행성 벨트
+    ru: Managed Asteroid Belt
+    zh: 受管理的小行星带
+  published: false
+  useBasePrice: false
+4932:
+  anchorable: false
+  anchored: false
+  categoryID: 4
+  fittableNonSingleton: false
+  name:
+    de: Unraffiniertes Mineral
+    en: Unrefined Mineral
+    es: Mineral sin refinar
+    fr: Minéral non raffiné
+    ja: 未精錬無機物
+    ko: 미가공 미네랄
+    ru: Необработанный минерал
+    zh: 粗糙矿物
+  published: true
+  useBasePrice: true
+4935:
+  anchorable: false
+  anchored: true
+  categoryID: 2
+  fittableNonSingleton: false
+  name:
+    de: Eisgürtel
+    en: Ice Belt
+    es: Cinturón de hielo
+    fr: Ceintures de glace
+    ja: アイスベルト
+    ko: 아이스 벨트
+    ru: Ледяной пояс
+    zh: 冰带
+  published: false
+  useBasePrice: false
+4936:
+  anchorable: false
+  anchored: true
+  categoryID: 2
+  fittableNonSingleton: false
+  name:
+    de: Phasenasteroidenfeld
+    en: Phased Asteroid Field
+    es: Campo de asteroides fásico
+    fr: Champ d'astéroïdes phasique
+    ja: 位相偏移アステロイドフィールド
+    ko: 위상 소행성 지대
+    ru: Скопление фазовых астероидов
+    zh: 相位小行星带
+  published: false
+  useBasePrice: false
+4937:
+  anchorable: false
+  anchored: true
+  categoryID: 2
+  fittableNonSingleton: false
+  name:
+    de: Seltenes Asteroidenfeld
+    en: Rare Asteroid Field
+    es: Campo de asteroides poco común
+    fr: Champ d'astéroïdes rare
+    ja: 希少なアステロイドフィールド
+    ko: 희귀한 소행성 지대
+    ru: Редкое скопление астероидов
+    zh: 稀有的小行星带
+  published: false
+  useBasePrice: false
+4938:
+  anchorable: false
+  anchored: true
+  categoryID: 2
+  fittableNonSingleton: false
+  name:
+    de: Erzblagerung
+    en: Ore Deposit
+    es: Depósito de mena
+    fr: Gisement de minerai
+    ja: 鉱床
+    ko: 광물 매장지
+    ru: Залежи руды
+    zh: 矿床
+  published: false
+  useBasePrice: false
+4941:
+  anchorable: false
+  anchored: false
+  categoryID: 2152
+  fittableNonSingleton: false
+  name:
+    de: QA-Phasenasteroiden
+    en: QA Phased Asteroids
+    es: Control de calidad de asteroides fásicos
+    fr: Astéroïdes phasiques QA
+    ja: QA位相偏移アステロイド
+    ko: QA Phased Asteroids
+    ru: Тестовые фазовые астероиды
+    zh: QA相位小行星
+  published: false
+  useBasePrice: false
+4945:
+  anchorable: false
+  anchored: false
+  categoryID: 11
+  fittableNonSingleton: false
+  name:
+    de: Regelwidriges Expeditionskommandoschiff
+    en: Irregular Expedition Command Ship
+    es: Nave de mando de expedición irregular
+    fr: Vaisseau de commandement d'expédition irrégulier
+    ja: 非正規指揮型探査船
+    ko: 비정상적인 탐사 커맨드쉽
+    ru: Необычный экспедиционный флагман
+    zh: 叛道者远征指挥舰
   published: false
   useBasePrice: false
 350858:
@@ -25544,7 +25951,6 @@
     en: Surface Infrastructure
     es: Infraestructura de superficie
     fr: Infrastructure
-    it: Infrastruttura di superficie
     ja: サーフェス領域管理
     ko: 지표면 인프라
     ru: Инфраструктура на поверхности
@@ -25561,7 +25967,6 @@
     en: Services
     es: Servicios
     fr: Services
-    it: Servizi
     ja: サービス
     ko: 서비스
     ru: Услуги
@@ -25578,7 +25983,6 @@
     en: Agents
     es: Agentes
     fr: Agents
-    it: Agenti
     ja: エージェント
     ko: 에이전트
     ru: Агенты
@@ -25595,7 +25999,6 @@
     en: Visual Customization
     es: Personalización visual
     fr: Personnalisation visuelle
-    it: Personalizzazione visiva
     ja: ビジュアルカスタマイズ
     ko: 외관 커스터마이징
     ru: Кастомизация внешнего вида
@@ -25612,7 +26015,6 @@
     en: Salvage Containers
     es: Contenedores de los objetos recuperados
     fr: Récupérer conteneurs
-    it: Container materiale recuperato
     ja: 回収品コンテナ
     ko: 샐비지 컨테이너
     ru: Контейнеры для добычи
@@ -25629,7 +26031,6 @@
     en: Salvage Decryptors
     es: Desencriptadores de los objetos recuperados
     fr: Récupérer décrypteurs
-    it: Chiavi crittografiche materiale recuperato
     ja: 回収品ディクリプタ
     ko: 샐비지 해독기
     ru: Дешифраторы для добычи
@@ -25646,7 +26047,6 @@
     en: Battle Salvage
     es: Despojos de batalla
     fr: Récupération de la bataille
-    it: Materiale recuperato in battaglia
     ja: バトルサルベージ
     ko: 전투 샐비지
     ru: Боевые трофеи
@@ -25663,7 +26063,6 @@
     en: Warbarge
     es: TRANSPORTADOR DE GUERRA
     fr: BARGE DE GUERRE
-    it: VASCELLO DA GUERRA
     ja: 将官艇
     ko: 전투선
     ru: ДЕСАНТНАЯ БАРЖА
@@ -25680,7 +26079,6 @@
     en: Infantry Color Skin
     es: Color de infantería
     fr: Couleur de peau de l'infanterie
-    it: Colore skin fanteria
     ja: 歩兵カラースキン
     ko: 보병 컬러 스킨
     ru: Цветной скин пехоты

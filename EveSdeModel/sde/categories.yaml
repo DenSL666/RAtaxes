@@ -517,6 +517,17 @@
     ru: Ресурсы колоний
     zh: 殖民地资源
   published: true
+2152:
+  name:
+    de: QA- und Dev-Gruppen
+    en: QA and Dev Groups
+    es: Control de calidad y grupos de desarrolladores
+    fr: Groupes QA et Dev
+    ja: QAと開発者グループ
+    ko: QA and Dev Groups
+    ru: Группы разработки и КК
+    zh: 质量保证和开发团队
+  published: false
 350001:
   name:
     de: Infanterie

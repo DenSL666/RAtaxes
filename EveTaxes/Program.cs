@@ -41,11 +41,11 @@ namespace EveTaxes
         /// <summary>
         /// Параметр запуска программы для составления текстового файла для гугл таблицы.
         /// </summary>
-        const string GoogleSdeArg = "googleSde";
+        const string GoogleSdeArg = "googlesde";
         /// <summary>
         /// Массив параметров запуска программы, допустимых для автоматического запуска (без среды разработки).
         /// </summary>
-        static readonly string[] ARGS = [UpdateArg, UpdateMineralArg, ReportArg];
+        static readonly string[] ARGS = [UpdateArg, UpdateMineralArg, ReportArg, GoogleSdeArg];
 
         /// <summary>
         /// Основной метод запуска программы.
