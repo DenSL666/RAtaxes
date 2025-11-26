@@ -111683,39 +111683,27 @@
 89612:
   materials:
   - materialTypeID: 34
-    quantity: 100
+    quantity: 500
   - materialTypeID: 37
-    quantity: 100
+    quantity: 500
   - materialTypeID: 16272
-    quantity: 300
-  - materialTypeID: 16274
-    quantity: 100
-  - materialTypeID: 17887
-    quantity: 100
+    quantity: 500
 89613:
   materials:
   - materialTypeID: 34
-    quantity: 100
+    quantity: 500
   - materialTypeID: 37
-    quantity: 100
+    quantity: 500
   - materialTypeID: 16272
-    quantity: 300
-  - materialTypeID: 16274
-    quantity: 100
-  - materialTypeID: 17887
-    quantity: 100
+    quantity: 500
 89614:
   materials:
   - materialTypeID: 34
-    quantity: 100
+    quantity: 500
   - materialTypeID: 37
-    quantity: 100
+    quantity: 500
   - materialTypeID: 16272
-    quantity: 300
-  - materialTypeID: 16274
-    quantity: 100
-  - materialTypeID: 17887
-    quantity: 100
+    quantity: 500
 89615:
   materials:
   - materialTypeID: 34
@@ -111852,6 +111840,32 @@
     quantity: 11
   - materialTypeID: 85316
     quantity: 1
+90041:
+  randomizedMaterials:
+  - materialTypeID: 34
+    quantityMax: 496800
+    quantityMin: 368000
+  - materialTypeID: 35
+    quantityMax: 111830
+    quantityMin: 89464
+  - materialTypeID: 36
+    quantityMax: 45540
+    quantityMin: 35420
+  - materialTypeID: 37
+    quantityMax: 31280
+    quantityMin: 23920
+  - materialTypeID: 38
+    quantityMax: 4025
+    quantityMin: 2875
+  - materialTypeID: 39
+    quantityMax: 1528
+    quantityMin: 1299
+  - materialTypeID: 40
+    quantityMax: 830
+    quantityMin: 634
+  - materialTypeID: 11399
+    quantityMax: 624
+    quantityMin: 312
 90045:
   materials:
   - materialTypeID: 38
@@ -111900,6 +111914,72 @@
     quantity: 11
   - materialTypeID: 85316
     quantity: 1
+90283:
+  randomizedMaterials:
+  - materialTypeID: 34
+    quantityMax: 496800
+    quantityMin: 368000
+90284:
+  randomizedMaterials:
+  - materialTypeID: 35
+    quantityMax: 106238
+    quantityMin: 84990
+90286:
+  randomizedMaterials:
+  - materialTypeID: 36
+    quantityMax: 43263
+    quantityMin: 33649
+90289:
+  randomizedMaterials:
+  - materialTypeID: 37
+    quantityMax: 12512
+    quantityMin: 9568
+90292:
+  randomizedMaterials:
+  - materialTypeID: 38
+    quantityMax: 3823
+    quantityMin: 2731
+90294:
+  randomizedMaterials:
+  - materialTypeID: 39
+    quantityMax: 1451
+    quantityMin: 1233
+90296:
+  randomizedMaterials:
+  - materialTypeID: 40
+    quantityMax: 788
+    quantityMin: 602
+90298:
+  randomizedMaterials:
+  - materialTypeID: 11399
+    quantityMax: 187
+    quantityMin: 93
+90307:
+  randomizedMaterials:
+  - materialTypeID: 34
+    quantityMax: 496800
+    quantityMin: 368000
+  - materialTypeID: 35
+    quantityMax: 111830
+    quantityMin: 89464
+  - materialTypeID: 36
+    quantityMax: 45540
+    quantityMin: 35420
+  - materialTypeID: 37
+    quantityMax: 31280
+    quantityMin: 23920
+  - materialTypeID: 38
+    quantityMax: 4025
+    quantityMin: 2875
+  - materialTypeID: 39
+    quantityMax: 1528
+    quantityMin: 1299
+  - materialTypeID: 40
+    quantityMax: 830
+    quantityMin: 634
+  - materialTypeID: 11399
+    quantityMax: 624
+    quantityMin: 312
 90460:
   materials:
   - materialTypeID: 34
@@ -112222,6 +112302,10 @@
   materials:
   - materialTypeID: 34
     quantity: 1000
+  randomizedMaterials:
+  - materialTypeID: 11399
+    quantityMax: 624
+    quantityMin: 312
 90733:
   materials:
   - materialTypeID: 34

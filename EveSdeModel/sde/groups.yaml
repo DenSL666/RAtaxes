@@ -25659,13 +25659,13 @@
   categoryID: 2
   fittableNonSingleton: false
   name:
-    de: Phasenasteroiden
-    en: Phased Asteroids
-    es: Asteroides fásicos
-    fr: Astéroïdes phasiques
+    de: Phasenasteroid
+    en: Phased Asteroid
+    es: Asteroide fásico
+    fr: Astéroïde phasique
     ja: 位相偏移アステロイド
     ko: 위상 소행성
-    ru: Фазовые астероиды
+    ru: Фазовый астероид
     zh: 相位小行星
   published: false
   useBasePrice: false
@@ -25811,6 +25811,15 @@
     ko: 비정상적인 탐사 커맨드쉽
     ru: Необычный экспедиционный флагман
     zh: 叛道者远征指挥舰
+  published: false
+  useBasePrice: false
+4975:
+  anchorable: false
+  anchored: false
+  categoryID: 11
+  fittableNonSingleton: false
+  name:
+    en: Irregular Capital Industrial Ship
   published: false
   useBasePrice: false
 350858:

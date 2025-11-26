@@ -214320,3 +214320,28 @@
       time: 18900
   blueprintTypeID: 90476
   maxProductionLimit: 5
+90734:
+  activities:
+    copying:
+      time: 720
+    manufacturing:
+      materials:
+      - quantity: 500
+        typeID: 34
+      - quantity: 500
+        typeID: 37
+      - quantity: 500
+        typeID: 16272
+      products:
+      - quantity: 500
+        typeID: 90733
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 5000
+    research_material:
+      time: 315
+    research_time:
+      time: 315
+  blueprintTypeID: 90734
+  maxProductionLimit: 200
