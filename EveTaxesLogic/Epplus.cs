@@ -51,89 +51,160 @@ namespace EveTaxesLogic
             ExcelPackage.License.SetNonCommercialPersonal("EveApp");
             using (var package = new ExcelPackage())
             {
-                ExcelWorksheet sheet = package.Workbook.Worksheets.Add("MySheet");
+                ExcelWorksheet sheet = package.Workbook.Worksheets.Add("Полная таблица");
+                FillSheet_Full(sheet, corporationTaxes, allianceIds);
 
-                var startCol = 1;
-                var rowNum = 1;
-                var headers = new string[] { "Альянс", "Корпорация", "Имя пользователя", "Имя персонажа", "Общий доход", "Общий налог", "Общий доход с лун", "Общий налог с лун", "Общий доход с минералов", "Общий налог с минералов", "Крабский доход", "Крабский налог" };
-                int numberColumn1 = headers.Length - 1, numberColumn2 = headers.Length;
-                sheet.FillRow(rowNum, startCol, headers);
-                rowNum++;
+                ExcelWorksheet sheet2 = package.Workbook.Worksheets.Add("Краткая таблица");
+                FillSheet_Short(sheet2, corporationTaxes, allianceIds);
 
-                var notNull = corporationTaxes.Where(x => x.AllianceId.HasValue && allianceIds.Contains(x.AllianceId.Value)).ToList();
-                var dictAlliances = notNull.GroupBy(x => x.AllianceId.Value).ToDictionary(x => x.Key, x => x.ToList());
-
-                foreach (var alliance in dictAlliances.OrderBy(x => x.Key))
-                {
-                    var allianceInfo = alliance.Value.First()?.Alliance;
-                    string allianceName = "no alliance";
-                    if (allianceInfo != null)
-                    {
-                        allianceName = allianceInfo.Name;
-                    }
-
-                    var summAllianceGain = alliance.Value.Sum(x => x.TotalIskGain);
-                    var summAllianceTaxes = alliance.Value.Sum(x => x.TotalIskTax);
-
-                    var summAllianceGain_MoonMining = alliance.Value.Sum(x => x.TotalIskGain_MoonMining);
-                    var summAllianceTaxes_MoonMining = alliance.Value.Sum(x => x.TotalIskTax_MoonMining);
-
-                    var TotalIskGain_MineralMining = alliance.Value.Sum(x => x.TotalIskGain_MineralMining);
-                    var TotalIskTax_MineralMining = alliance.Value.Sum(x => x.TotalIskTax_MineralMining);
-
-                    var summAllianceGain_Ratting = alliance.Value.Sum(x => x.TotalIskGain_Ratting);
-                    var summAllianceTaxes_Ratting = alliance.Value.Sum(x => x.TotalIskTax_Ratting);
-
-                    var allianceHeader = new object[] { allianceName, "", "", "", summAllianceGain, summAllianceTaxes, summAllianceGain_MoonMining, summAllianceTaxes_MoonMining, TotalIskGain_MineralMining, TotalIskTax_MineralMining, summAllianceGain_Ratting, summAllianceTaxes_Ratting };
-                    sheet.FillRow(rowNum, startCol, allianceHeader);
-                    rowNum++;
-
-                    foreach (var corporation in alliance.Value.OrderBy(x => x.CorporationId))
-                    {
-                        var corporationHeader = new object[] { "", corporation.CorporationName, "", "", corporation.TotalIskGain, corporation.TotalIskTax, corporation.TotalIskGain_MoonMining, corporation.TotalIskTax_MoonMining, corporation.TotalIskGain_MineralMining, corporation.TotalIskTax_MineralMining, corporation.TotalIskGain_Ratting, corporation.TotalIskTax_Ratting };
-                        sheet.FillRow(rowNum, startCol, corporationHeader);
-                        rowNum++;
-
-                        foreach (var user in corporation.UserTaxes.OrderBy(x => x.MainCharacterId))
-                        {
-                            //  если персонажей несколько
-                            if (user.CharacterTaxes.Count > 1)
-                            {
-                                var userHeader = new object[] { "", "", user.Name, "", user.TotalIskGain, user.TotalIskTax, user.TotalIskGain_MoonMining, user.TotalIskTax_MoonMining, user.TotalIskGain_MineralMining, user.TotalIskTax_MineralMining, user.TotalIskGain_Ratting, user.TotalIskTax_Ratting };
-                                sheet.FillRow(rowNum, startCol, userHeader);
-                                rowNum++;
-
-                                foreach (var characterTax in user.CharacterTaxes.OrderBy(x => x.CharacterId))
-                                {
-                                    var characterTaxRow = new object[] { "", "", "", characterTax.CharacterName, characterTax.TotalIskGain, characterTax.TotalIskTax, characterTax.TotalIskGain_MoonMining, characterTax.TotalIskTax_MoonMining, characterTax.TotalIskGain_MineralMining, characterTax.TotalIskTax_MineralMining, characterTax.TotalIskGain_Ratting, characterTax.TotalIskTax_Ratting };
-                                    sheet.FillRow(rowNum, startCol, characterTaxRow);
-                                    rowNum++;
-                                }
-                            }
-                            else
-                            {
-                                var _char = user.CharacterTaxes.FirstOrDefault();
-                                if (_char != null)
-                                {
-                                    var userHeader = new object[] { "", "", user.Name, _char.CharacterName, user.TotalIskGain, user.TotalIskTax, user.TotalIskGain_MoonMining, user.TotalIskTax_MoonMining, user.TotalIskGain_MineralMining, user.TotalIskTax_MineralMining, user.TotalIskGain_Ratting, user.TotalIskTax_Ratting };
-                                    sheet.FillRow(rowNum, startCol, userHeader);
-                                    rowNum++;
-                                }
-                            }
-                        }
-                        rowNum++;
-                        rowNum++;
-                    }
-                    rowNum++;
-                    rowNum++;
-                }
-
-                sheet.Cells.Style.Font.Name = "Calibri";
-                sheet.Cells.AutoFitColumns();
                 package.SaveAs(path);
             }
         }
 
+        private static void FillSheet_Full(ExcelWorksheet sheet, IEnumerable<CorporationTax> corporationTaxes, int[] allianceIds)
+        {
+            var startCol = 1;
+            var rowNum = 1;
+            var headers = new string[] { "Альянс", "Корпорация", "Имя пользователя", "Имя персонажа", "Общий доход", "Общий налог", "Общий доход с лун", "Общий налог с лун", "Общий доход с минералов", "Общий налог с минералов", "Крабский доход", "Крабский налог" };
+            int numberColumn1 = headers.Length - 1, numberColumn2 = headers.Length;
+            sheet.FillRow(rowNum, startCol, headers);
+            rowNum++;
+
+            var notNull = corporationTaxes.Where(x => x.AllianceId.HasValue && allianceIds.Contains(x.AllianceId.Value)).ToList();
+            var dictAlliances = notNull.GroupBy(x => x.AllianceId.Value).ToDictionary(x => x.Key, x => x.ToList());
+
+            foreach (var alliance in dictAlliances.OrderBy(x => x.Key))
+            {
+                var allianceInfo = alliance.Value.First()?.Alliance;
+                string allianceName = "no alliance";
+                if (allianceInfo != null)
+                {
+                    allianceName = allianceInfo.Name;
+                }
+
+                var summAllianceGain = alliance.Value.Sum(x => x.TotalIskGain);
+                var summAllianceTaxes = alliance.Value.Sum(x => x.TotalIskTax);
+
+                var summAllianceGain_MoonMining = alliance.Value.Sum(x => x.TotalIskGain_MoonMining);
+                var summAllianceTaxes_MoonMining = alliance.Value.Sum(x => x.TotalIskTax_MoonMining);
+
+                var TotalIskGain_MineralMining = alliance.Value.Sum(x => x.TotalIskGain_MineralMining);
+                var TotalIskTax_MineralMining = alliance.Value.Sum(x => x.TotalIskTax_MineralMining);
+
+                var summAllianceGain_Ratting = alliance.Value.Sum(x => x.TotalIskGain_Ratting);
+                var summAllianceTaxes_Ratting = alliance.Value.Sum(x => x.TotalIskTax_Ratting);
+
+                var allianceHeader = new object[] { allianceName, "", "", "", summAllianceGain, summAllianceTaxes, summAllianceGain_MoonMining, summAllianceTaxes_MoonMining, TotalIskGain_MineralMining, TotalIskTax_MineralMining, summAllianceGain_Ratting, summAllianceTaxes_Ratting };
+                sheet.FillRow(rowNum, startCol, allianceHeader);
+                rowNum++;
+
+                foreach (var corporation in alliance.Value.OrderBy(x => x.CorporationId))
+                {
+                    var corporationHeader = new object[] { "", corporation.CorporationName, "", "", corporation.TotalIskGain, corporation.TotalIskTax, corporation.TotalIskGain_MoonMining, corporation.TotalIskTax_MoonMining, corporation.TotalIskGain_MineralMining, corporation.TotalIskTax_MineralMining, corporation.TotalIskGain_Ratting, corporation.TotalIskTax_Ratting };
+                    sheet.FillRow(rowNum, startCol, corporationHeader);
+                    rowNum++;
+
+                    foreach (var user in corporation.UserTaxes.OrderBy(x => x.MainCharacterId))
+                    {
+                        //  если персонажей несколько
+                        if (user.CharacterTaxes.Count > 1)
+                        {
+                            var userHeader = new object[] { "", "", user.Name, "", user.TotalIskGain, user.TotalIskTax, user.TotalIskGain_MoonMining, user.TotalIskTax_MoonMining, user.TotalIskGain_MineralMining, user.TotalIskTax_MineralMining, user.TotalIskGain_Ratting, user.TotalIskTax_Ratting };
+                            sheet.FillRow(rowNum, startCol, userHeader);
+                            rowNum++;
+
+                            foreach (var characterTax in user.CharacterTaxes.OrderBy(x => x.CharacterId))
+                            {
+                                var characterTaxRow = new object[] { "", "", "", characterTax.CharacterName, characterTax.TotalIskGain, characterTax.TotalIskTax, characterTax.TotalIskGain_MoonMining, characterTax.TotalIskTax_MoonMining, characterTax.TotalIskGain_MineralMining, characterTax.TotalIskTax_MineralMining, characterTax.TotalIskGain_Ratting, characterTax.TotalIskTax_Ratting };
+                                sheet.FillRow(rowNum, startCol, characterTaxRow);
+                                rowNum++;
+                            }
+                        }
+                        else
+                        {
+                            var _char = user.CharacterTaxes.FirstOrDefault();
+                            if (_char != null)
+                            {
+                                var userHeader = new object[] { "", "", user.Name, _char.CharacterName, user.TotalIskGain, user.TotalIskTax, user.TotalIskGain_MoonMining, user.TotalIskTax_MoonMining, user.TotalIskGain_MineralMining, user.TotalIskTax_MineralMining, user.TotalIskGain_Ratting, user.TotalIskTax_Ratting };
+                                sheet.FillRow(rowNum, startCol, userHeader);
+                                rowNum++;
+                            }
+                        }
+                    }
+                    rowNum++;
+                    rowNum++;
+                }
+                rowNum++;
+                rowNum++;
+            }
+
+            sheet.Cells.Style.Font.Name = "Calibri";
+            sheet.Cells.AutoFitColumns();
+        }
+
+        private static void FillSheet_Short(ExcelWorksheet sheet, IEnumerable<CorporationTax> corporationTaxes, int[] allianceIds)
+        {
+            var startCol = 1;
+            var rowNum = 1;
+            var headers = new string[] { "Альянс", "Корпорация", "Общий налог" };
+            int numberColumn1 = headers.Length - 1, numberColumn2 = headers.Length;
+            sheet.FillRow(rowNum, startCol, headers);
+            rowNum++;
+
+            var notNull = corporationTaxes.Where(x => x.AllianceId.HasValue && allianceIds.Contains(x.AllianceId.Value)).ToList();
+            var dictAlliances = notNull.GroupBy(x => x.AllianceId.Value).ToDictionary(x => x.Key, x => x.ToList());
+
+            foreach (var alliance in dictAlliances.OrderBy(x => x.Key))
+            {
+                var allianceInfo = alliance.Value.First()?.Alliance;
+                string allianceName = "no alliance";
+                if (allianceInfo != null)
+                {
+                    allianceName = allianceInfo.Name;
+                }
+
+                foreach (var corporation in alliance.Value.OrderBy(x => x.CorporationId))
+                {
+                    var corporationHeader = new object[] { allianceName, corporation.CorporationName, corporation.TotalIskTax };
+                    sheet.FillRow(rowNum, startCol, corporationHeader);
+                    rowNum++;
+                }
+            }
+
+            rowNum++;
+
+            headers = new string[] { "Альянс", "Корпорация", "Имя пользователя", "Нужно заплатить в корпорацию", };
+            sheet.FillRow(rowNum, startCol, headers);
+            rowNum++;
+
+            foreach (var alliance in dictAlliances.OrderBy(x => x.Key))
+            {
+                var allianceInfo = alliance.Value.First()?.Alliance;
+                string allianceName = "no alliance";
+                if (allianceInfo != null)
+                {
+                    allianceName = allianceInfo.Name;
+                }
+
+                foreach (var corporation in alliance.Value.OrderBy(x => x.CorporationId))
+                {
+                    foreach (var user in corporation.UserTaxes.OrderBy(x => x.MainCharacterId))
+                    {
+                        var needPay = user.TotalIskTax_MoonMining + user.TotalIskTax_MineralMining;
+                        if (needPay > 0)
+                        {
+                            var userHeader = new object[] { allianceName, corporation.CorporationName, user.Name, needPay };
+                            sheet.FillRow(rowNum, startCol, userHeader);
+                            rowNum++;
+                        }
+                    }
+                }
+            }
+
+            sheet.Cells.Style.Font.Name = "Calibri";
+            sheet.Cells.AutoFitColumns();
+        }
+        
         private static void FillRow(this ExcelWorksheet sheet, int rowNum, int colNum, IEnumerable<object> values)
         {
             var col = colNum;
