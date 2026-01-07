@@ -8,6 +8,7 @@ using EveWebClient.Esi;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NLog;
+using StaticDataStorage.Workers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,10 +17,10 @@ using System.Threading.Tasks;
 
 namespace EveTaxesLogic
 {
-    public class CreateReportLogic(IConfig config, ILogger<CreateReportLogic> logger, SdeMain sdeMain)
+    public class CreateReportLogic(IConfig config, ILogger<CreateReportLogic> logger, StaticDataStorageReader staticDataStorageReader)
     {
         protected IConfig Config { get; } = config;
-        protected SdeMain SdeMain { get; } = sdeMain;
+        protected StaticDataStorageReader SDStorageReader { get; } = staticDataStorageReader;
         protected ILogger<CreateReportLogic> Logger { get; } = logger;
 
         public void CreateReport(string[] args)
@@ -61,7 +62,7 @@ namespace EveTaxesLogic
             }
 
             //  коллекция id руд, которые являются минеральными и льдом, чтобы отфильтровать только их из майнинг леджера сеата
-            var oreFilter = SdeMain.Asteroid.Where(x => x.IsMineral || x.IsIce).Select(x => x.TypeId).ToArray();
+            var oreFilter = SDStorageReader.Asteroid.Where(x => x.IsMineral || x.IsIce).Select(x => x.Id).ToArray();
 
             //  добытая лунная руда. фильтр по альянсам берём из конфига
             var ledger = GetLedger(startDate.Value, endDate.Value /*, alliIds: Config.TaxParams.AllianceIdsToCalcTaxes*/);
@@ -70,7 +71,7 @@ namespace EveTaxesLogic
             var charMains = GetCharacterMains(alliIds: Config.TaxParams.AllianceIdsToCalcTaxes);
 
             //  цены на продукты переработки руды
-            var prices = GetPrices(SdeMain.AsteroidRefineItems.Select(x => x.TypeId).ToList()).OrderBy(x => x.DateUpdate).ThenBy(x => x.TypeId).ToList();
+            var prices = GetPrices(SDStorageReader.AsteroidRefineItems.Select(x => x.Id).ToList()).OrderBy(x => x.DateUpdate).ThenBy(x => x.TypeId).ToList();
 
             //  налоговые транзакции корпораций. фильтр по альянсам берём из конфига
             var wallets = GetWalletTransactions(startDate.Value, endDate.Value, alliIds: Config.TaxParams.AllianceIdsToCalcTaxes);
@@ -85,7 +86,7 @@ namespace EveTaxesLogic
                 oreTypeIds: oreFilter);
 
             //  запускаем расчет налогов по корпорациям
-            var calculated = Taxes.CalculateCorporations(SdeMain.Asteroid, ledger, charMains, prices, wallets, mineralMining, Config);
+            var calculated = Taxes.CalculateCorporations(SDStorageReader.Asteroid, ledger, charMains, prices, wallets, mineralMining, Config);
 
             //  фильтруем те корпорации, у которых налог составляем менее 30 миллионов
             //  величину 30 миллионов лучше вынести в конфиг
@@ -293,65 +294,65 @@ namespace EveTaxesLogic
         /// <summary>
         /// Временный код по сохранению sde в БД
         /// </summary>
-        [Obsolete]
-        private void SaveUniverseSde()
-        {
-            return;
-            var regions = SdeMain.InvItems.Where(x => x.IsRegion).ToList();
-            var constellations = SdeMain.InvItems.Where(x => x.IsConstellation).ToList();
-            var solarSystems = SdeMain.InvItems.Where(x => x.IsSolarSystem).ToList();
+        //[Obsolete]
+        //private void SaveUniverseSde()
+        //{
+        //    return;
+        //    var regions = SdeMain.InvItems.Where(x => x.IsRegion).ToList();
+        //    var constellations = SdeMain.InvItems.Where(x => x.IsConstellation).ToList();
+        //    var solarSystems = SdeMain.InvItems.Where(x => x.IsSolarSystem).ToList();
 
-            using (var context = new StorageContext())
-            {
-                foreach (var region in regions)
-                {
-                    var id = int.Parse(region.Id);
-                    var found = context.Regions.FirstOrDefault(x => x.Id == id);
-                    if (found == null)
-                    {
-                        context.Regions.Add(new Region
-                        {
-                            Id = id,
-                            Name = region.Name,
-                        });
-                        context.SaveChanges();
-                    }
-                }
+        //    using (var context = new StorageContext())
+        //    {
+        //        foreach (var region in regions)
+        //        {
+        //            var id = int.Parse(region.Id);
+        //            var found = context.Regions.FirstOrDefault(x => x.Id == id);
+        //            if (found == null)
+        //            {
+        //                context.Regions.Add(new Region
+        //                {
+        //                    Id = id,
+        //                    Name = region.Name,
+        //                });
+        //                context.SaveChanges();
+        //            }
+        //        }
 
-                foreach (var constellation in constellations)
-                {
-                    var id = int.Parse(constellation.Id);
-                    var locId = int.Parse(constellation.LocationID);
-                    var found = context.Constellations.FirstOrDefault(x => x.Id == id);
-                    if (found == null)
-                    {
-                        context.Constellations.Add(new Constellation
-                        {
-                            Id = id,
-                            Name = constellation.Name,
-                            RegionId = locId,
-                        });
-                        context.SaveChanges();
-                    }
-                }
+        //        foreach (var constellation in constellations)
+        //        {
+        //            var id = int.Parse(constellation.Id);
+        //            var locId = int.Parse(constellation.LocationID);
+        //            var found = context.Constellations.FirstOrDefault(x => x.Id == id);
+        //            if (found == null)
+        //            {
+        //                context.Constellations.Add(new Constellation
+        //                {
+        //                    Id = id,
+        //                    Name = constellation.Name,
+        //                    RegionId = locId,
+        //                });
+        //                context.SaveChanges();
+        //            }
+        //        }
 
-                foreach (var solarSystem in solarSystems)
-                {
-                    var id = int.Parse(solarSystem.Id);
-                    var locId = int.Parse(solarSystem.LocationID);
-                    var found = context.SolarSystems.FirstOrDefault(x => x.Id == id);
-                    if (found == null)
-                    {
-                        context.SolarSystems.Add(new SolarSystem
-                        {
-                            Id = id,
-                            Name = solarSystem.Name,
-                            ConstellationId = locId,
-                        });
-                        context.SaveChanges();
-                    }
-                }
-            }
-        }
+        //        foreach (var solarSystem in solarSystems)
+        //        {
+        //            var id = int.Parse(solarSystem.Id);
+        //            var locId = int.Parse(solarSystem.LocationID);
+        //            var found = context.SolarSystems.FirstOrDefault(x => x.Id == id);
+        //            if (found == null)
+        //            {
+        //                context.SolarSystems.Add(new SolarSystem
+        //                {
+        //                    Id = id,
+        //                    Name = solarSystem.Name,
+        //                    ConstellationId = locId,
+        //                });
+        //                context.SaveChanges();
+        //            }
+        //        }
+        //    }
+        //}
     }
 }

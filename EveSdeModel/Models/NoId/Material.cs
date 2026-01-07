@@ -11,8 +11,37 @@ using YamlDotNet.Serialization;
 
 namespace EveSdeModel.Models
 {
-    public class Material : IYamlEntity
+    public class BaseMaterial
     {
+        [YamlIgnore]
+        private int? _id;
+
+        /// <summary>
+        /// Числовый вид Id сущности.
+        /// </summary>
+        [YamlIgnore]
+        public int IntId
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_typeID))
+                {
+                    return -1;
+                }
+                else
+                {
+                    if (!_id.HasValue && int.TryParse(_typeID, out int _val))
+                    {
+                        _id = _val;
+                    }
+                    if (_id.HasValue)
+                        return _id.Value;
+                    else
+                        return -1;
+                }
+            }
+        }
+
         private string _typeID;
 
         [JsonPropertyName("materialTypeID")]
@@ -33,11 +62,16 @@ namespace EveSdeModel.Models
         [JsonPropertyName("quantity")]
         public string Quantity { get; set; }
 
-        public Material()
+        public BaseMaterial()
         {
             _typeID = string.Empty;
             Quantity = string.Empty;
         }
+    }
+
+    public class Material : BaseMaterial, IYamlEntity
+    {
+        public Material() : base() { }
 
         public void ParseWithId(KeyValuePair<YamlNode, YamlNode> yamlNode)
         {

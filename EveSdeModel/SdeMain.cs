@@ -33,6 +33,22 @@ namespace EveSdeModel
         /// Путь к файлу SDE чертежей.
         /// </summary>
         string BlueprintsPath { get; }
+        /// <summary>
+        /// Путь к файлу SDE уникальных имён.
+        /// </summary>
+        string InvUniqueNamesPath { get; }
+        /// <summary>
+        /// Путь к файлу SDE уникальных сущностей.
+        /// </summary>
+        string InvItemsPath { get; }
+        /// <summary>
+        /// Путь к файлу SDE регионов.
+        /// </summary>
+        string RegionsPath { get; }
+        /// <summary>
+        /// Путь к файлу SDE солнечных систем.
+        /// </summary>
+        string SolarSystemsPath { get; }
 
         /// <summary>
         /// Список категорий SDE.
@@ -62,6 +78,14 @@ namespace EveSdeModel
         /// Список уникальных имён SDE.
         /// </summary>
         public ReadOnlyCollection<InvUniqueName> InvUniqueNames { get; private set; }
+        /// <summary>
+        /// Список сущностей SDE, описывающих регионы.
+        /// </summary>
+        public ReadOnlyCollection<Region> Regions { get; private set; }
+        /// <summary>
+        /// Список сущностей SDE, описывающих системы.
+        /// </summary>
+        public ReadOnlyCollection<SolarSystem> SolarSystems { get; private set; }
 
         public SdeMain(IConfiguration configuration)
         {
@@ -71,6 +95,13 @@ namespace EveSdeModel
             TypeMaterialsPath = Path.Combine(AppContext.BaseDirectory, configuration.GetValue<string>("Runtime:PathSdeTypeMaterials"));
             BlueprintsPath = Path.Combine(AppContext.BaseDirectory, configuration.GetValue<string>("Runtime:PathSdeBlueprints"));
 
+            var downloadPath = configuration.GetValue<string>("Runtime:PathSdeDownload");
+
+            InvUniqueNamesPath = Path.Combine(AppContext.BaseDirectory, downloadPath, "invUniqueNames.yaml");
+            InvItemsPath = Path.Combine(AppContext.BaseDirectory, downloadPath, "invItems.yaml");
+            RegionsPath = Path.Combine(AppContext.BaseDirectory, downloadPath, "mapRegions.yaml");
+            SolarSystemsPath = Path.Combine(AppContext.BaseDirectory, downloadPath, "mapSolarSystems.yaml");
+
             Categories = new ReadOnlyCollection<Category>([]);
             Groups = new ReadOnlyCollection<Group>([]);
             Blueprints = new ReadOnlyCollection<Blueprint>([]);
@@ -78,19 +109,21 @@ namespace EveSdeModel
             TypeMaterials = new ReadOnlyCollection<TypeMaterial>([]);
             InvItems = new ReadOnlyCollection<InvItem>([]);
             InvUniqueNames = new ReadOnlyCollection<InvUniqueName>([]);
+            Regions = new ReadOnlyCollection<Region>([]);
+            SolarSystems = new ReadOnlyCollection<SolarSystem>([]);
 
             InitGroups();
             InitTypes();
             InitMaterials();
 
-            var file = new FileInfo(TypeIDPath);
-            var sizeBytes = file.Length;
-            var sizeMBytes = (double)sizeBytes / 1024 / 1024;
+            //var file = new FileInfo(TypeIDPath);
+            //var sizeBytes = file.Length;
+            //var sizeMBytes = (double)sizeBytes / 1024 / 1024;
 
-            /// Если файл с id и описанием предметов слишком большой (по умолчанию он около 150 МБ)
-            /// То его нужно прочитать и сохранить, чтобы убрать лишние данные
-            if (sizeMBytes > 20)
-                TryRewriteTypesSde();
+            ///// Если файл с id и описанием предметов слишком большой (по умолчанию он около 150 МБ)
+            ///// То его нужно прочитать и сохранить, чтобы убрать лишние данные
+            //if (sizeMBytes > 20)
+            //    TryRewriteTypesSde();
         }
 
 
@@ -129,10 +162,13 @@ namespace EveSdeModel
         {
             if (!Categories.Any() || !Groups.Any())
             {
-                Categories = new ReadOnlyCollection<Category>(EveYamlFactory.ParseFile<Category>(CategoriesPath));
-                Groups = new ReadOnlyCollection<Group>(EveYamlFactory.ParseFile<Group>(GroupsPath));
-                foreach (var group in Groups)
-                    group.FillCategories(Categories);
+                if (File.Exists(CategoriesPath) && File.Exists(GroupsPath))
+                {
+                    Categories = new ReadOnlyCollection<Category>(EveYamlFactory.ParseFile<Category>(CategoriesPath));
+                    Groups = new ReadOnlyCollection<Group>(EveYamlFactory.ParseFile<Group>(GroupsPath));
+                    foreach (var group in Groups)
+                        group.FillCategories(Categories);
+                }
             }
         }
 
@@ -147,9 +183,12 @@ namespace EveSdeModel
             }
             if (!EntityTypes.Any())
             {
-                EntityTypes = new ReadOnlyCollection<EntityType>(EveYamlFactory.ParseFile<EntityType>(TypeIDPath));
-                foreach (var type in EntityTypes)
-                    type.FillGroups(Groups);
+                if (File.Exists(TypeIDPath))
+                {
+                    EntityTypes = new ReadOnlyCollection<EntityType>(EveYamlFactory.ParseFile<EntityType>(TypeIDPath));
+                    foreach (var type in EntityTypes)
+                        type.FillGroups(Groups);
+                }
             }
         }
 
@@ -164,9 +203,12 @@ namespace EveSdeModel
             }
             if (!TypeMaterials.Any())
             {
-                TypeMaterials = new ReadOnlyCollection<TypeMaterial>(EveYamlFactory.ParseFile<TypeMaterial>(TypeMaterialsPath));
-                foreach (var material in TypeMaterials)
-                    material.FillMaterials(EntityTypes);
+                if (File.Exists(TypeMaterialsPath))
+                {
+                    TypeMaterials = new ReadOnlyCollection<TypeMaterial>(EveYamlFactory.ParseFile<TypeMaterial>(TypeMaterialsPath));
+                    foreach (var material in TypeMaterials)
+                        material.FillMaterials(EntityTypes);
+                }
             }
         }
 
@@ -181,23 +223,51 @@ namespace EveSdeModel
             }
             if (!Blueprints.Any())
             {
-                Blueprints = new ReadOnlyCollection<Blueprint>(EveYamlFactory.ParseFile<Blueprint>(BlueprintsPath));
-                foreach (var blueprint in Blueprints)
-                    blueprint.FillMaterials(EntityTypes);
+                if (File.Exists(BlueprintsPath))
+                {
+                    Blueprints = new ReadOnlyCollection<Blueprint>(EveYamlFactory.ParseFile<Blueprint>(BlueprintsPath));
+                    foreach (var blueprint in Blueprints)
+                        blueprint.FillMaterials(EntityTypes);
+                }
             }
         }
 
         /// <summary>
         /// Читает из SDE имена уникальных планетарных объектов и принадлежность одних планетарных объектов к другим. Заполняет имена объектов.
         /// </summary>
-        private void InitInvItems()
+        public void InitInvItems()
         {
             if (!InvItems.Any())
             {
-                InvUniqueNames = new ReadOnlyCollection<InvUniqueName>(EveYamlFactory.ParseFileSequence<InvUniqueName>(Path.Combine(AppContext.BaseDirectory, "sde", "invUniqueNames.yaml")));
-                InvItems = new ReadOnlyCollection<InvItem>(EveYamlFactory.ParseFileSequence<InvItem>(Path.Combine(AppContext.BaseDirectory, "sde", "invItems.yaml")));
-                foreach (var invItem in InvItems.Where(x => x.IsSolarSystem || x.IsConstellation || x.IsRegion))
-                    invItem.FillNames(InvUniqueNames);
+                if (File.Exists(InvUniqueNamesPath) && File.Exists(InvItemsPath))
+                {
+                    InvUniqueNames = new ReadOnlyCollection<InvUniqueName>(EveYamlFactory.ParseFileSequence<InvUniqueName>(InvUniqueNamesPath));
+                    InvItems = new ReadOnlyCollection<InvItem>(EveYamlFactory.ParseFileSequence<InvItem>(InvItemsPath));
+                    foreach (var invItem in InvItems.Where(x => x.IsSolarSystem || x.IsConstellation || x.IsRegion))
+                        invItem.FillNames(InvUniqueNames);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Читает из SDE данные уникальных планетарных объектов.
+        /// </summary>
+        public void InitRegionsAndSolarSystems()
+        {
+            if (!Regions.Any())
+            {
+                if (File.Exists(RegionsPath))
+                {
+                    Regions = new ReadOnlyCollection<Region>(EveYamlFactory.ParseFile<Region>(RegionsPath));
+                }
+            }
+
+            if (!SolarSystems.Any())
+            {
+                if (File.Exists(SolarSystemsPath))
+                {
+                    SolarSystems = new ReadOnlyCollection<SolarSystem>(EveYamlFactory.ParseFile<SolarSystem>(SolarSystemsPath));
+                }
             }
         }
 

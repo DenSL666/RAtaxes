@@ -13,6 +13,7 @@
     <ProjectReference Include="..\EveSdeModel\EveSdeModel.csproj" />
     <ProjectReference Include="..\EveTaxesLogic\EveTaxesLogic.csproj" />
     <ProjectReference Include="..\EveWebClient\EveWebClient.csproj" />
+    <ProjectReference Include="..\StaticDataStorage\StaticDataStorage.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -21,6 +21,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Logic", "Logic", "{07BBE2C3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EveCommon", "EveCommon\EveCommon.csproj", "{8B05216F-8208-4119-8410-785A947B6117}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StaticDataStorage", "StaticDataStorage\StaticDataStorage.csproj", "{DC2FCDE0-1B0D-4388-B096-CEEB3FBA8E5E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8B05216F-8208-4119-8410-785A947B6117} = {8B05216F-8208-4119-8410-785A947B6117}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +56,10 @@ Global
 		{8B05216F-8208-4119-8410-785A947B6117}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B05216F-8208-4119-8410-785A947B6117}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B05216F-8208-4119-8410-785A947B6117}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC2FCDE0-1B0D-4388-B096-CEEB3FBA8E5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC2FCDE0-1B0D-4388-B096-CEEB3FBA8E5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC2FCDE0-1B0D-4388-B096-CEEB3FBA8E5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC2FCDE0-1B0D-4388-B096-CEEB3FBA8E5E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,6 +71,7 @@ Global
 		{C49FAF8C-01CE-44CB-8941-610D7DD00213} = {36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}
 		{F7564845-A094-4723-9126-8FE99147E33E} = {07BBE2C3-4CDC-4387-8950-C35062ADB6D4}
 		{8B05216F-8208-4119-8410-785A947B6117} = {07BBE2C3-4CDC-4387-8950-C35062ADB6D4}
+		{DC2FCDE0-1B0D-4388-B096-CEEB3FBA8E5E} = {36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1A4401AE-67AD-4B32-A729-672A4AA1BCFF}

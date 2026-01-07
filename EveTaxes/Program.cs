@@ -1,4 +1,5 @@
 ﻿using EveCommon;
+using EveCommon.Interfaces;
 using EveCommon.Models;
 using EveDataStorage.Contexts;
 using EveDataStorage.Models;
@@ -12,7 +13,9 @@ using EveWebClient.External.Models.Seat;
 using EveWebClient.SSO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using NLog;
+using StaticDataStorage.Workers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -43,9 +46,13 @@ namespace EveTaxes
         /// </summary>
         const string GoogleSdeArg = "googlesde";
         /// <summary>
+        /// Параметр запуска программы для составления текстового файла для гугл таблицы.
+        /// </summary>
+        const string UpdateSdeArg = "updatesde";
+        /// <summary>
         /// Массив параметров запуска программы, допустимых для автоматического запуска (без среды разработки).
         /// </summary>
-        static readonly string[] ARGS = [UpdateArg, UpdateMineralArg, ReportArg, GoogleSdeArg];
+        static readonly string[] ARGS = [UpdateArg, UpdateMineralArg, ReportArg, GoogleSdeArg, UpdateSdeArg];
 
         /// <summary>
         /// Основной метод запуска программы.
@@ -70,25 +77,100 @@ namespace EveTaxes
                 ServiceCollection services = new();
                 //  На всякий случай коллекцию сервисов сохраняем в статическую переменную для доступа из любого модуля программы.
                 DIManager.Registry(services);
+                DeleteLogFiles();
 
-                //  Добавляем в сервисы класс с форматом создания отдельного экземпляра при каждом запросе.
-                services.AddScoped<OAuthHelper>();
-                services.AddScoped<EsiHelper>();
-                services.AddScoped<WebHelper>();
+                services.AddSingleton<IFileService, FileService>();
+                services.AddSingleton<IDownloadManager, DownloadManager>();
+
+                services.AddHttpClient("DefaultClient")
+                    .ConfigureHttpClient(client =>
+                    {
+                        client.Timeout = TimeSpan.FromSeconds(30);
+                        client.DefaultRequestHeaders.Add("Accept", "application/json");
+                    })
+                    .ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler
+                    {
+                        PooledConnectionLifetime = TimeSpan.FromMinutes(5),
+                        UseProxy = false,
+                        AutomaticDecompression = System.Net.DecompressionMethods.GZip
+                    });
+
+                services.AddHttpClient("DownloadClient")
+                    .ConfigureHttpClient(client =>
+                    {
+                        client.Timeout = TimeSpan.FromMinutes(30); // Длинный таймаут для больших файлов
+                        //client.DefaultRequestHeaders.Add("User-Agent", "YourApp-Downloader/1.0");
+                    })
+                    .ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler
+                    {
+                        PooledConnectionLifetime = TimeSpan.FromMinutes(30),
+                        UseProxy = true,
+                        Proxy = null, // Или настройте прокси если нужно
+                        AutomaticDecompression = System.Net.DecompressionMethods.GZip |
+                                               System.Net.DecompressionMethods.Deflate,
+                        MaxConnectionsPerServer = 10,
+                        // Увеличиваем буферы для скачивания файлов
+                        MaxResponseHeadersLength = 64, // KB
+                        // Настройки для Keep-Alive
+                        KeepAlivePingDelay = TimeSpan.FromSeconds(30),
+                        KeepAlivePingTimeout = TimeSpan.FromSeconds(5),
+                        KeepAlivePingPolicy = HttpKeepAlivePingPolicy.Always
+                    });
 
                 services.AddHttpClient<OAuthHelper>();
                 services.AddHttpClient<EsiHelper>();
                 services.AddHttpClient<WebHelper>();
 
-                services.AddSingleton<SdeMain>();
+                //  Добавляем в сервисы класс с форматом создания отдельного экземпляра при каждом запросе.
+                services.AddScoped<OAuthHelper>(sp =>
+                {
+                    var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+                    var httpClient = httpClientFactory.CreateClient("DefaultClient");
+                    var config = sp.GetRequiredService<IConfig>();
+                    var logger = sp.GetRequiredService<ILogger<OAuthHelper>>();
+                    return new OAuthHelper(httpClient, config, logger);
+                });
+                services.AddScoped<EsiHelper>(sp =>
+                {
+                    var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+                    var httpClient = httpClientFactory.CreateClient("DefaultClient");
+                    var config = sp.GetRequiredService<IConfig>();
+                    var logger = sp.GetRequiredService<ILogger<EsiHelper>>();
+                    return new EsiHelper(httpClient, config, logger);
+                });
+                services.AddScoped<WebHelper>(sp =>
+                {
+                    var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+                    var httpClient = httpClientFactory.CreateClient("DefaultClient");
+                    var config = sp.GetRequiredService<IConfig>();
+                    var logger = sp.GetRequiredService<ILogger<WebHelper>>();
+                    return new WebHelper(httpClient, config, logger);
+                });
+                services.AddScoped<SdeWebHelper>(sp =>
+                {
+                    var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+                    var httpClient = httpClientFactory.CreateClient("DownloadClient");
+                    var config = sp.GetRequiredService<IConfig>();
+                    var logger = sp.GetRequiredService<ILogger<SdeWebHelper>>();
+                    var downloadManager = sp.GetRequiredService<IDownloadManager>();
+                    return new SdeWebHelper(httpClient, config, logger, downloadManager);
+                });
+                
+                services.AddScoped<SdeMain>();
                 services.AddScoped<UpdateDataLogic>();
                 services.AddScoped<CreateReportLogic>();
+                services.AddScoped<UpdateSdeLogic>();
+                services.AddSingleton<StaticDataStorageReader>();
+
 
                 using ServiceProvider provider = services.BuildServiceProvider();
                 DIManager.ServiceProvider = provider;
 
-                //  Выполняем миграцию и создание бэкапа БД при каждом запуске
+                //  Выполняем миграцию БД при каждом запуске
                 StorageContext.Migrate();
+
+                var updateSdeWorker = DIManager.ServiceProvider.GetService<UpdateSdeLogic>();
+                await updateSdeWorker.UpdateSdeDataAsync();
 
                 switch (param1)
                 {
@@ -116,7 +198,8 @@ namespace EveTaxes
                     //  Аргумент создания текстового файла с существующими в игре чертежами и рецептами
                     case GoogleSdeArg:
                         {
-                            CreateBlueprints("items.txt", "bps.txt");
+                            var staticDataStorageReader = DIManager.ServiceProvider.GetService<StaticDataStorageReader>();
+                            staticDataStorageReader.CreateBlueprints("items.txt", "bps.txt");
                             break;
                         }
                 }
@@ -131,39 +214,24 @@ namespace EveTaxes
             }
         }
 
-        private static void CreateBlueprints(string savePathFileTypes, string savePathFileBlueprints)
+        private static void DeleteLogFiles()
         {
-            var sdeMain = DIManager.ServiceProvider.GetService<SdeMain>();
-            sdeMain.InitBlueprints();
-
-            if (!string.IsNullOrEmpty(savePathFileTypes))
+            var maxLogFiles = DIManager.Configuration.GetValue<int>("Runtime:MaxLogFiles");
+            var logPath = DIManager.Configuration.GetValue<string>("Runtime:PathLog");
+            if (Directory.Exists(logPath))
             {
-                var writeTypes = sdeMain.EntityTypes
-                    .Where(x => x.IsPublished && x.Name != null
-                                && !x.Name.en.Contains("SKIN")
-                                && !x.Name.en.EndsWith("Blueprint")
-                                && !x.Name.en.EndsWith("Emblem")
-                                && !x.Name.en.EndsWith("Limited")
-                                && !x.Name.en.EndsWith("Unlimited"))
-                    .Select(x => $"  {x.Id}: \"{x.Name.en.Replace('\"', '\'')}\",").ToList();
-                using (var wr = new StreamWriter(savePathFileTypes))
-                {
-                    foreach (var item in writeTypes)
-                    {
-                        wr.WriteLine(item);
-                    }
-                }
-            }
+                var files = Directory.GetFiles(logPath, "*.log");
 
-            if (!string.IsNullOrEmpty(savePathFileBlueprints))
-            {
-                //фильтр и вывод блюпринтов
-                var hasManu = sdeMain.Blueprints.Where(x => x.HasManufactory && !x.IsFuelBlock).ToList();
-                using (var wr = new StreamWriter(savePathFileBlueprints))
+                if (files.Any() && files.Length > maxLogFiles)
                 {
-                    foreach (var bp in hasManu.OrderBy(x => x.Product.Name.en.Replace("'", "").Replace("’", "")))
+                    var deleteFiles = files.Select(x => new FileInfo(x)).OrderByDescending(x => x.CreationTime).Skip(maxLogFiles).ToList();
+                    foreach (var file in deleteFiles)
                     {
-                        wr.WriteLine(bp.Write());
+                        try
+                        {
+                            file.Delete();
+                        }
+                        catch { }
                     }
                 }
             }

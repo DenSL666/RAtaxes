@@ -7,11 +7,41 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using YamlDotNet.RepresentationModel;
+using YamlDotNet.Serialization;
 
 namespace EveSdeModel.Models
 {
-    public class Product : IYamlEntity
+    public class BaseProduct
     {
+        [YamlIgnore]
+        private int? _id;
+
+        /// <summary>
+        /// Числовый вид Id сущности.
+        /// </summary>
+        [YamlIgnore]
+        public int IntId
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(TypeID))
+                {
+                    return -1;
+                }
+                else
+                {
+                    if (!_id.HasValue && int.TryParse(TypeID, out int _val))
+                    {
+                        _id = _val;
+                    }
+                    if (_id.HasValue)
+                        return _id.Value;
+                    else
+                        return -1;
+                }
+            }
+        }
+
         [JsonPropertyName("quantity")]
         public string Quantity { get; set; }
 
@@ -21,12 +51,17 @@ namespace EveSdeModel.Models
         [JsonPropertyName("typeID")]
         public string TypeID { get; set; }
 
-        public Product()
+        public BaseProduct()
         {
             Quantity = string.Empty;
             Probability = string.Empty;
             TypeID = string.Empty;
         }
+    }
+
+    public class Product : BaseProduct, IYamlEntity
+    {
+        public Product() : base() { }
 
         public void ParseWithId(KeyValuePair<YamlNode, YamlNode> yamlNode)
         {

@@ -1,7 +1,7 @@
 ﻿using EveCommon.Interfaces;
 using EveCommon.Models;
 using EveDataStorage.Models;
-using EveSdeModel.Models;
+using StaticDataStorage.Models;
 using EveTaxesLogic;
 using System;
 using System.Collections.Generic;
@@ -140,10 +140,10 @@ namespace EveTaxesLogic.Models
                 var typeIdMined = pair.Key;
                 var quantityMined = pair.Value;
 
-                var foundOre = oreList.FirstOrDefault(x => x.TypeId == typeIdMined);
+                var foundOre = oreList.FirstOrDefault(x => x.Id == typeIdMined);
                 if (foundOre != null)
                 {
-                    MinedDictionary_Names.Add(foundOre.Entity?.Name.English, quantityMined);
+                    MinedDictionary_Names.Add(foundOre.Entity?.NameEnglish, quantityMined);
                 }
             }
         }
@@ -172,7 +172,7 @@ namespace EveTaxesLogic.Models
                     excessDict[typeIdMined] = 0;
                 }
 
-                var foundOre = oreList.FirstOrDefault(x => x.TypeId == typeIdMined);
+                var foundOre = oreList.FirstOrDefault(x => x.Id == typeIdMined);
                 if (foundOre != null)
                 {
                     //  выполняем переработку руды с эффективностью, взятой из конфига
@@ -188,7 +188,7 @@ namespace EveTaxesLogic.Models
                         var material = item.Key;
                         var quantity = item.Value;
 
-                        var foundPrice = prices.SelectNearestDatePrice(material.TypeId, dateTime);
+                        var foundPrice = prices.SelectNearestDatePrice(material.Id, dateTime);
                         if (foundPrice != null)
                         {
                             var _value = (long)Math.Round(quantity * foundPrice.SelectPrice(config));

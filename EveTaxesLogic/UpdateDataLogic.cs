@@ -3,8 +3,6 @@ using EveCommon.Interfaces;
 using EveCommon.Models;
 using EveDataStorage.Contexts;
 using EveDataStorage.Models;
-using EveSdeModel;
-using EveSdeModel.Models;
 using EveWebClient.Esi;
 using EveWebClient.Esi.Models;
 using EveWebClient.External;
@@ -12,7 +10,9 @@ using EveWebClient.External.Models;
 using EveWebClient.External.Models.Seat;
 using EveWebClient.SSO;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using StaticDataStorage.Workers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,14 +24,13 @@ using System.Xml.Serialization;
 
 namespace EveTaxesLogic
 {
-    public class UpdateDataLogic(IConfiguration configuration, IConfig config, ILogger<UpdateDataLogic> logger, OAuthHelper authHelper, EsiHelper esiHelper, WebHelper webHelper, SdeMain sdeMain)
+    public class UpdateDataLogic(IConfiguration configuration, IConfig config, ILogger<UpdateDataLogic> logger, OAuthHelper authHelper, EsiHelper esiHelper, WebHelper webHelper)
     {
         protected IConfiguration Configuration { get; } = configuration;
         protected IConfig Config { get; } = config;
         protected OAuthHelper AuthHelper { get; } = authHelper;
         protected EsiHelper EsiHelper { get; } = esiHelper;
         protected WebHelper WebHelper { get; } = webHelper;
-        protected SdeMain SdeMain { get; } = sdeMain;
         protected ILogger<UpdateDataLogic> Logger { get; } = logger;
 
         public async Task Update(string[] args)
@@ -44,8 +43,13 @@ namespace EveTaxesLogic
                 var _date = Config.LastUpdateDateTime.AddHours(Config.HoursBeforeUpdate);
                 if (_date < DateTime.Now)
                 {
+                    //  Выполняем создание бэкапа БД перед изменением
+                    StorageContext.CreateBackup();
+
+                    var SDStorageReader = DIManager.ServiceProvider.GetService<StaticDataStorageReader>();
+
                     //  выбираем id всех сущностей, которые получаются в результате переработки руд
-                    var refineIdsStr = SdeMain.AsteroidRefineItems.Select(x => x.Id).ToList();
+                    var refineIdsStr = SDStorageReader.AsteroidRefineItems.Select(x => x.Id.ToString()).ToList();
 
                     //  обновляем токен доступа к esi
                     //  он актуален в течение 5 минут, так что в идеале проверять его корректность на каждом запросе, если они будут идти более 5 минут подряд

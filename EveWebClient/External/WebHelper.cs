@@ -1,5 +1,6 @@
 ﻿using EveCommon.Interfaces;
 using EveCommon.Models;
+using EveCommon.Workers;
 using EveWebClient.Esi.Models;
 using EveWebClient.External.Models;
 using EveWebClient.External.Models.Seat;
@@ -22,7 +23,7 @@ namespace EveWebClient.External
     /// <summary>
     /// Класс обращения к различным сервисам помимо EVE SSO и EVE Esi.
     /// </summary>
-    public class WebHelper
+    public class WebHelper : ApiWebHelper
     {
         /// <summary>
         /// Строка обращения к списку аккаунтов сеата.
@@ -33,15 +34,9 @@ namespace EveWebClient.External
         /// </summary>
         private const string SeatCorporationWalletJournalUrl = "/api/v2/corporation/wallet-journal";
 
-        private IConfig Config { get; }
-        private HttpClient HttpClient { get; }
-        protected ILogger<WebHelper> Logger { get; }
-
-        public WebHelper(HttpClient httpClient, IConfig config, ILogger<WebHelper> logger)
+        public WebHelper(HttpClient httpClient, IConfig config, ILogger<WebHelper> logger) : base(httpClient, config, logger)
         {
-            Config = config;
-            HttpClient = httpClient;
-            Logger = logger;
+
         }
 
         #region Получение всех цен
@@ -60,7 +55,7 @@ namespace EveWebClient.External
                 var esiData = MarketPrice.Read();
 
                 var idString = string.Join(",", ids);
-                var fuzzworkData = await GetFuzzworkPrices(new Uri(Config.FuzzworkPricesUrl + idString));
+                var fuzzworkData = await GetFuzzworkPrices(new Uri(_config.FuzzworkPricesUrl + idString));
 
                 foreach (var id in ids)
                 {
@@ -112,7 +107,7 @@ namespace EveWebClient.External
             };
             string json = "";
 
-            var response = await HttpClient.SendAsync(request).ConfigureAwait(false);
+            var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
             if (response.IsSuccessStatusCode)
             {
                 json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -294,7 +289,7 @@ namespace EveWebClient.External
             {
                 var request = CreateRequest(page, url, filter);
 
-                var response = await HttpClient.SendAsync(request).ConfigureAwait(false);
+                var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
                     json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -303,7 +298,7 @@ namespace EveWebClient.External
                 }
                 else
                 {
-                    Logger.LogError("Error during CreateSeatTask()\r\nStatus code:" + response.StatusCode.ToString() + " " + response.ReasonPhrase);
+                    _logger.LogError("Error during CreateSeatTask()\r\nStatus code:" + response.StatusCode.ToString() + " " + response.ReasonPhrase);
                 }
             }
             catch { }
@@ -321,7 +316,7 @@ namespace EveWebClient.External
                 queryParams.Add(Uri.EscapeDataString("$filter"), Uri.EscapeDataString(filter));
             }
 
-            var builder = new UriBuilder(Config.SeatParams.SeatUrl)
+            var builder = new UriBuilder(_config.SeatParams.SeatUrl)
             {
                 Path = url,
                 Query = queryParams.ToString(),
@@ -331,7 +326,7 @@ namespace EveWebClient.External
                 RequestUri = builder.Uri,
                 Method = HttpMethod.Get,
             };
-            request.Headers.Add("X-Token", Config.SeatParams.SeatToken);
+            request.Headers.Add("X-Token", _config.SeatParams.SeatToken);
             return request;
         }
 

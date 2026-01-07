@@ -2,8 +2,7 @@
 using EveCommon.Models;
 using EveDataStorage.Contexts;
 using EveDataStorage.Models;
-using EveSdeModel;
-using EveSdeModel.Models;
+using StaticDataStorage.Models;
 using EveTaxesLogic.Models;
 using EveWebClient.SSO;
 using System;

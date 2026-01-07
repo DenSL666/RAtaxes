@@ -1,5 +1,5 @@
 ﻿using EveCommon;
-using EveDataStorage.Models;
+using StaticDataStorage.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -9,84 +9,84 @@ using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
-namespace EveDataStorage.Contexts
+namespace StaticDataStorage.Contexts
 {
     public class StorageContext : DbContext
     {
         static StorageContext()
         {
-            PathDb = "data\\storage.db";
+            PathDb = "data\\static_data_storage.db";
             //PathDb = DIManager.Configuration.GetValue<string>("ConnectionStrings:eveStorageConnectionString");
             PathDb = Path.Combine(AppContext.BaseDirectory, PathDb);
         }
 
         public StorageContext()
         {
-
+            Database.EnsureCreated();
         }
 
         public static string PathDb { get; }
 
         /// <summary>
-        /// Коллекция записей о добытой лунной руде.
+        /// Данные об используемой версии SDE.
         /// </summary>
-        public DbSet<ObservedMining> ObservedMinings => Set<ObservedMining>();
+        public DbSet<SdeVersionData> SdeVersions => Set<SdeVersionData>();
 
         /// <summary>
-        /// Коллекция персонажей.
+        /// Коллекция игровых чертежей.
         /// </summary>
-        public DbSet<Character> Characters => Set<Character>();
+        public DbSet<Blueprint> Blueprints => Set<Blueprint>();
 
         /// <summary>
-        /// Коллекция корпораций.
+        /// Коллекция категорий сущностей.
         /// </summary>
-        public DbSet<Corporation> Corporations => Set<Corporation>();
+        public DbSet<Category> Categories => Set<Category>();
 
         /// <summary>
-        /// Коллекция альянсов.
+        /// Коллекция групп сущностей.
         /// </summary>
-        public DbSet<Alliance> Alliances => Set<Alliance>();
+        public DbSet<Group> Groups => Set<Group>();
 
         /// <summary>
-        /// Коллекция цен на предметы.
+        /// Коллекция игровых сущностей.
         /// </summary>
-        public DbSet<ItemPrice> Prices => Set<ItemPrice>();
+        public DbSet<EntityType> EntityTypes => Set<EntityType>();
 
         /// <summary>
-        /// Коллекция пользователей.<br/>
-        /// (один пользователь может иметь много персонажей)
+        /// Коллекция данных, на какие сущности могут быть переработаны игровые сущности.
         /// </summary>
-        public DbSet<CharacterMain> CharacterMains => Set<CharacterMain>();
+        public DbSet<TypeMaterial> TypeMaterials => Set<TypeMaterial>();
 
         /// <summary>
-        /// Коллеция транзакций между персонажем и счетом корпорации.
+        /// Коллекция уникальных объектов.
         /// </summary>
-        public DbSet<WalletTransaction> WalletTransactions => Set<WalletTransaction>();
+        public DbSet<UniqEntity> UniqEntities => Set<UniqEntity>();
 
         /// <summary>
-        /// Коллекция типов транзакций. Соотносится с типами транзакций SEAT.
+        /// Коллекция уникальных имён объектов.
         /// </summary>
-        public DbSet<WalletTransactionType> WalletTransactionTypes => Set<WalletTransactionType>();
+        public DbSet<UniqName> UniqNames => Set<UniqName>();
+
 
         /// <summary>
         /// Коллекция регионов, наполненная данными из SDE.
         /// </summary>
-        public DbSet<Region> Regions => Set<Region>();
+        //public DbSet<Region> Regions => Set<Region>();
 
         /// <summary>
         /// Коллекция созвездий, наполненная данными из SDE.
         /// </summary>
-        public DbSet<Constellation> Constellations => Set<Constellation>();
+        //public DbSet<Constellation> Constellations => Set<Constellation>();
 
         /// <summary>
         /// Коллекция систем, наполненная данными из SDE.
         /// </summary>
-        public DbSet<SolarSystem> SolarSystems => Set<SolarSystem>();
+        //public DbSet<SolarSystem> SolarSystems => Set<SolarSystem>();
 
         /// <summary>
         /// Коллекция записей о добытых минеральных рудах персонажем.
         /// </summary>
-        public DbSet<MineralMining> MineralMinings => Set<MineralMining>();
+        //public DbSet<MineralMining> MineralMinings => Set<MineralMining>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -99,10 +99,11 @@ namespace EveDataStorage.Contexts
         }
 
         /// <summary>
-        /// Выполняет миграцию текущей БД к обновлённому виду.
+        /// Выполняет резервное копирование файла текущей БД и затем миграцию текущей БД к обновлённому виду.
         /// </summary>
         public static void Migrate()
         {
+            CreateBackup();
             using (var context = new StorageContext())
             {
                 context.Database.Migrate();
@@ -122,7 +123,7 @@ namespace EveDataStorage.Contexts
 
                 if (!string.IsNullOrEmpty(dirName))
                 {
-                    var files = Directory.GetFiles(dirName, "*storage_backup*");
+                    var files = Directory.GetFiles(dirName, "*static_data_storage_backup*");
 
                     if (files.Any() && files.Length > backupCount)
                     {
