@@ -33,7 +33,7 @@ namespace EveTaxes
         /// <summary>
         /// Параметр запуска программы для обновления данных в БД.
         /// </summary>
-        const string UpdateMineralArg = "updateMineral";
+        const string UpdateMineralArg = "updatemineral";
         /// <summary>
         /// Параметр запуска программы для составления отчета.
         /// </summary>

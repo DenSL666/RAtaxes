@@ -64,7 +64,7 @@ namespace EveTaxesLogic
             var oreFilter = SdeMain.Asteroid.Where(x => x.IsMineral || x.IsIce).Select(x => x.TypeId).ToArray();
 
             //  добытая лунная руда. фильтр по альянсам берём из конфига
-            var ledger = GetLedger(startDate.Value, endDate.Value, alliIds: Config.TaxParams.AllianceIdsToCalcTaxes);
+            var ledger = GetLedger(startDate.Value, endDate.Value /*, alliIds: Config.TaxParams.AllianceIdsToCalcTaxes*/);
 
             //  основные персонажи. фильтр по альянсам берём из конфига
             var charMains = GetCharacterMains(alliIds: Config.TaxParams.AllianceIdsToCalcTaxes);
@@ -97,7 +97,7 @@ namespace EveTaxesLogic
 
             var name = $"taxesReport_{startDate.Value.ToLocalTime():yyyy_MM_dd}_{endDate.Value.ToLocalTime():yyyy_MM_dd}.xlsx";
             var filePath = Path.Combine(directory, name);
-            Epplus.Export(filePath, calculated, Config.TaxParams.AllianceIdsToCalcTaxes);
+            Epplus.Export(filePath, calculated, []/*Config.TaxParams.AllianceIdsToCalcTaxes*/);
         }
 
         /// <summary>

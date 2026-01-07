@@ -70,8 +70,10 @@ namespace EveTaxesLogic
             sheet.FillRow(rowNum, startCol, headers);
             rowNum++;
 
-            var notNull = corporationTaxes.Where(x => x.AllianceId.HasValue && allianceIds.Contains(x.AllianceId.Value)).ToList();
-            var dictAlliances = notNull.GroupBy(x => x.AllianceId.Value).ToDictionary(x => x.Key, x => x.ToList());
+            var notNull = allianceIds != null && allianceIds.Any()
+                ? corporationTaxes.Where(x => x.AllianceId.HasValue && allianceIds.Contains(x.AllianceId.Value)).ToList()
+                : corporationTaxes.ToList();
+            var dictAlliances = notNull.GroupBy(x => x.AllianceId.HasValue ? x.AllianceId : -1).ToDictionary(x => x.Key, x => x.ToList());
 
             foreach (var alliance in dictAlliances.OrderBy(x => x.Key))
             {
@@ -151,8 +153,10 @@ namespace EveTaxesLogic
             sheet.FillRow(rowNum, startCol, headers);
             rowNum++;
 
-            var notNull = corporationTaxes.Where(x => x.AllianceId.HasValue && allianceIds.Contains(x.AllianceId.Value)).ToList();
-            var dictAlliances = notNull.GroupBy(x => x.AllianceId.Value).ToDictionary(x => x.Key, x => x.ToList());
+            var notNull = allianceIds != null && allianceIds.Any() 
+                ? corporationTaxes.Where(x => x.AllianceId.HasValue && allianceIds.Contains(x.AllianceId.Value)).ToList()
+                : corporationTaxes.ToList();
+            var dictAlliances = notNull.GroupBy(x => x.AllianceId.HasValue ? x.AllianceId : -1).ToDictionary(x => x.Key, x => x.ToList());
 
             foreach (var alliance in dictAlliances.OrderBy(x => x.Key))
             {
