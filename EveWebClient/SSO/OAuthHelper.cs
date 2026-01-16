@@ -1,6 +1,8 @@
-﻿using EveCommon.Models;
-using EveCommon.Interfaces;
+﻿using EveCommon.Interfaces;
+using EveCommon.Models;
+using EveCommon.Workers;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -25,7 +27,7 @@ namespace EveWebClient.SSO
     /// <summary>
     /// Класс для доступа к EVE сервису авторизации.
     /// </summary>
-    public class OAuthHelper
+    public class OAuthHelper : ApiWebHelper
     {
         #region Construct
 
@@ -34,12 +36,11 @@ namespace EveWebClient.SSO
         /// </summary>
         /// <param name="httpClient">Http клиент получаем с помощью Dependency Injection.</param>
         /// <param name="config">Конфиг программы получаем с помощью Dependency Injection.</param>
-        public OAuthHelper(HttpClient httpClient, IConfig config)
+        public OAuthHelper(HttpClient httpClient, IConfig config, ILogger<OAuthHelper> logger) : base(httpClient, config, logger)
         {
             ClientId = config.ClientId;
             RedirectUrl = config.CallbackUrl;
             Scopes = config.Scopes;
-            HttpClient = httpClient;
         }
 
         #endregion
@@ -59,7 +60,6 @@ namespace EveWebClient.SSO
         /// Массив строк, содержащих кодовое значение запрашиваемых прав для получения данных от EVE SSO.
         /// </summary>
         private IEnumerable<string> Scopes { get; }
-        private HttpClient HttpClient { get; }
 
         /// <summary>
         /// Строковый параметр, используемый для создания уникальности каждого запроса авторизации к EVE SSO.
@@ -220,7 +220,7 @@ namespace EveWebClient.SSO
 
                 var content = new FormUrlEncodedContent(payload);
 
-                var response = await HttpClient.PostAsync(TokenUrl, content);
+                var response = await _httpClient.PostAsync(TokenUrl, content);
                 response.EnsureSuccessStatusCode();
 
                 var token = await response.Content.ReadAsStringAsync();
@@ -256,7 +256,7 @@ namespace EveWebClient.SSO
 
             var content = new FormUrlEncodedContent(payload);
 
-            var response = await HttpClient.PostAsync(TokenUrl, content);
+            var response = await _httpClient.PostAsync(TokenUrl, content);
             response.EnsureSuccessStatusCode();
 
             string responseString = await response.Content.ReadAsStringAsync();
@@ -430,14 +430,14 @@ namespace EveWebClient.SSO
             }
 
             // Fetch metadata
-            var metadataResponse = await HttpClient.GetAsync(SSO_META_DATA_URL);
+            var metadataResponse = await _httpClient.GetAsync(SSO_META_DATA_URL);
             metadataResponse.EnsureSuccessStatusCode();
 
             var resp = await metadataResponse.Content.ReadAsStringAsync();
             var metadata = JsonConvert.DeserializeObject<OAuthMetadata>(resp);
 
             // Fetch JWKS data
-            var jwksResponse = await HttpClient.GetAsync(metadata.jwks_uri);
+            var jwksResponse = await _httpClient.GetAsync(metadata.jwks_uri);
             jwksResponse.EnsureSuccessStatusCode();
 
             var resp2 = await jwksResponse.Content.ReadAsStringAsync();

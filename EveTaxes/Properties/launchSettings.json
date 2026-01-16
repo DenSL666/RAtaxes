@@ -7,6 +7,10 @@
     "EveTaxes (report)": {
       "commandName": "Project",
       "commandLineArgs": "-report 01.05.2025 01.06.2025"
+    },
+    "EveTaxes(update SDE)": {
+      "commandName": "Project",
+      "commandLineArgs": "-updatesde"
     }
   }
 }

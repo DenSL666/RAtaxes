@@ -40,8 +40,8 @@ namespace EveCommon
             {
                 // configure Logging with NLog
                 loggingBuilder.ClearProviders();
-                loggingBuilder.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
                 loggingBuilder.AddNLog(Configuration);
+                loggingBuilder.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
             });
 
             services.AddSingleton<IConfig, Config>();

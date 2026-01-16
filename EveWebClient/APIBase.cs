@@ -1,4 +1,5 @@
 ﻿using EveCommon.Interfaces;
+using EveCommon.Workers;
 using EveWebClient.Esi.Models;
 using EveWebClient.SSO;
 using Microsoft.Extensions.Logging;
@@ -19,17 +20,13 @@ namespace EveWebClient
     /// Базовый класс обращения к EVE Esi.<br/>
     /// Содержит базовые методы обращения к серверу и обработка полученного ответа.
     /// </summary>
-    public class APIBase
+    public class APIBase : ApiWebHelper
     {
         private const string TRANQUILITY_ESI_BASE = "https://esi.evetech.net";
         private const string SERENITY_ESI_BASE = "https://esi.evepc.163.com";
 
         public readonly string ESI_BASE;
         private readonly string dataSource;
-        protected HttpClient HttpClient { get; }
-
-        protected IConfig Config { get; }
-        protected ILogger<APIBase> Logger { get; }
 
         /// <summary>
         /// Получает экземпляр Httpclient, конфиг программы и логгер.<br/>
@@ -38,13 +35,10 @@ namespace EveWebClient
         /// <param name="httpClient"></param>
         /// <param name="config"></param>
         /// <param name="logger"></param>
-        internal APIBase(HttpClient httpClient, IConfig config, ILogger<APIBase> logger)
+        internal APIBase(HttpClient httpClient, IConfig config, ILogger<APIBase> logger) : base(httpClient, config, logger)
         {
             dataSource = dataSource ?? "tranquility";
             ESI_BASE = TRANQUILITY_ESI_BASE;
-            HttpClient = httpClient;
-            Config = config;
-            Logger = logger;
         }
 
         internal async Task<APIResponse> GetAsync(string uri, string ifNoneMatch = null, Dictionary<string, string> queryParameters = null)
@@ -119,7 +113,7 @@ namespace EveWebClient
                     request.Headers.Add("If-None-Match", ifNoneMatch);
                 }
 
-                var authResponse = await HttpClient.SendAsync(request).ConfigureAwait(false);
+                var authResponse = await _httpClient.SendAsync(request).ConfigureAwait(false);
 
                 return await ProcessResponse(authResponse);
             }
@@ -131,12 +125,12 @@ namespace EveWebClient
 
         protected void CheckAuth(AccessTokenDetails auth, string scope)
         {
-            if (auth?.AccessToken == null || scope == null || Config.Scopes == null)
+            if (auth?.AccessToken == null || scope == null || _config.Scopes == null)
             {
                 throw new ArgumentNullException();
             }
 
-            if (!Config.Scopes.Contains(scope))
+            if (!_config.Scopes.Contains(scope))
             {
                 throw new EVEStandardScopeNotAcquired("Missing scope: " + scope);
             }
@@ -288,7 +282,7 @@ namespace EveWebClient
         {
             if (response.Error)
             {
-                Logger.LogError(response.Message);
+                _logger.LogError(response.Message);
                 return null;
             }
             T _model = default;
@@ -316,7 +310,7 @@ namespace EveWebClient
         {
             if (response.Error)
             {
-                Logger.LogError(response.Message);
+                _logger.LogError(response.Message);
                 return null;
             }
             T _model = default;
