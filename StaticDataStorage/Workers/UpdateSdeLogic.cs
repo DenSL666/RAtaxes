@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using StaticDataStorage.Contexts;
 using StaticDataStorage.Models;
+using StaticDataStorage.Models.Celestial;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -234,6 +235,116 @@ namespace StaticDataStorage.Workers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to save version info");
+            }
+        }
+
+        public async Task WriteCelestialtoDB(CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                StorageContext.Migrate();
+
+                var sdeMain = DIManager.ServiceProvider.GetService<SdeMain>();
+                sdeMain.InitCelestials();
+
+                if (sdeMain.Regions != null && sdeMain.Regions.Any())
+                {
+                    using (var context = new StorageContext())
+                    {
+                        context.Regions.RemoveRange(context.Regions);
+                        _logger.LogWarning("SDE DB regions cleaned");
+
+                        foreach (var region in sdeMain.Regions)
+                        {
+                            var newRegion = Region.Empty();
+                            newRegion.FillFrom(region);
+                            context.Regions.Add(newRegion);
+                        }
+
+                        context.SaveChanges();
+                        _logger.LogWarning("SDE DB regions filled {regions}", context.Regions.Count());
+                    }
+                }
+
+                if (sdeMain.Constellations != null && sdeMain.Constellations.Any())
+                {
+                    using (var context = new StorageContext())
+                    {
+                        context.Constellations.RemoveRange(context.Constellations);
+                        _logger.LogWarning("SDE DB constellations cleaned");
+
+                        foreach (var constellation in sdeMain.Constellations)
+                        {
+                            var newConstellation = Constellation.Empty();
+                            newConstellation.FillFrom(constellation);
+                            context.Constellations.Add(newConstellation);
+                        }
+
+                        context.SaveChanges();
+                        _logger.LogWarning("SDE DB constellations filled {constellations}", context.Constellations.Count());
+                    }
+                }
+
+                if (sdeMain.SolarSystems != null && sdeMain.SolarSystems.Any())
+                {
+                    using (var context = new StorageContext())
+                    {
+                        context.SolarSystems.RemoveRange(context.SolarSystems);
+                        _logger.LogWarning("SDE DB SolarSystems cleaned");
+
+                        foreach (var solarSystem in sdeMain.SolarSystems)
+                        {
+                            var newSolarSystem = SolarSystem.Empty();
+                            newSolarSystem.FillFrom(solarSystem);
+                            context.SolarSystems.Add(newSolarSystem);
+                        }
+
+                        context.SaveChanges();
+                        _logger.LogWarning("SDE DB SolarSystems filled {SolarSystems}", context.SolarSystems.Count());
+                    }
+                }
+
+                if (sdeMain.Planets != null && sdeMain.Planets.Any())
+                {
+                    using (var context = new StorageContext())
+                    {
+                        context.Planets.RemoveRange(context.Planets);
+                        _logger.LogWarning("SDE DB Planets cleaned");
+
+                        foreach (var planet in sdeMain.Planets)
+                        {
+                            var newPlanet = Planet.Empty();
+                            newPlanet.FillFrom(planet);
+                            context.Planets.Add(newPlanet);
+                        }
+
+                        context.SaveChanges();
+                        _logger.LogWarning("SDE DB Planets filled {planets}", context.Planets.Count());
+                    }
+                }
+
+                if (sdeMain.Moons != null && sdeMain.Moons.Any())
+                {
+                    using (var context = new StorageContext())
+                    {
+                        context.Moons.RemoveRange(context.Moons);
+                        _logger.LogWarning("SDE DB Moons cleaned");
+
+                        foreach (var moon in sdeMain.Moons)
+                        {
+                            var newMoon = Moon.Empty();
+                            newMoon.FillFrom(moon);
+                            context.Moons.Add(newMoon);
+                        }
+
+                        context.SaveChanges();
+                        _logger.LogWarning("SDE DB constellations filled {moons}", context.Moons.Count());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error during Manual Sde Work");
             }
         }
     }

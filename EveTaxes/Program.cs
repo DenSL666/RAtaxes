@@ -46,13 +46,17 @@ namespace EveTaxes
         /// </summary>
         const string GoogleSdeArg = "googlesde";
         /// <summary>
-        /// Параметр запуска программы для составления текстового файла для гугл таблицы.
+        /// Параметр запуска программы для обновления БД статичных данных.
         /// </summary>
         const string UpdateSdeArg = "updatesde";
         /// <summary>
+        /// Параметр запуска программы для работы с Бд статичных данных.
+        /// </summary>
+        const string SdeWork = "sdework";
+        /// <summary>
         /// Массив параметров запуска программы, допустимых для автоматического запуска (без среды разработки).
         /// </summary>
-        static readonly string[] ARGS = [UpdateArg, UpdateMineralArg, ReportArg, GoogleSdeArg, UpdateSdeArg];
+        static readonly string[] ARGS = [UpdateArg, UpdateMineralArg, ReportArg, GoogleSdeArg, UpdateSdeArg, SdeWork];
 
         /// <summary>
         /// Основной метод запуска программы.
@@ -78,6 +82,8 @@ namespace EveTaxes
                 //  На всякий случай коллекцию сервисов сохраняем в статическую переменную для доступа из любого модуля программы.
                 DIManager.Registry(services);
                 DeleteLogFiles();
+
+                #region Dependency Injection
 
                 services.AddSingleton<IFileService, FileService>();
                 services.AddSingleton<IDownloadManager, DownloadManager>();
@@ -155,7 +161,7 @@ namespace EveTaxes
                     var downloadManager = sp.GetRequiredService<IDownloadManager>();
                     return new SdeWebHelper(httpClient, config, logger, downloadManager);
                 });
-                
+
                 services.AddScoped<SdeMain>();
                 services.AddScoped<UpdateDataLogic>();
                 services.AddScoped<CreateReportLogic>();
@@ -165,6 +171,8 @@ namespace EveTaxes
 
                 using ServiceProvider provider = services.BuildServiceProvider();
                 DIManager.ServiceProvider = provider;
+
+                #endregion
 
                 //  Выполняем миграцию БД при каждом запуске
                 StorageContext.Migrate();
@@ -200,6 +208,12 @@ namespace EveTaxes
                         {
                             var staticDataStorageReader = DIManager.ServiceProvider.GetService<StaticDataStorageReader>();
                             staticDataStorageReader.CreateBlueprints("items.txt", "bps.txt");
+                            break;
+                        }
+                    case SdeWork:
+                        {
+                            var staticDataStorageReader = DIManager.ServiceProvider.GetService<StaticDataStorageReader>();
+                            staticDataStorageReader.SdeStartWork(@"D:\full_table_moon_scan.txt", @"D:\needScan.txt");
                             break;
                         }
                 }

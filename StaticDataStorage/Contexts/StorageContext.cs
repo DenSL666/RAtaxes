@@ -1,5 +1,6 @@
 ﻿using EveCommon;
 using StaticDataStorage.Models;
+using StaticDataStorage.Models.Celestial;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -57,36 +58,31 @@ namespace StaticDataStorage.Contexts
         /// </summary>
         public DbSet<TypeMaterial> TypeMaterials => Set<TypeMaterial>();
 
-        /// <summary>
-        /// Коллекция уникальных объектов.
-        /// </summary>
-        public DbSet<UniqEntity> UniqEntities => Set<UniqEntity>();
-
-        /// <summary>
-        /// Коллекция уникальных имён объектов.
-        /// </summary>
-        public DbSet<UniqName> UniqNames => Set<UniqName>();
-
 
         /// <summary>
         /// Коллекция регионов, наполненная данными из SDE.
         /// </summary>
-        //public DbSet<Region> Regions => Set<Region>();
+        public DbSet<Region> Regions => Set<Region>();
 
         /// <summary>
         /// Коллекция созвездий, наполненная данными из SDE.
         /// </summary>
-        //public DbSet<Constellation> Constellations => Set<Constellation>();
+        public DbSet<Constellation> Constellations => Set<Constellation>();
 
         /// <summary>
         /// Коллекция систем, наполненная данными из SDE.
         /// </summary>
-        //public DbSet<SolarSystem> SolarSystems => Set<SolarSystem>();
+        public DbSet<SolarSystem> SolarSystems => Set<SolarSystem>();
 
         /// <summary>
-        /// Коллекция записей о добытых минеральных рудах персонажем.
+        /// Коллекция планет, наполненная данными из SDE.
         /// </summary>
-        //public DbSet<MineralMining> MineralMinings => Set<MineralMining>();
+        public DbSet<Planet> Planets => Set<Planet>();
+
+        /// <summary>
+        /// Коллекция лун, наполненная данными из SDE.
+        /// </summary>
+        public DbSet<Moon> Moons => Set<Moon>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

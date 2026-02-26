@@ -11,6 +11,10 @@
     "EveTaxes(update SDE)": {
       "commandName": "Project",
       "commandLineArgs": "-updatesde"
+    },
+    "EveTaxes (sdework)": {
+      "commandName": "Project",
+      "commandLineArgs": "-sdework"
     }
   }
 }

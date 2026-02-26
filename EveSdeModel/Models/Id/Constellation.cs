@@ -11,54 +11,35 @@ using YamlDotNet.RepresentationModel;
 namespace EveSdeModel.Models.Id
 {
     /// <summary>
-    /// Уникальная сущность солнечной системы.
+    /// Уникальная сущность созвездия.
     /// </summary>
-    public class SolarSystem : IYamlEntity
+    public class Constellation : IYamlEntity
     {
         public string Id { get; set; }
 
-        [JsonPropertyName("constellationID")]
-        public string ConstellationID { get; set; }
+        [JsonPropertyName("factionID")]
+        public string FactionID { get; set; }
 
-        [JsonPropertyName("hub")]
-        public string Hub { get; set; }
-
-        [JsonPropertyName("international")]
-        public string International { get; set; }
-
-        [JsonPropertyName("radius")]
-        public string Radius { get; set; }
+        [JsonPropertyName("wormholeClassID")]
+        public string WormholeClassID { get; set; }
 
         [JsonPropertyName("regionID")]
         public string RegionID { get; set; }
 
-        [JsonPropertyName("regional")]
-        public string Regional { get; set; }
-
-        [JsonPropertyName("securityStatus")]
-        public string SecurityStatus { get; set; }
-
-        [JsonPropertyName("starID")]
-        public string StarID { get; set; }
+        [JsonPropertyName("solarSystemIDs")]
+        public List<string> SolarSystemIDs { get; set; }
 
         [JsonPropertyName("name")]
         public Name Name { get; set; }
 
-        [JsonPropertyName("planetIDs")]
-        public List<string> PlanetIDs { get; set; }
-
-        public SolarSystem()
+        public Constellation()
         {
             Id = string.Empty;
-            Hub = string.Empty;
-            International = string.Empty;
-            Radius = string.Empty;
+            FactionID = string.Empty;
+            WormholeClassID = string.Empty;
             RegionID = string.Empty;
-            Regional = string.Empty;
-            SecurityStatus = string.Empty;
-            StarID = string.Empty;
             Name = null;
-            PlanetIDs = new List<string>();
+            SolarSystemIDs = new List<string>();
         }
 
         public void ParseWithId(KeyValuePair<YamlNode, YamlNode> yamlNode)
@@ -67,22 +48,22 @@ namespace EveSdeModel.Models.Id
             var properties = EveYamlFactory.GetProperties(GetType());
             foreach (var node in ((YamlMappingNode)yamlNode.Value).Children)
             {
-                var found = properties.FirstOrDefault(x => x.Name.GetAttr<SolarSystem>() == node.Key.ToString());
+                var found = properties.FirstOrDefault(x => x.Name.GetAttr<Constellation>() == node.Key.ToString());
                 if (found != null)
                 {
                     found.SetValue(this, node.Value.ToString());
                 }
-                if (node.Key.ToString() == nameof(Name).GetAttr<SolarSystem>())
+                if (node.Key.ToString() == nameof(Name).GetAttr<Constellation>())
                 {
                     Name = EveYamlFactory.GetObject<Name>((YamlMappingNode)node.Value);
                 }
-                if (node.Key.ToString() == nameof(PlanetIDs).GetAttr<SolarSystem>())
+                if (node.Key.ToString() == nameof(SolarSystemIDs).GetAttr<Constellation>())
                 {
                     var mapping = (YamlSequenceNode)node.Value;
                     foreach (YamlScalarNode _node in mapping.Children.OfType<YamlScalarNode>())
                     {
                         if (!string.IsNullOrEmpty(_node.Value))
-                            PlanetIDs.Add(_node.Value);
+                            SolarSystemIDs.Add(_node.Value);
                     }
                 }
             }

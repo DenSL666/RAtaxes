@@ -49,6 +49,18 @@ namespace EveSdeModel
         /// Путь к файлу SDE солнечных систем.
         /// </summary>
         string SolarSystemsPath { get; }
+        /// <summary>
+        /// Путь к файлу SDE созвездий.
+        /// </summary>
+        string ConstellationsPath { get; }
+        /// <summary>
+        /// Путь к файлу SDE планет.
+        /// </summary>
+        string PlanetsPath { get; }
+        /// <summary>
+        /// Путь к файлу SDE лун.
+        /// </summary>
+        string MoonsPath { get; }
 
         /// <summary>
         /// Список категорий SDE.
@@ -86,6 +98,18 @@ namespace EveSdeModel
         /// Список сущностей SDE, описывающих системы.
         /// </summary>
         public ReadOnlyCollection<SolarSystem> SolarSystems { get; private set; }
+        /// <summary>
+        /// Список сущностей SDE, описывающих созвездия.
+        /// </summary>
+        public ReadOnlyCollection<Constellation> Constellations { get; private set; }
+        /// <summary>
+        /// Список сущностей SDE, описывающих планеты.
+        /// </summary>
+        public ReadOnlyCollection<Planet> Planets { get; private set; }
+        /// <summary>
+        /// Список сущностей SDE, описывающих луны.
+        /// </summary>
+        public ReadOnlyCollection<Moon> Moons { get; private set; }
 
         public SdeMain(IConfiguration configuration)
         {
@@ -101,6 +125,9 @@ namespace EveSdeModel
             InvItemsPath = Path.Combine(AppContext.BaseDirectory, downloadPath, "invItems.yaml");
             RegionsPath = Path.Combine(AppContext.BaseDirectory, downloadPath, "mapRegions.yaml");
             SolarSystemsPath = Path.Combine(AppContext.BaseDirectory, downloadPath, "mapSolarSystems.yaml");
+            ConstellationsPath = Path.Combine(AppContext.BaseDirectory, downloadPath, "mapConstellations.yaml");
+            PlanetsPath = Path.Combine(AppContext.BaseDirectory, downloadPath, "mapPlanets.yaml");
+            MoonsPath = Path.Combine(AppContext.BaseDirectory, downloadPath, "mapMoons.yaml");
 
             Categories = new ReadOnlyCollection<Category>([]);
             Groups = new ReadOnlyCollection<Group>([]);
@@ -111,6 +138,9 @@ namespace EveSdeModel
             InvUniqueNames = new ReadOnlyCollection<InvUniqueName>([]);
             Regions = new ReadOnlyCollection<Region>([]);
             SolarSystems = new ReadOnlyCollection<SolarSystem>([]);
+            Planets = new ReadOnlyCollection<Planet>([]);
+            Constellations = new ReadOnlyCollection<Constellation>([]);
+            Moons = new ReadOnlyCollection<Moon>([]);
 
             InitGroups();
             InitTypes();
@@ -252,7 +282,7 @@ namespace EveSdeModel
         /// <summary>
         /// Читает из SDE данные уникальных планетарных объектов.
         /// </summary>
-        public void InitRegionsAndSolarSystems()
+        public void InitCelestials()
         {
             if (!Regions.Any())
             {
@@ -267,6 +297,34 @@ namespace EveSdeModel
                 if (File.Exists(SolarSystemsPath))
                 {
                     SolarSystems = new ReadOnlyCollection<SolarSystem>(EveYamlFactory.ParseFile<SolarSystem>(SolarSystemsPath));
+                }
+            }
+
+            if (!Constellations.Any())
+            {
+                if (File.Exists(ConstellationsPath))
+                {
+                    Constellations = new ReadOnlyCollection<Constellation>(EveYamlFactory.ParseFile<Constellation>(ConstellationsPath));
+                }
+            }
+
+            if (!Planets.Any())
+            {
+                if (File.Exists(PlanetsPath))
+                {
+                    Planets = new ReadOnlyCollection<Planet>(EveYamlFactory.ParseFile<Planet>(PlanetsPath));
+                    foreach (var planet in Planets)
+                        planet.FillName(SolarSystems);
+                }
+            }
+
+            if (!Moons.Any())
+            {
+                if (File.Exists(MoonsPath))
+                {
+                    Moons = new ReadOnlyCollection<Moon>(EveYamlFactory.ParseFile<Moon>(MoonsPath));
+                    foreach (var moon in Moons)
+                        moon.FillName(Planets);
                 }
             }
         }
