@@ -271,13 +271,13 @@ namespace StaticDataStorage.Models
         public void LoadCollections()
         {
             this.ManufacturingMaterials = UnPack<BaseMaterial>(ManufacturingMaterialsStr).ToList();
-            this.ManufacturingProducts = UnPack<BaseProduct>(ManufacturingMaterialsStr).ToList();
+            this.ManufacturingProducts = UnPack<BaseProduct>(ManufacturingProductsStr).ToList();
 
             this.ReactionMaterials = UnPack<BaseMaterial>(ReactionMaterialsStr).ToList();
-            this.ReactionProducts = UnPack<BaseProduct>(ReactionMaterialsStr).ToList();
+            this.ReactionProducts = UnPack<BaseProduct>(ReactionProductsStr).ToList();
 
             this.InventionMaterials = UnPack<BaseMaterial>(InventionMaterialsStr).ToList();
-            this.InventionProducts = UnPack<BaseProduct>(InventionMaterialsStr).ToList();
+            this.InventionProducts = UnPack<BaseProduct>(InventionProductsStr).ToList();
         }
 
         public void FillMaterials(IReadOnlyCollection<EntityType> items)

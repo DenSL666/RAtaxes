@@ -88,7 +88,7 @@ namespace EveTaxesLogic
             var path = Configuration.GetValue<string>("Runtime:PathAuth");
             path = Path.Combine(AppContext.BaseDirectory, path);
             var token = AccessTokenDetails.Read(path);
-            if (!token.IsEmpty)
+            if (token != null && !token.IsEmpty)
             {
                 var isValid = await AuthHelper.IsTokenValid(token);
                 if (!isValid)
