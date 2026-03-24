@@ -389,6 +389,6 @@ namespace StaticDataStorage.Models
         /// Строковый формат чертежа, используемый в скрипте гугл таблицы.
         /// </summary>
         /// <returns></returns>
-        public string Write() => $"  new Blueprint(\"{Product.NameEnglish.Replace("'", "").Replace("’", "")}\", {Products[Product]}, \"{(IsFormula ? "Formula" : $"{Product.Group?.Category?.Name} {Product.GetTech()}")}\", \"{string.Join("$", ManufactoryMaterials.Select(p => $"{p.Key.NameEnglish}&{p.Value}"))}\"),";
+        public string Write() => $"  new Blueprint(\"{Product.NameEnglish.Replace("'", "").Replace("’", "")}\", {Products[Product]}, {MaxProductionLimit}, \"{(IsFormula ? "Formula" : $"{Product.Group?.Category?.Name} {Product.GetTech()}")}\", \"{string.Join("$", ManufactoryMaterials.Select(p => $"{p.Key.NameEnglish}&{p.Value}"))}\"),";
     }
 }

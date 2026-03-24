@@ -178,7 +178,7 @@ namespace StaticDataStorage.Models
         /// </summary>
         private static List<string> FactionNavy = new List<string>
         {
-            "Navy", "Fleet",
+            "Navy", "Fleet", "Capital Ultratidal Entropic Mounting", "Capital Radiation Conversion Unit", "Capital Absorption Thruster Array",
         };
 
         /// <summary>

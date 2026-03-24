@@ -15,6 +15,10 @@
     "EveTaxes (sdework)": {
       "commandName": "Project",
       "commandLineArgs": "-sdework"
+    },
+    "EveTaxes(googlesde)": {
+      "commandName": "Project",
+      "commandLineArgs": "-googlesde"
     }
   }
 }

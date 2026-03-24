@@ -187,6 +187,9 @@ namespace StaticDataStorage.Workers
             {
                 //фильтр и вывод блюпринтов
                 var hasManu = Blueprints.Where(x => x.HasManufactory && !x.IsFuelBlock).ToList();
+                var found = hasManu.FirstOrDefault(x => x.Product != null && x.Product.NameEnglish == "Tungsten Carbide" && x.MaxProductionLimit > 1000);
+                if (found != null)
+                    hasManu.Remove(found);
                 using (var wr = new StreamWriter(savePathFileBlueprints))
                 {
                     foreach (var bp in hasManu.OrderBy(x => x.Product.NameEnglish.Replace("'", "").Replace("’", "")))
