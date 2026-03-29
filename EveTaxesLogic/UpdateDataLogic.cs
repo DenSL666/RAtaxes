@@ -9,6 +9,7 @@ using EveWebClient.External;
 using EveWebClient.External.Models;
 using EveWebClient.External.Models.Seat;
 using EveWebClient.SSO;
+using EveWebClient.SSO.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -51,13 +52,9 @@ namespace EveTaxesLogic
                     //  выбираем id всех сущностей, которые получаются в результате переработки руд
                     var refineIdsStr = SDStorageReader.AsteroidRefineItems.Select(x => x.Id.ToString()).ToList();
 
-                    //  обновляем токен доступа к esi
-                    //  он актуален в течение 5 минут, так что в идеале проверять его корректность на каждом запросе, если они будут идти более 5 минут подряд
-                    var token = await GetAndUpdateToken();
-
                     await SaveCharacterMainsInfo();
 
-                    await UpdateCorpMiningStructureLedger(token);
+                    await UpdateAllCorpsMiningStructureLedger();
 
                     //  получаем коллекцию цен на все предметы игры из EVE ESI и сохраняем в файл
                     var esiData = await EsiHelper.ListMarketPricesV1Async();
@@ -80,14 +77,71 @@ namespace EveTaxesLogic
         }
 
         /// <summary>
-        /// Выполняет чтение данных текущего токена. Либо выполняет его обновление, либо выполняет запрос на авторизацию.
+        /// Выполняет запрос майнинг леджера для всех указанных в файле корпораций.
         /// </summary>
-        /// <returns>Токен авторизции SSO персонажа.</returns>
-        public async Task<AccessTokenDetails> GetAndUpdateToken()
+        /// <returns></returns>
+        public async Task UpdateAllCorpsMiningStructureLedger()
+        {
+            try
+            {
+                var path = Configuration.GetValue<string>("Runtime:PathAuth");
+                path = Path.Combine(AppContext.BaseDirectory, path);
+
+                TokenStorage storage = TokenStorage.Read(path);
+                if (storage == null || storage.CorporationTokens == null)
+                    throw new Exception("Словарь id корпораций и токенов доступа был создан некорректно.");
+                if (!storage.CorporationTokens.Any())
+                    throw new Exception("Словарь id корпораций и токенов доступа пуст. Добавьте хотя бы одну корпорацию для сбора данных майнинг леджера.");
+
+                foreach (var id in storage.CorporationTokens.Keys)
+                {
+                    var oldToken = storage.CorporationTokens[id];
+
+                    //  обновляем токен доступа к esi
+                    //  он актуален в течение 5 минут, так что в идеале проверять его корректность на каждом запросе, если они будут идти более 5 минут подряд
+                    var newToken = await GetAndUpdateToken(oldToken);
+                    await UpdateCorpMiningStructureLedger(newToken, id);
+
+                    storage.CorporationTokens[id] = newToken;
+                    storage.Write(path);
+                }
+                
+            }
+            catch (Exception exc)
+            {
+                Logger.LogError(exc, "Ошибка при попытке обновления данных майнинг леджера корпораций");
+            }
+        }
+
+        /// <summary>
+        /// Добавляет новый id корпорации в словарь, из которого берутся токены для сбора данных о добыче лун.
+        /// </summary>
+        /// <param name="args"></param>
+        public void TryAddNewToken(string[] args)
         {
             var path = Configuration.GetValue<string>("Runtime:PathAuth");
             path = Path.Combine(AppContext.BaseDirectory, path);
-            var token = AccessTokenDetails.Read(path);
+
+            TokenStorage storage = TokenStorage.Read(path);
+
+            if (args == null || args.Length < 2 || !int.TryParse(args[1], out int corpId))
+                return;
+
+            if (!storage.CorporationTokens.ContainsKey(corpId))
+            {
+                storage.CorporationTokens.Add(corpId, new AccessTokenDetails());
+                storage.Write(path);
+            }
+        }
+
+        /// <summary>
+        /// Проверяет переданный токен. Либо выполняет его обновление, либо выполняет запрос на авторизацию.
+        /// </summary>
+        /// <param name="token">Прочитанный из файла токен.</param>
+        /// <returns>Токен авторизции SSO персонажа.</returns>
+        public async Task<AccessTokenDetails> GetAndUpdateToken(AccessTokenDetails token)
+        {
+            AccessTokenDetails result = token;
             if (token != null && !token.IsEmpty)
             {
                 var isValid = await AuthHelper.IsTokenValid(token);
@@ -96,8 +150,7 @@ namespace EveTaxesLogic
                     var newToken = await AuthHelper.RefreshTokenAsync(token);
                     if (newToken != null && !newToken.IsEmpty)
                     {
-                        newToken.Write(path);
-                        token = newToken;
+                        result = newToken;
                     }
                 }
             }
@@ -106,14 +159,14 @@ namespace EveTaxesLogic
                 var code = await AuthHelper.GetAuthCodeFromSSO();
                 if (string.IsNullOrEmpty(code))
                     throw new Exception("Получен пустой код после редиректа SSO");
-                token = await AuthHelper.RequestTokenAsync(code);
-                if (token != null && !token.IsEmpty)
+                var newToken = await AuthHelper.RequestTokenAsync(code);
+                if (newToken != null && !newToken.IsEmpty)
                 {
-                    token.Write(path);
+                    result = newToken;
                 }
             }
 
-            return token;
+            return result;
         }
 
         /// <summary>
@@ -206,9 +259,10 @@ namespace EveTaxesLogic
         /// Выполняет запрос майнинг леджера корпорации и обновление данных в собственной БД.
         /// </summary>
         /// <param name="token">Токен EVE ESI, используемый при запросе данных.</param>
-        private async Task UpdateCorpMiningStructureLedger(AccessTokenDetails token)
+        /// <param name="corporationId">Id корпорации, о которой собираются данные.</param>
+        private async Task UpdateCorpMiningStructureLedger(AccessTokenDetails token, int corporationId)
         {
-            var observers = await EsiHelper.CorporationMiningObserversV1Async(token, Config.TaxParams.MiningHoldingCorporationId);
+            var observers = await EsiHelper.CorporationMiningObserversV1Async(token, corporationId);
             if (observers == null)
                 return;
             using (var context = new StorageContext())
@@ -225,7 +279,7 @@ namespace EveTaxesLogic
                     {
                         //  в цикле постранично запрашиваем леджеры структуры
                         //  хотя обычно там всего одна страница
-                        var observed = await EsiHelper.ObservedCorporationMiningV1Async(token, Config.TaxParams.MiningHoldingCorporationId, observer.ObserverId, i);
+                        var observed = await EsiHelper.ObservedCorporationMiningV1Async(token, corporationId, observer.ObserverId, i);
                         i++;
                         if (observed != null)
                         {

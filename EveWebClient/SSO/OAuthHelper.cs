@@ -21,6 +21,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Web;
 using static System.Formats.Asn1.AsnWriter;
+using EveWebClient.SSO.Models;
 
 namespace EveWebClient.SSO
 {

@@ -1,6 +1,6 @@
 ﻿using EveCommon.Interfaces;
 using EveWebClient.Esi.Models;
-using EveWebClient.SSO;
+using EveWebClient.SSO.Models;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;

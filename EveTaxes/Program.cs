@@ -54,9 +54,13 @@ namespace EveTaxes
         /// </summary>
         const string SdeWork = "sdework";
         /// <summary>
+        /// Параметр запуска программы для работы с Бд статичных данных.
+        /// </summary>
+        const string Auth = "auth";
+        /// <summary>
         /// Массив параметров запуска программы, допустимых для автоматического запуска (без среды разработки).
         /// </summary>
-        static readonly string[] ARGS = [UpdateArg, UpdateMineralArg, ReportArg, GoogleSdeArg, UpdateSdeArg, SdeWork];
+        static readonly string[] ARGS = [UpdateArg, UpdateMineralArg, ReportArg, GoogleSdeArg, UpdateSdeArg, SdeWork, Auth];
 
         /// <summary>
         /// Основной метод запуска программы.
@@ -214,6 +218,12 @@ namespace EveTaxes
                         {
                             var staticDataStorageReader = DIManager.ServiceProvider.GetService<StaticDataStorageReader>();
                             staticDataStorageReader.SdeStartWork(@"D:\full_table_moon_scan.txt", @"D:\needScan.txt");
+                            break;
+                        }
+                    case Auth:
+                        {
+                            var updateDataLogic = DIManager.ServiceProvider.GetService<UpdateDataLogic>();
+                            updateDataLogic.TryAddNewToken(args);
                             break;
                         }
                 }

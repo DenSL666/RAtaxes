@@ -19,6 +19,10 @@
     "EveTaxes(googlesde)": {
       "commandName": "Project",
       "commandLineArgs": "-googlesde"
+    },
+    "EveTaxes(auth)": {
+      "commandName": "Project",
+      "commandLineArgs": "-auth 98818427"
     }
   }
 }

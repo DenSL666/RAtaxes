@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using static System.Formats.Asn1.AsnWriter;
 using Microsoft.Extensions.Configuration;
 
-namespace EveWebClient.SSO
+namespace EveWebClient.SSO.Models
 {
     /// <summary>
     /// Токен авторизации персонажа EVE SSO.
